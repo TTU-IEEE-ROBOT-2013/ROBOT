@@ -51,5 +51,6 @@ public:
 };
 void WriteF(const char * FileName, const char * value);
 char * ReadF(const char * FileName, char * buff, int length);
-
+double AIN(int ADC_ID);
+void EnableADCs();
 #endif

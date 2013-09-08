@@ -262,6 +262,22 @@ char * ReadF(const char * FileName, char * buff, int length)
 	fread(buff,1,1,A);
 	fclose(A);
 }
-
+void EnableADCs()
+{
+//echo cape-bone-iio > /sys/devices/bone_capemgr.*/slots
+FILE * A;
+A=fopen(,"ab");
+if(A==NULL)return;
+fprintf(A,"cape-bone-iio");
+fclose(A);
+}
+double AIN(int ADC_ID)
+{
+char op[255];double ret;
+sprintf(op,ADCT,ADC_ID);
+FILE * A = fopen(op,"rb");
+fscanf(A,"%d",&ret);
+return ret;
+}
 #else
 #endif
