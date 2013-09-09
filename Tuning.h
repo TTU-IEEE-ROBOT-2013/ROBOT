@@ -7,21 +7,33 @@
 //definitions of some common pins for i/o (if it is defined 0, it is NOT DEFINED!)
 #define ION 0//a pin for second "Power Switch" to enable the  robot on the track 
 //(avoids problem with boot time as it is booted before it is put on the track
-#define LT1 0 
-#define LT2 0
-#define LT3 0
-#define LT4 0
-#define LT5 0
-#define LT6 0
-#define LT7 0
-#define LT8 0
-#define LT9 0
-#define LT10 0
-//motor speed controled by 3 bit DAC (separate circuit)
-#define LeftDrive {0,0,0,0}
-#define RightDrive {0,0,0,0}
+#define LT1 66 //7	2[2]	32*2+2
+#define LT2 67 //8	2[3]
+#define LT3 69 //9	2[5]
+#define LT4 68 //10	2[4]
+#define LT5 45 //11	1[13]
+#define LT6 44 //12	1[12]
+#define LT7 26 //14	0[26]
+#define LT8 47 //15	1[15]
+#define LT9 46 //16	1[14]
+#define LT10 59 //17	1[27]
+//motor speed controled by pwm
+#define LeftDrive 8,13
+#define RightDrive 8,19
+//definitions for pwm output
+#define PERIOD  250000 //250000 ns = 1/4000 (for 4000 hz frequency)
+#define MAX_DUTY 250000 //if it is too fast, lower this to lower the speed. 
+//reserved macros (not used in code, but specify pins used by other interfaces)
+//reserved of color-sense
+#define NO_USE_COLOR_SENSE 9,21;9,22
+#define NO_USE_MMC 8,{22 23 24 3 4 5 6 20 21 25}
+#define AVOID_USE_HDMI 8,{27-46} //we shouldn't use them
+//usable are p8 { 7,8,9,10,11,12,13,14,15,16,17,18,19,26 }
+//			 p9 { 11-24,26-31,41,42 }
+//free on p8 are 18,26 (p9 all but 21,22 <i2c>
+//special pins are {9,21;9,22} i2c: 8,13;8,19;9,14;9,15;9,42;9,29;9,31; PWM
+//					9,24;9,26 UART 1
 //text pin definitions
-
 #define LED0 "/sys/class/leds/beaglebone:green:usr0/brightness" //turned on at start
 #define LED1 "/sys/class/leds/beaglebone:green:usr1/brightness" //can be used for debuging/error reporting 
 #define LED2 "/sys/class/leds/beaglebone:green:usr2/brightness" //can be used for debuging (when run starts)
@@ -38,8 +50,9 @@
 
 
 //definitions of some common values required
-#define NavMaxLineWidth 2 
 //value from 1 to 10 specifies line width. anything over is considered to be intersection
+#define NavMaxLineWidth 2 
+//speed at which to turn. this is in reference to MAX_DUTY / 16  which is( (TurnSpeed*Max_DUTY/(16*PERIOD))*3.3)V
 #define TurnSpeed 8
 //RGB limits for block detection.
 #define NAV_RL 50

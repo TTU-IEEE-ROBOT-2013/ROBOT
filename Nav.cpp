@@ -4,11 +4,11 @@
 using namespace std;
 namespace NAVIGATION
 {
-	//keep global variables in unique namespaces to avoid duplication (same with functions not called from outside.
+	//keep global variables in unique namespaces to avoid duplication (same with functions not called from outside).
 	c_bin_io * LineVars[10];
 	cRGBC * CT;
 	int Lpins[]={LT1,LT2,LT3,LT4,LT5,LT6,LT7,LT8,LT9,LT10};
-	c_bin_io * LeftSpeed[4], * LeftDirection, *RightSpeed[4], *RightDirection;
+	c_bin_io  * LeftDirection, *RightDirection;
 	int IRightSpeed;
 	int ILeftSpeed;
 	void Count1()
@@ -85,14 +85,10 @@ namespace NAVIGATION
 	}
 	bool Move() //set movement speed.
 	{
-		bitset<sizeof(int)> RS (IRightSpeed);
-		bitset<sizeof(int)> LS (ILeftSpeed);
-		int i;
-		for(i=0;i<4;i++)
-		{
-			LeftSpeed[i]->Write(LS[i]);
-			RightSpeed[i]->Write(RS[i]);
-		}
+		//8=normal (will set default in Tuning.h)
+		int actspeed= LeftSpeed * MAX_DUTY / 16;
+		WritePWM(LeftDrive,period,actspeed);
+		actspeed=RightSpeed * MAX_DUTY / 16;
 	}
 int LineCheck()
 {
@@ -169,16 +165,12 @@ using namespace NAVIGATION;
 //last subroutines in file.
 void Nav_init()
 {
-	int LD[]=LeftDrive;
-	int RD[]=RightDrive;
 	int i;
+	EnablePWM(LeftDrive);
+	EnablePWM(RightDrive);
 	for(i=0;i<10;i++)
 	{
 		LineVars[i] = new c_bin_io(Lpins[i]);
-		if(i<4){
-		LeftSpeed[i]=new c_bin_io(LD[i]);
-		RightSpeed[i]=new c_bin_io(RD[i]);
-			}
 	}
 	LeftDirection=new c_bin_io(LeftExite);
 	RightDirection=new c_bin_io(RightExite);
