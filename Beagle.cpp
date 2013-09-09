@@ -266,7 +266,7 @@ void EnableADCs()
 {
 //echo cape-bone-iio > /sys/devices/bone_capemgr.*/slots
 FILE * A;
-A=fopen(,"ab");
+A=fopen(BEAGLE_CAPE_SLOTS,"ab");
 if(A==NULL)return;
 fprintf(A,"cape-bone-iio");
 fclose(A);
@@ -276,8 +276,40 @@ double AIN(int ADC_ID)
 char op[255];double ret;
 sprintf(op,ADCT,ADC_ID);
 FILE * A = fopen(op,"rb");
+if(A==NULL)return;
 fscanf(A,"%d",&ret);
 return ret;
+}
+//untested
+void EnablePWM(int HDR,int pin)
+{
+const am33xx_pwm = "am33xx_pwm";
+FILE * A = fopen(BEAGLE_CAPE_SLOTS,"ab
+if(A==NULL) return;
+fprintf(A,am33xx_pwm)
+fclose(A);
+//often the file needs be cycled first on this board
+FILE * A = fopen(BEAGLE_CAPE_SLOTS,"ab");
+fprintf(A,"bone_pwm_p%d_%d",HDR,pin);
+fclose(A);
+//bone_pwm_P8_13
+}
+/*NOTE: period is in nanoseconds, stranger is that duty is in nanoseconds (NOT %).
+To convert is easy dutyNS=duty*periodNS/100; (for duty %, leave out 100 if duty is simple double)*/
+void WritePWM(int HDR,int pin,int periodNS,int dutyNS)
+{
+	if(periodNS<dutyNS)return;
+	char[255] pd;
+	sprintf(pd, "/sys/devices/ocp.*/pwm_test_P%d_%d.*/period",HDR,pin);
+	FILE * A = fopen(pd,"ab");
+	if(A==0)return;
+	fprintf(A,"%d",periodNS);
+	fclose(A)
+	sprintf(pd, "/sys/devices/ocp.*/pwm_test_P%d_%d.*/duty",HDR,pin);
+	fopen(pd,"ab");
+	if(A==0)return;
+	fprintf(A,"%d",dutyNS);
+	fclose(A)
 }
 #else
 #endif

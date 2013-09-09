@@ -5,6 +5,7 @@
 #include <stdlib.h>
 typedef unsigned char byte;
 #define TCS34717 0x29 //address
+//untested
 //#ifndef I_Class //pure virtal interface fail me on linux. WHY?
 //cI2C
 class cI2C//: public I2C
@@ -34,6 +35,7 @@ public:
 	void Write(byte regaddr, byte data);
 	byte Read(byte regaddr);
 };
+//tested
 class c_bin_io
 {
 private:
@@ -53,4 +55,7 @@ void WriteF(const char * FileName, const char * value);
 char * ReadF(const char * FileName, char * buff, int length);
 double AIN(int ADC_ID);
 void EnableADCs();
+//untested
+void EnablePWM(int HDR,int pin);
+void WritePWM(int HDR,int pin,int periodNS,int dutyNS);
 #endif
