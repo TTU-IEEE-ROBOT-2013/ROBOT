@@ -7,6 +7,7 @@
 //definitions of some common pins for i/o (if it is defined 0, it is NOT DEFINED!)
 #define ION 0//a pin for second "Power Switch" to enable the  robot on the track 
 //(avoids problem with boot time as it is booted before it is put on the track
+				//all LT's on header p8
 #define LT1 66 //7	2[2]	32*2+2
 #define LT2 67 //8	2[3]
 #define LT3 69 //9	2[5]
@@ -17,6 +18,9 @@
 #define LT8 47 //15	1[15]
 #define LT9 46 //16	1[14]
 #define LT10 59 //17	1[27]
+//motor direction 0=fwd, 1=rev 
+#define LeftExite 65 //p8_18 2[1] 65
+#define RightExite 61//p8_26 1[29] 61
 //motor speed controled by pwm
 #define LeftDrive 8,13
 #define RightDrive 8,19
@@ -25,12 +29,12 @@
 #define MAX_DUTY 250000 //if it is too fast, lower this to lower the speed. 
 //reserved macros (not used in code, but specify pins used by other interfaces)
 //reserved of color-sense
-#define NO_USE_COLOR_SENSE 9,21;9,22
+#define NO_USE_COLOR_SENSE 9,21;9,22 //other i2c devices can go here
 #define NO_USE_MMC 8,{22 23 24 3 4 5 6 20 21 25}
 #define AVOID_USE_HDMI 8,{27-46} //we shouldn't use them
 //usable are p8 { 7,8,9,10,11,12,13,14,15,16,17,18,19,26 }
 //			 p9 { 11-24,26-31,41,42 }
-//free on p8 are 18,26 (p9 all but 21,22 <i2c>
+//free on p8 (none) (p9 all but 21,22 <i2c>
 //special pins are {9,21;9,22} i2c: 8,13;8,19;9,14;9,15;9,42;9,29;9,31; PWM
 //					9,24;9,26 UART 1
 //text pin definitions
@@ -42,10 +46,7 @@
 #define BEAGLE_CAPE_SLOTS "/sys/devices/bone_capemgr.*/slots"
 
 #define GPIO_EXPORT 
-//motor direction controled by excitation. (digital out 0 = positive, digital out 1 = negative)
-//motor driver will be designed accordingly. 
-#define LeftExite 0
-#define RightExite 0
+
 
 
 
