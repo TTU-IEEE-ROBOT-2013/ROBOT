@@ -24,9 +24,12 @@
 //motor speed controled by pwm
 #define LeftDrive 8,13
 #define RightDrive 8,19
+//Rotary Encoders
+#define REL_ 30 //P9_11 0[30]
+#define RER_ 60 //P9_12 1[28]
+//output to enable led's (led's cand be on before start signal)
+#define LSTART 31//P9_13 0[31]
 //definitions for pwm output
-#define PERIOD  250000 //250000 ns = 1/4000 (for 4000 hz frequency)
-#define MAX_DUTY 250000 //if it is too fast, lower this to lower the speed. 
 //reserved macros (not used in code, but specify pins used by other interfaces)
 //reserved of color-sense
 #define NO_USE_COLOR_SENSE 9,21;9,22 //other i2c devices can go here
@@ -34,7 +37,7 @@
 #define AVOID_USE_HDMI 8,{27-46} //we shouldn't use them
 //usable are p8 { 7,8,9,10,11,12,13,14,15,16,17,18,19,26 }
 //			 p9 { 11-24,26-31,41,42 }
-//free on p8 (none) (p9 all but 21,22 <i2c>
+//free on p8 (none) (p9 all but 21,22 <i2c> and 11,12
 //special pins are {9,21;9,22} i2c: 8,13;8,19;9,14;9,15;9,42;9,29;9,31; PWM
 //					9,24;9,26 UART 1
 //text pin definitions
@@ -43,9 +46,7 @@
 #define LED2 "/sys/class/leds/beaglebone:green:usr2/brightness" //can be used for debuging (when run starts)
 #define LED3 "/sys/class/leds/beaglebone:green:usr3/brightness" //reserved for heartbeat.
 #define ADCT "/sys/bus/iio/devices/iio:device0/in_voltage%d_raw"
-#define BEAGLE_CAPE_SLOTS "/sys/devices/bone_capemgr.*/slots"
-
-#define GPIO_EXPORT 
+#define BEAGLE_CAPE_SLOTS "/sys/devices/bone_capemgr.*/slots" 
 
 
 
@@ -55,6 +56,8 @@
 #define NavMaxLineWidth 2 
 //speed at which to turn. this is in reference to MAX_DUTY / 16  which is( (TurnSpeed*Max_DUTY/(16*PERIOD))*3.3)V
 #define TurnSpeed 8
+#define RotationsPer90dTurn 1 //assuming 3" wheels and 12" axle length, 2*pi*3/2*pi*12=1/4 (1/4 of a circle is 90d)
+#define PointsOnWheel 32 //assuming an encoder with 32 points. (this is points on encoder btw)
 //RGB limits for block detection.
 #define NAV_RL 50
 #define NAV_BL 50
@@ -62,6 +65,8 @@
 #define NAV_RH 1024
 #define NAV_BH 1024
 #define NAV_GH 1024
+#define PERIOD  250000 //250000 ns = 1/4000 (for 4000 hz frequency)
+#define MAX_DUTY 250000 //if it is too fast, lower this to lower the speed. 
 //GPIO ADDRESS FOR USE IN PRU CODE (yes, not this code)
 /*
 #define GPIO0 0x44E05000

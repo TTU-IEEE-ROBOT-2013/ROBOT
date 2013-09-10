@@ -1,5 +1,6 @@
 #include "Main.h"
 #include "Beagle.h"
+#include <unistd>
 #include <bitset>
 using namespace std;
 namespace NAVIGATION
@@ -8,11 +9,19 @@ namespace NAVIGATION
 	c_bin_io * LineVars[10];
 	cRGBC * CT;
 	int Lpins[]={LT1,LT2,LT3,LT4,LT5,LT6,LT7,LT8,LT9,LT10};
-	c_bin_io  * LeftDirection, *RightDirection;
+	c_bin_io  * LeftDirection, * RightDirection, * Lon, *RELeft *RERight;
 	int IRightSpeed;
 	int ILeftSpeed;
 	void Count1()
 	{
+	double a=1.3,b=1.3,c=1.3;
+	bool c=false;
+	if(RELeft->Read())
+		while(RELeft->Read())
+			a=b*c; //waist time
+	while(RELeft->Read()==false)
+		a=b*c; //waist time
+		//rotary encoder (will need specifics later(points per turn))
 		//count 1 point on encoder (using while)
 		//need more info about encoder to implement
 	}
@@ -30,8 +39,8 @@ namespace NAVIGATION
 		CT->GreenRead()<NAV_GL)
 		{
 			return 1;
-		}else if(CT->BlueRead() > NAV_BL && // Red
-		CT->RedRead()<NAV_RH &&
+		}else if(CT->BlueRead() < NAV_BL && // Red
+		CT->RedRead()>NAV_RH &&
 		CT->GreenRead()<NAV_GL)
 		{
 			return 2;
@@ -42,7 +51,14 @@ namespace NAVIGATION
 	}
 	void TurnRight()
 	{
-
+		LeftDirection->Write(false);
+		RightDirection->Write(true);
+		IRightSpeed = ILeftSpeed = TurnSpeed;
+		Move();
+		wait(RotationsPer90dTurn);//#of rotations to do a turn
+		RightDirection->Write(false);
+		while(LineCheck()==0xFFFF)
+		Move();
 	}
 	void Return(int Steps)
 	{
@@ -77,11 +93,10 @@ namespace NAVIGATION
 		RightDirection->Write(false);
 		IRightSpeed = ILeftSpeed = TurnSpeed;
 		Move();
-		wait(2);
-		//sleep untill done
+		wait(RotationsPer90dTurn);//#of rotations to do a turn
 		LeftDirection->Write(false);
+		while(LineCheck()==0xFFFF)
 		Move();
-		wait(1);
 	}
 	bool Move() //set movement speed.
 	{
@@ -158,8 +173,63 @@ int LineCheck()
 		return 0;
 	}
 }
+void Start()
+{
 
-
+while(!LineVars[5]->Read())
+{
+sleep(.1);
+}
+}
+void SeeRed()
+{
+		double a=1.3,b=1.3,c=1.3;
+		while(CTest() != 2)
+		{
+			LineCheck();
+			Move();
+			a=b*c; //waist time
+		}
+}
+void NavEnd()
+{
+	int i;
+	//EnablePWM(LeftDrive);
+	//EnablePWM(RightDrive);
+	for(i=0;i<10;i++)
+	{
+		delete LineVars[i];
+		//LineVars[i]->SetIP();
+	}
+	delete LeftDirection;//=new c_bin_io(LeftExite);
+	//LeftDirection->SetOP();
+	delete RightDirection;//=new c_bin_io(RightExite);
+	//RightDirection->SetOP();
+	delete CT;//=new cRGBC();
+	delete Lon;//=new c_bin_io(LSTART);
+	//Lon->SetOP();
+	delete RELeft;//=new c_bin_io(REL_);
+	//RELeft->SetIP();
+	delete RERight;//=new c_bin_io(RER_);
+	//RERight->SetIP();
+	//Lon->Write(false);
+}
+void FollowLine()
+{
+Lon->Write(true);
+while(LineCheck()==0)
+Move();//skip "first" line(as it is part of starting box)
+while(LineCheck()==0)
+Move();
+Count2Blue();//shot 1
+while(LineCheck()==0)
+Move();
+Count2Blue();
+while(LineCheck()==0);
+Count2Blue();
+SeeRed();
+Lon->Write(false);
+}
 }
 using namespace NAVIGATION;
 //last subroutines in file.
@@ -171,12 +241,24 @@ void Nav_init()
 	for(i=0;i<10;i++)
 	{
 		LineVars[i] = new c_bin_io(Lpins[i]);
+		LineVars[i]->SetIP();
 	}
 	LeftDirection=new c_bin_io(LeftExite);
+	LeftDirection->SetOP();
 	RightDirection=new c_bin_io(RightExite);
+	RightDirection->SetOP();
 	CT=new cRGBC();
+	Lon=new c_bin_io(LSTART);
+	Lon->SetOP();
+	RELeft=new c_bin_io(REL_);
+	RELeft->SetIP();
+	RERight=new c_bin_io(RER_);
+	RERight->SetIP();
+	Lon->Write(false);//ensure our lights are out
 }
 void Navigate()
 {
-
+Start();
+FollowLine();
+NavEnd();
 }

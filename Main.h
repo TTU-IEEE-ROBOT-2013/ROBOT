@@ -5,4 +5,5 @@ void Navigate();
 void Nav_init();
 void ShootTarget();
 void GunInit();
+void GunDone();
 #endif
