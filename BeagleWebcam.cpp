@@ -1,3 +1,4 @@
+#pragma GCC warning WARNING: BeagleWebcam has been obsoleted, use "GunShot.cpp" instead
 #include "Beagle.h"
 #include "Target.h"
 #include <stdlib.h>

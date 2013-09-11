@@ -1,4 +1,7 @@
 //#pragma once
+//pio_addr = mmap(0, GPIO1_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, fd, GPIO1_START_ADDR);
+//for beaglebone mean_and_dirty, we will use this style to increase speed (iff we need to)
+//if we don't, i wont.  the delay of te filesystem may not hurt. but we keep this ref for later.
 #ifndef __Beagle_Gen_purpose_input_output
 #define __Beagle_Gen_purpose_input_output
 #include <stdio.h>

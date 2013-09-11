@@ -58,7 +58,8 @@ GunCam wc;
 (shoot should be self-contained in software and mostly hardware implemented<555 single pulse out>)*/
 void mdx(int a,int b)//sets servo moving (with feed back from camera when to stop)
 {
-//servo control here (may need static int/static double or something
+static double VOLT=0;
+//servo control here (need static int/static double or something
 //and conversion form x,y to angular coords.
 }
 void shoot()//shoots the gun
