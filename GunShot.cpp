@@ -1,4 +1,4 @@
-#include <unixstd.h>
+#include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -69,7 +69,7 @@ void shoot()//shoots the gun
 //then wait .1sec, then write back low for when next shot comes
 }
 }
-using namespace _GUN
+using namespace _GUN;
 void ShootTarget()
 {	
 	wc.start_capturing();

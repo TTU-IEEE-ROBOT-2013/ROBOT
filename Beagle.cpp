@@ -54,6 +54,7 @@ and thanks to multiple others for for ioctl and acess name for i2c operation.
 //#include "linuxwebcam.h"
 //using namespace std;
 #include "Beagle.h"
+#include "Tuning.h"
 #ifndef I_Class
 /* cI2C: Class for i2c comm */
 #pragma region I2C
@@ -276,20 +277,20 @@ double AIN(int ADC_ID)
 char op[255];double ret;
 sprintf(op,ADCT,ADC_ID);
 FILE * A = fopen(op,"rb");
-if(A==NULL)return;
+if(A==NULL)return 0;
 fscanf(A,"%d",&ret);
 return ret;
 }
 //untested
 void EnablePWM(int HDR,int pin)
 {
-const am33xx_pwm = "am33xx_pwm";
-FILE * A = fopen(BEAGLE_CAPE_SLOTS,"ab
+const char * am33xx_pwm = "am33xx_pwm";
+FILE * A = fopen(BEAGLE_CAPE_SLOTS,"ab");
 if(A==NULL) return;
-fprintf(A,am33xx_pwm)
+fprintf(A,am33xx_pwm);
 fclose(A);
 //often the file needs be cycled first on this board
-FILE * A = fopen(BEAGLE_CAPE_SLOTS,"ab");
+A = fopen(BEAGLE_CAPE_SLOTS,"ab");
 fprintf(A,"bone_pwm_p%d_%d",HDR,pin);
 fclose(A);
 //bone_pwm_P8_13
@@ -299,17 +300,17 @@ To convert is easy dutyNS=duty*periodNS/100; (for duty %, leave out 100 if duty 
 void WritePWM(int HDR,int pin,int periodNS,int dutyNS)
 {
 	if(periodNS<dutyNS)return;
-	char[255] pd;
+	char pd[255];
 	sprintf(pd, "/sys/devices/ocp.*/pwm_test_P%d_%d.*/period",HDR,pin);
 	FILE * A = fopen(pd,"ab");
 	if(A==0)return;
 	fprintf(A,"%d",periodNS);
-	fclose(A)
+	fclose(A);
 	sprintf(pd, "/sys/devices/ocp.*/pwm_test_P%d_%d.*/duty",HDR,pin);
 	fopen(pd,"ab");
 	if(A==0)return;
 	fprintf(A,"%d",dutyNS);
-	fclose(A)
+	fclose(A);
 }
 #else
 #endif

@@ -9,6 +9,7 @@ struct RGB_t{
 	unsigned char BLUE;
 	unsigned char RED;
 };
+typedef unsigned char Tiny;
 //sturcture to hold info about the actual image (image capture code responsible for creating)
 //size is size in byte, length is # of RGB values (probably unused, thus safe to set 0)
 //width and height are used intensivly and it is important they are set correctly
@@ -37,7 +38,10 @@ struct BDS{
 
 Point SD(RAW_BITMAP P, Point u);
 Point ProcRGBtoRMGM(RAW_BITMAP,RGB_t *, int);
-//Point FindCenterTarget(RGB * Bitmap, int width, int height);
+RGB_t RRGB(Tiny R,Tiny G,Tiny B);
+RGB_t operator+(RGB_t A,RGB_t B);
+RGB_t operator-(RGB_t A,RGB_t B);
+bool inline IsColRange(RGB_t D,RGB_t L,RGB_t H);
 
 // Macros to help. (Macros are faster than functions as they are placed directly.
 //inline functions are not guarenteed to be inline, macros will be every time
@@ -59,4 +63,7 @@ Point ProcRGBtoRMGM(RAW_BITMAP,RGB_t *, int);
 #define IsRed(rgb)		((rgb.RED > T_R_R) && (rgb.BLUE < T_R_B) && (rgb.GREEN < T_R_G))
 #define IsWhite(rgb)	((rgb.RED > T_W_R) && (rgb.BLUE > T_W_B) && (rgb.GREEN > T_W_G))
 #define IsBlue(rgb)		((rgb.RED < T_B_R) && (rgb.BLUE > T_B_B) && (rgb.GREEN < T_B_G))
+
+
+
 #endif

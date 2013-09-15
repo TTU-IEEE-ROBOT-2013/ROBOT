@@ -1,4 +1,5 @@
 //#pragma once
+//thanks to community at stack overflow
 //pio_addr = mmap(0, GPIO1_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, fd, GPIO1_START_ADDR);
 //for beaglebone mean_and_dirty, we will use this style to increase speed (iff we need to)
 //if we don't, i wont.  the delay of te filesystem may not hurt. but we keep this ref for later.
@@ -9,7 +10,6 @@
 typedef unsigned char byte;
 #define TCS34717 0x29 //address
 //untested
-//#ifndef I_Class //pure virtal interface fail me on linux. WHY?
 //cI2C
 class cI2C//: public I2C
 {

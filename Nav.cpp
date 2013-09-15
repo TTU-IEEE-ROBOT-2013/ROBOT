@@ -1,6 +1,6 @@
 #include "Main.h"
 #include "Beagle.h"
-#include <unistd>
+#include <unistd.h>
 #include <bitset>
 using namespace std;
 namespace NAVIGATION
@@ -9,13 +9,15 @@ namespace NAVIGATION
 	c_bin_io * LineVars[10];
 	cRGBC * CT;
 	int Lpins[]={LT1,LT2,LT3,LT4,LT5,LT6,LT7,LT8,LT9,LT10};
-	c_bin_io  * LeftDirection, * RightDirection, * Lon, *RELeft *RERight;
+	c_bin_io  * LeftDirection, * RightDirection, * Lon, *RELeft, *RERight;
 	int IRightSpeed;
 	int ILeftSpeed;
+	bool Move();
+	int LineCheck();
 	void Count1()
 	{
 	double a=1.3,b=1.3,c=1.3;
-	bool c=false;
+	//bool c=false;
 	if(RELeft->Read())
 		while(RELeft->Read())
 			a=b*c; //waist time
@@ -101,9 +103,9 @@ namespace NAVIGATION
 	bool Move() //set movement speed.
 	{
 		//8=normal (will set default in Tuning.h)
-		int actspeed= LeftSpeed * MAX_DUTY / 16;
-		WritePWM(LeftDrive,period,actspeed);
-		actspeed=RightSpeed * MAX_DUTY / 16;
+		int actspeed= ILeftSpeed * MAX_DUTY / 16;
+		WritePWM(LeftDrive,PERIOD,actspeed);
+		actspeed=IRightSpeed * MAX_DUTY / 16;
 	}
 int LineCheck()
 {
