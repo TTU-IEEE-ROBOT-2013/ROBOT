@@ -1,0 +1,3 @@
+If pru does not load, we can try items here.
+but hopefully the device tree enable is all we need
+http://github.jfet.org/BBKNotes2.html
