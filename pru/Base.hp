@@ -1,20 +1,20 @@
-//Macros to make pru work easier.
-//also some other defines
-//Contains GPIO Read/Clear/Set
-//also Contains ADC Configure/Enable/Read
+//;Macros to make pru work easier.
+//;also some other defines
+//;Contains GPIO Read/Clear/Set
+//;also Contains ADC Configure/Enable/Read
 
 
 #define GPIO0 0x44E07000
 #define GPIO1 0x4804C000
 #define GPIO2 0x481AC000
 #define GPIO3 0x481AE000
-//GPIO read/write instructs
+//;GPIO read/write instructs
 #define GPIO_SET  0x194
 #define GPIO_CLR  0x190
 #define GPIO_READ 0x138
-//uart and I2C registers. these should just be used
-//from within main linux processor.
-#define UART0 ox44E09000
+//;uart and I2C registers. these should just be used
+//;from within main linux processor.
+#define UART0 0x44E09000
 #define UART1 0x48022000
 #define I2C0  0x44E09000
 #define UART2 0x48024000
@@ -27,11 +27,11 @@
 
 
 
-//=========================================================================
-//Gen purpose Input/Output
-//write
-//RB = temporary register used internally DWORD
-//Data = register containing data to write DWORD
+//;=========================================================================
+//;Gen purpose Input/Output
+//;write
+//;RB = temporary register used internally DWORD
+//;Data = register containing data to write DWORD
 .macro BitSetGPIO0
 .mparam RB,Data
    mov RB, GPIO0 | GPIO_SET
@@ -76,53 +76,53 @@
 
 
 
-//read
+//;read
 .macro ReadGPIO0
 .mparam RB,Data
    mov RB, GPIO0 | GPIO_READ
-   lbbo Data,RB,0,4   //only difference is l not s
+   lbbo Data,RB,0,4   //;only difference is l not s
 .endm
 .macro ReadGPIO1
 .mparam RB,Data
    mov RB, GPIO1 | GPIO_READ
-   lbbo Data,RB,0,4   //only difference is l not s
+   lbbo Data,RB,0,4   //;only difference is l not s
 .endm
 .macro ReadGPIO2
 .mparam RB,Data
    mov RB, GPIO2 | GPIO_READ
-   lbbo Data,RB,0,4   //only difference is l not s
+   lbbo Data,RB,0,4   //;only difference is l not s
 .endm
 .macro ReadGPIO3
 .mparam RB,Data
    mov RB, GPIO3 | GPIO_READ
-   lbbo Data,RB,0,4   //only difference is l not s
+   lbbo Data,RB,0,4   //;only difference is l not s
 .endm
 
 
 
 
 
-//====================================================================
-//ADC's
-//location defines
+//;====================================================================
+//;ADC's
+//;location defines
 #define TSP_ADC   0x44E0D000
 #define ADC_FIFO1_COUNT 0xF0
 #define ADC_FIFO0_COUNT 0xE4
 #define ADC_FIFO1_DATA 0x200
 #define ADC_FIFO0_DATA 0x100
-#define ADC_STEPCFG_ST  0x64 //step 1 register
-#define ADC_STEP_DELTA  0x08 //address of step n - address of step (n-1)
-							 //step 3 = ADC_STEPCFG_ST+2*(ADC_STEP_DELTA)
+#define ADC_STEPCFG_ST  0x64 //;step 1 register
+#define ADC_STEP_DELTA  0x08 //;address of step n - address of step (n-1)
+							 //;step 3 = ADC_STEPCFG_ST+2*(ADC_STEP_DELTA)
 #define ADC_STEPENABLE  0x54
 
 
 
 
-//Enable Steps
-//RB Temporary internally used register
-//EN specify which steps to enable
-//EN word 0. set bit n High to enable that step,
-//set bit n low to disable. (note: 16 steps, 16 bits)
+//;Enable Steps
+//;RB Temporary internally used register
+//;EN specify which steps to enable
+//;EN word 0. set bit n High to enable that step,
+//;set bit n low to disable. (note: 16 steps, 16 bits)
 .macro ADC_Enable_Steps
 .mparam RB,EN
    mov RB,TSP_ADC | ADC_STEPENABLE
@@ -135,85 +135,84 @@
 
 
 
+//;configure (slightly less than trivial)
+//;Configure_Step
+//;RB  = temporary internally used register
+//;TM  = Configuration settings
+//;byte 1: Step to configure     |byte 2: Differential FIFO Queue Select
+//;byte 3: Channel +             |byte 4: Channel -
+//;For channels: 0 refers to channel 1, 1 to 2, ... , 7 to 8
+//;byte 2:t1 0-> not differential input (only byte 3 is used) 
+//;	1-> differential input (byte 4 is -, byte 3 is +)
+//;byte 2:t2 0-> use Queue 0, 1-> use Queue 1
+//;byte 2:t0,t3,t4,t5,t6,t7 should all be zero.
+//;byte 1: step to configure (0-15)
+//;note: if multiple 'steps' use the same queue,
+//;the lower number steps are the first values retrieved
+//;Byte 1 is Rm.b0, ..., byte 4 is Rm.b3
 
-//configure (slightly less than trivial)
-//Configure_Step
-//RB  = temporary internally used register
-//TM  = Configuration settings
-//byte 1: Step to configure     |byte 2: Differential FIFO Queue Select
-//byte 3: Channel +             |byte 4: Channel -
-//For channels: 0 refers to channel 1, 1 to 2, ... , 7 to 8
-//byte 2:t1 0-> not differential input (only byte 3 is used) 
-//	1-> differential input (byte 4 is -, byte 3 is +)
-//byte 2:t2 0-> use Queue 0, 1-> use Queue 1
-//byte 2:t0,t3,t4,t5,t6,t7 should all be zero.
-//byte 1: step to configure (0-15)
-//note: if multiple 'steps' use the same queue,
-//the lower number steps are the first values retrieved
-//Byte 1 is Rm.b0, ..., byte 4 is Rm.b3
-
-//configured using vssa, vdda as references as basic ADC (not touchscreen ability)
+//;configured using vssa, vdda as references as basic ADC (not touchscreen ability)
 .macro ADC_Configure_Step
 .mparam RB,TM
-   //Start with
-   //NNNN_NNNN__0000_0XX0_-_0000_XXXX__0000_XXXX
-   //NNNN_NNNN is used in address portion and not transfered
-   //target is
-   //0000_0XX0__0XXX_XXXX_-_X000_0000__0000_0000
-   //<FIFO - 1bit><Differential - 1bit>
-   //<Channel + (4 bits)><Channel - (4 bits)>
-   //and mask
-   //06_7F_80_00
+   //;Start with
+   //;NNNN_NNNN__0000_0XX0_-_0000_XXXX__0000_XXXX
+   //;NNNN_NNNN is used in address portion and not transfered
+   //;target is
+   //;0000_0XX0__0XXX_XXXX_-_X000_0000__0000_0000
+   //;<FIFO - 1bit><Differential - 1bit>
+   //;<Channel + (4 bits)><Channel - (4 bits)>
+   //;and mask
+   //;06_7F_80_00
    
-   //load address of control
+   //;load address of control
    mov RB, TSP_ADC | ADC_STEPCFG_ST
-   lsl TM.B0,TM.B0,3 //I need to multiply our Step number by 8 (delta)
-   add RB,RB,TM.B0   //add Step m * 8 to ADC_STEPCFG_ST
-   //form message
-   and TM.B1,TM.B1, 0x06  //ensure certain pins are clear
-   mov TM.B0,TM.B1        //continue formatting our register
-   lsl TM.B2,3            //see page 1538 of AM335x MPU's reference manuel
-   and TM.B2,TM.B2,0x78   //for information into the formatting were doing
-   mov TM.B1,TM.B2		  //here.
+   lsl TM.B0,TM.B0,3 //;I need to multiply our Step number by 8 (delta)
+   add RB,RB,TM.B0   //;add Step m * 8 to ADC_STEPCFG_ST
+   //;form message
+   and TM.B1,TM.B1, 0x06  //;ensure certain pins are clear
+   mov TM.B0,TM.B1        //;continue formatting our register
+   lsl TM.B2,TM.B2,3            //;see page 1538 of AM335x MPU's reference manuel
+   and TM.B2,TM.B2,0x78   //;for information into the formatting were doing
+   mov TM.B1,TM.B2		  //;here.
    mov TM.B2,TM.B3
-   rsl TM.B3,TM.B3,1
+   lsr TM.B3,TM.B3,1
    lsl TM.B2,TM.B2,0x07
    and TM.B3,TM.B3,0x07
-   or  TM.B1,TM.B1,TM.B3  //B3 is now useless
+   or  TM.B1,TM.B1,TM.B3  //;B3 is now useless
    mov TM.B3,0x00
    and TM.B0,TM.B0,0x06
    and TM.B1,TM.B1,0x7F
    and TM.B2,TM.B2,0x80
-   //TM.B3 is set to zero
+   //;TM.B3 is set to zero
    sbbo TM,RB,0,4
 .endm
 
 
 
 
-//read from FIFO
-//RB = temporary register used internally DWORD
-//RT = return value register (Word0)
+//;read from FIFO
+//;RB = temporary register used internally DWORD
+//;RT = return value register (Word0)
 .macro ADC_Read_Queue0
 .mparam RB,RT
-   mov RB, TSP_ADC | ADC_FIFO0_DATA | 2 //+2 for size of word (2 byte)
+   mov RB, TSP_ADC | ADC_FIFO0_DATA | 2 //;+2 for size of word (2 byte)
    lbbo RT,RB,0,2
    mov RB.w0, 0x0FFF
-   and RT.w0,RT.w0,RB.w0 //RT=RT and 0x0FFF (12 bits)
+   and RT.w0,RT.w0,RB.w0 //;RT=RT and 0x0FFF (12 bits)
 .endm
 .macro ADC_Read_Queue1
 .mparam RB,RT
-   mov RB, TSP_ADC | ADC_FIFO1_DATA | 2 //+2 for size of word (2 byte)
+   mov RB, TSP_ADC | ADC_FIFO1_DATA | 2 //;+2 for size of word (2 byte)
    lbbo RT.w0,RB,0,2
    mov RB.w0, 0x0FFF
-   and RT.w0,RT.w0,RB.w0 //clear all undefined (reserved) bits.
+   and RT.w0,RT.w0,RB.w0 //;clear all undefined (reserved) bits.
 .endm
 
 
 
 
 
-//ADC FIFO count
+//;ADC FIFO count
 .macro ADC_Queue_Counts
 .mparam RB,RT
    mov RB, TSP_ADC | ADC_FIFO1_Count | 2
@@ -221,9 +220,11 @@
    mov RB, TSP_ADC | ADC_FIFO0_Count | 2
    lbbo RT.w0,RB,0,2
    mov RB, 0x007F007F
-   and RT,RT,RB //clear all undefined (reserved) bits.
+   and RT,RT,RB //;clear all undefined (reserved) bits.
 .endm
-//compile test
-//.origin 8
-// mov r1, 0xFFFFFFFF
-// BitClrGPIO0 r2,r1
+//;compile test
+//;.origin 8
+//; mov r1, 0xFFFFFFFF
+//; mov r2, 0xFFFFFFFF
+//; BitClrGPIO0 r2,r1
+//; ADC_Configure_Step r1,r2
