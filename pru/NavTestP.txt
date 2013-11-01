@@ -1,0 +1,9 @@
+#include "Init.hp"
+#include "Base.hp"
+#define AD_CONFIG r3
+#define TMP r1
+mov  AD_CONFIG.b0,1
+mov  AD_CONFIG.b1,0x04
+mov  AD_CONFIG.b2,1
+mov  AD_CONFIG.b3,2
+ADC_Configure_Step AD_CONFIG,TMP

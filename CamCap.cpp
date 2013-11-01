@@ -35,8 +35,9 @@ int ShootTarget()
 		//hardware in 70's
 		//however if you want any specific color scheme
 		//we will get it here for you
-		
-		cvtColor(frame, edges, CV_BGR2HSV);
+		mat s2x;
+		cvtColor(frame, s2x, CV_BGR2HLS);
+		//CV_BGR2HSV for HSV values instead (not much difference)
 		//RGB Red Green Blue
 		//color work here can be counterintuitive
 		//HSV Hue Saturation Value
@@ -47,12 +48,15 @@ int ShootTarget()
 		//setting H=H, S=S, L=0 (so HS0)
 		//only opencv works in order HLS not HSL
 		//CV_BGR2HLS is used for this conversion
+		//the advantage for HSL is that in theory, varing light conditions leads to a
+		//varying L with H and S relatively constant (so if we can work to make it a L independent as possible, thats good)
+		//further, if we find H and S vary more than we want, we can use our L values to detect the Light, and modify the algorithm
 		
 		//next we will process our frame, moving servo, ect
 		//the faster this function works, the higher our framerate.
 		//so don't wait for servos to finish moving, just get them started
 		//then stop them when target is ready to shoot
-		Finished = ProcessTarget(frame);
+		Finished = ProcessTarget(s2x);
 		//process target will also be responsible for counting time
 		//for 3 seconds to pass.
 		//DO NOT DO THIS WITH SLEEP
@@ -68,4 +72,23 @@ int ShootTarget()
     }
     // the camera will be deinitialized automatically in VideoCapture destructor
     return 0;
+}
+
+bool ProcessTarget(Mat _Frame)
+{
+Mat_ <Vec3b> Frame(_Frame); //mat_ is a mat wrapper that allows us to access element by element using (i,j)
+int i,j;
+for(i=0;i<200;i++)
+for(j=0;j<200;j++)
+ {
+ //Frame(i,j)[0]=0;
+ if(Frame(i,j)[0] < 20) {  //the value is red hue
+	if(Frame(i,j)[2] > 200) //Can vary the sat value to require it to be more or less red (like pink is a red)
+		if(Frame(i,j)[1] < 190 && Frame(i,j)[2] > 65) //vary the luminance values.  Black and White can be red with Very Low or Very High luminance
+		//off-white can be red with low saturation and high luminance. something similar 
+		{
+		
+		}
+	}
+ }
 }

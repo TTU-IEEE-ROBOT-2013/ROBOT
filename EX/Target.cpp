@@ -67,7 +67,7 @@ bool inline IsColRange(RGB_t D,RGB_t L,RGB_t H)
 //(or maybe its due to lack of design)
 //the actual function to use
 //is ProcRGBtoRMGM
-#ifdef _WIN32
+//#ifdef _WIN32
 void TracTest(RAW_BITMAP Bitmap)
 {
 	bool Active = false;
@@ -94,7 +94,7 @@ void TracTest(RAW_BITMAP Bitmap)
 	//A=B;
 	char mb[1000];
 	sprintf(mb,"%d|%d",A.x,A.y);
-	MessageBox(0,mb,0,0);
+	//MessageBox(0,mb,0,0);
 				
 	k++;
 	if(k==4)k=0;
@@ -103,7 +103,7 @@ void TracTest(RAW_BITMAP Bitmap)
 		//there was more here.
 
 }
-#endif
+//#endif
 //ProcRGBtoRMGM maps colors near values in TG to RED (255,0,0) and all other values to BLACK (0,0,0)
 //it also returns initial Center of Gravity (though you may need to process further to obtain necessary results)
 //Bitmap is a RAW_BITMAP created during image capture

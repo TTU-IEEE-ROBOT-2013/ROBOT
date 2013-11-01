@@ -221,6 +221,8 @@ void FollowLine()
 Lon->Write(true);
 while(LineCheck()==0)
 Move();//skip "first" line(as it is part of starting box)
+while(LineCheck()!=0)
+Move();//skiping the "first" line. 
 while(LineCheck()==0)
 Move();
 Count2Blue();//shot 1

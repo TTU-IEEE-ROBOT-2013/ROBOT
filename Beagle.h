@@ -3,6 +3,7 @@
 //pio_addr = mmap(0, GPIO1_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, fd, GPIO1_START_ADDR);
 //for beaglebone mean_and_dirty, we will use this style to increase speed (iff we need to)
 //if we don't, i wont.  the delay of te filesystem may not hurt. but we keep this ref for later.
+
 #ifndef __Beagle_Gen_purpose_input_output
 #define __Beagle_Gen_purpose_input_output
 #include <stdio.h>
@@ -10,6 +11,13 @@
 typedef unsigned char byte;
 #define TCS34717 0x29 //address
 //untested
+//uart
+class UART
+{
+private:
+public:
+
+};
 //cI2C
 class cI2C//: public I2C
 {
@@ -61,4 +69,7 @@ void EnableADCs();
 //untested
 void EnablePWM(int HDR,int pin);
 void WritePWM(int HDR,int pin,int periodNS,int dutyNS);
+//PWM EZ
+void EZWritePWM(int HDR, int pin, double FS, double Duty);
+//note: DUTY is a relative Fixed Point input (0<D<2^16-1)
 #endif

@@ -38,8 +38,6 @@ and thanks to multiple others for for ioctl and acess name for i2c operation.
 */
 
 
-
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -51,13 +49,9 @@ and thanks to multiple others for for ioctl and acess name for i2c operation.
 //as it is compiled on beaglebone, this is only one needed.
 #include <unistd.h>
 #include <linux/i2c-dev.h>
-//#include "linuxwebcam.h"
-//using namespace std;
 #include "Beagle.h"
 #include "Tuning.h"
-#ifndef I_Class
 /* cI2C: Class for i2c comm */
-#pragma region I2C
 cI2C::cI2C(int ADDR)
 {
 	op	= open("dev/i2c-3", O_RDWR); //open i2c
@@ -86,9 +80,7 @@ byte cI2C::Read(byte address)
 	return ret;
 
 }
-#pragma endregion Class for I2c comm
 /* cRGBC: uses i2c for our rgbc sensor*/
-#pragma region RGBC
 cRGBC::cRGBC()
 {
 
@@ -148,10 +140,8 @@ byte cRGBC::Read(byte regaddr)
 	read(fh,&rpt,1);
 	return rpt;
 }
-#pragma endregion Class for ic2 for rgbc comm
 /*c_bin_io Binary IO*/
 //tested principle behind it.
-#pragma region bin_io
 c_bin_io::c_bin_io(int inPin)
 {
 	ip=ips=false;
@@ -166,16 +156,10 @@ c_bin_io::c_bin_io(int inPin)
 	{
 		fprintf(TP,"%d",inPin);
 		fclose(TP);
-		//printf("/n");
 		sprintf(PinVal,"/sys/class/gpio/gpio%d/value",inPin);
-		//printf("/sys/class/gpio/gpio%d/value",inPin);
-		//printf("/n");
 		sprintf(PinDirection,"/sys/class/gpio/gpio%d/direction",inPin);
-		//printf("/sys/class/gpio/gpio%d/direction",inPin);
-		//printf("/n");
 	}
 	OK=true;
-
 }
 c_bin_io::~c_bin_io()
 {
@@ -245,7 +229,6 @@ void c_bin_io::Write(bool val)
 		fclose(Pin);
 	}
 }
-#pragma endregion Class for standard digital I/O
 
 void WriteF(const char * FileName, const char * value)
 {
@@ -312,5 +295,12 @@ void WritePWM(int HDR,int pin,int periodNS,int dutyNS)
 	fprintf(A,"%d",dutyNS);
 	fclose(A);
 }
-#else
-#endif
+
+void EZWritePWM(int HDR, int pin, double FS, double Duty)
+{
+if(Duty > 1)Duty=1;
+if(Duty < 0)Duty=0;
+int periodNS = (int)(1e9*1.0/FS);
+int dutyNS = (int)(periodNS * Duty);
+WritePWM(HDR,pin,PeriodNS,dutyNS);
+}
