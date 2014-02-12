@@ -1,0 +1,538 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_MOD_BY	Bostjan Mihoric	/ccompletion@gmail.com/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	/unofficial modification/
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	/unofficial modification/
+ALT0	event_gpio.h	38;"	macro
+ARRAY_SIZE	common.h	35;"	macro	funlike:
+BCM	common.h	33;"	macro
+BOARD	common.h	32;"	macro
+BOTH_EDGE	event_gpio.h	34;"	macro
+DUTY	c_pwm.c	36;"	macro	file:
+FALLING_EDGE	event_gpio.h	33;"	macro
+FILENAME_BUFFER_SIZE	common.h	37;"	macro
+HIGH	event_gpio.h	40;"	macro
+INPUT	event_gpio.h	36;"	macro
+KEYLEN	c_pwm.c	33;"	macro	file:
+LOW	event_gpio.h	41;"	macro
+MAXMSGLEN	spimodule.c	102;"	macro	file:
+MAXPATH	spimodule.c	100;"	macro	file:
+MODE_UNKNOWN	common.h	31;"	macro
+NO_EDGE	event_gpio.h	31;"	macro
+OUTPUT	event_gpio.h	37;"	macro
+PERIOD	c_pwm.c	35;"	macro	file:
+PUD_DOWN	event_gpio.h	44;"	macro
+PUD_OFF	event_gpio.h	43;"	macro
+PUD_UP	event_gpio.h	45;"	macro
+PyInit_ADC	py_adc.c	148;"	function
+PyInit_GPIO	py_gpio.c	503;"	function
+PyInit_PWM	py_pwm.c	194;"	function
+PyInit_UART	py_uart.c	84;"	function
+PyMODINIT_FUNC	spimodule.c	830;"	macro	file:
+RISING_EDGE	event_gpio.h	32;"	macro
+SPI	spimodule.c	53;"	typedef	file:
+SPI_close	spimodule.c	75;"	function	file:
+SPI_dealloc	spimodule.c	92;"	function	file:
+SPI_get_3wire	spimodule.c	410;"	function	file:
+SPI_get_bpw	spimodule.c	584;"	function	file:
+SPI_get_cshigh	spimodule.c	384;"	function	file:
+SPI_get_loop	spimodule.c	423;"	function	file:
+SPI_get_lsbfirst	spimodule.c	397;"	function	file:
+SPI_get_mode	spimodule.c	376;"	function	file:
+SPI_get_msh	spimodule.c	625;"	function	file:
+SPI_getset	spimodule.c	665;"	variable	file:
+SPI_init	spimodule.c	742;"	function	file:
+SPI_methods	spimodule.c	767;"	variable	file:
+SPI_module_methods	spimodule.c	825;"	variable	file:
+SPI_new	spimodule.c	56;"	function	file:
+SPI_open	spimodule.c	691;"	function	file:
+SPI_readbytes	spimodule.c	162;"	function	file:
+SPI_set_3wire	spimodule.c	528;"	function	file:
+SPI_set_bpw	spimodule.c	591;"	function	file:
+SPI_set_cshigh	spimodule.c	472;"	function	file:
+SPI_set_loop	spimodule.c	556;"	function	file:
+SPI_set_lsbfirst	spimodule.c	500;"	function	file:
+SPI_set_mode	spimodule.c	437;"	function	file:
+SPI_set_msh	spimodule.c	632;"	function	file:
+SPI_type	spimodule.c	783;"	variable	file:
+SPI_writebytes	spimodule.c	112;"	function	file:
+SPI_xfer	spimodule.c	207;"	function	file:
+SPI_xfer2	spimodule.c	290;"	function	file:
+__SPI_set_mode	spimodule.c	358;"	function	file:
+adc_cleanup	c_adc.c	107;"	function
+adc_cleanup	c_adc.h	28;"	prototype
+adc_initialized	c_adc.c	36;"	variable
+adc_methods	py_adc.c	127;"	variable
+adc_prefix_dir	c_adc.c	33;"	variable
+adc_setup	c_adc.c	102;"	function
+adc_setup	c_adc.h	26;"	prototype
+add_edge_callback	event_gpio.c	341;"	function
+add_edge_callback	event_gpio.h	57;"	prototype
+add_edge_detect	event_gpio.c	506;"	function
+add_edge_detect	event_gpio.h	55;"	prototype
+add_fd_list	event_gpio.c	149;"	function
+add_py_callback	py_gpio.c	203;"	function	file:
+ain	common.c	44;"	member	struct:pins_t	file:
+ain	py_adc.c	53;"	local
+ain	py_adc.c	92;"	local
+ain_path	c_adc.c	70;"	local
+alt0	constants.h	5;"	variable
+bb_revision	py_gpio.c	36;"	variable	file:
+bbadcmodule	py_adc.c	138;"	variable	file:
+bbpwmmodule	py_pwm.c	184;"	variable	file:
+bbuartmodule	py_uart.c	74;"	variable	file:
+bits	spimodule.c	593;"	local
+blocking_wait_for_edge	event_gpio.c	590;"	function
+blocking_wait_for_edge	event_gpio.h	64;"	prototype
+both_edge	constants.h	11;"	variable
+bouncetime	py_gpio.c	240;"	local
+bouncetime	py_gpio.c	281;"	local
+bouncetime	py_gpio.c	45;"	member	struct:py_callback	file:
+bpw	spimodule.c	51;"	member	struct:__anon1	file:
+buf	event_gpio.c	429;"	local
+buf	event_gpio.c	596;"	local
+buf	spimodule.c	116;"	local
+buffer	c_pwm.c	109;"	local
+buffer	c_pwm.c	126;"	local
+buffer	c_pwm.c	82;"	local
+build_path	common.c	310;"	function
+build_path	common.h	49;"	prototype
+bus	spimodule.c	693;"	local
+bus	spimodule.c	744;"	local
+callback	event_gpio.c	55;"	struct	file:
+callbacks	event_gpio.c	61;"	variable
+cb	event_gpio.c	343;"	local
+cb	event_gpio.c	368;"	local
+cb	event_gpio.c	379;"	local
+cb	py_gpio.c	174;"	local
+cb	py_gpio.c	206;"	local
+cb	py_gpio.c	335;"	local
+cb_func	py_gpio.c	241;"	local
+cb_func	py_gpio.c	282;"	local
+ch	event_gpio.c	287;"	local
+channel	py_adc.c	56;"	local
+channel	py_adc.c	95;"	local
+channel	py_gpio.c	123;"	local
+channel	py_gpio.c	146;"	local
+channel	py_gpio.c	239;"	local
+channel	py_gpio.c	279;"	local
+channel	py_gpio.c	334;"	local
+channel	py_gpio.c	373;"	local
+channel	py_gpio.c	392;"	local
+channel	py_gpio.c	41;"	member	struct:py_callback	file:
+channel	py_gpio.c	440;"	local
+channel	py_gpio.c	75;"	local
+channel	py_pwm.c	114;"	local
+channel	py_pwm.c	144;"	local
+channel	py_pwm.c	54;"	local
+channel	py_pwm.c	95;"	local
+channel	py_uart.c	44;"	local
+client	spimodule.c	745;"	local
+close_value_fd	event_gpio.c	112;"	function
+closedir	common.c	323;"	prototype	file:
+closedir	common.c	327;"	prototype	file:
+copy_pwm_key_by_key	common.c	231;"	function
+ctrl_dir	common.h	43;"	variable
+define_constants	constants.c	36;"	function
+define_constants	constants.h	14;"	prototype
+delay	spimodule.c	211;"	local
+device	spimodule.c	693;"	local
+device_tree_name	spimodule.c	695;"	local
+direction	event_gpio.c	223;"	local
+direction	event_gpio.c	243;"	local
+direction	py_gpio.c	76;"	local
+dp	common.c	312;"	local
+dt	common.c	151;"	member	struct:uart_t	file:
+dt	py_uart.c	43;"	local
+duty	c_pwm.c	48;"	member	struct:pwm_exp	file:
+duty_cycle	py_pwm.c	115;"	local
+duty_cycle	py_pwm.c	56;"	local
+duty_fd	c_pwm.c	154;"	local
+duty_fd	c_pwm.c	46;"	member	struct:pwm_exp	file:
+duty_path	c_pwm.c	152;"	local
+edge	py_gpio.c	280;"	local
+edge	py_gpio.c	391;"	local
+ep	common.c	313;"	local
+epfd	event_gpio.c	594;"	local
+epfd	event_gpio.c	74;"	variable
+err	c_adc.c	71;"	local
+error	py_gpio.c	393;"	local
+ev	event_gpio.c	514;"	local
+ev	event_gpio.c	554;"	local
+ev	event_gpio.c	595;"	local
+event_cleanup	event_gpio.c	583;"	function
+event_cleanup	event_gpio.h	63;"	prototype
+event_detected	event_gpio.c	573;"	function
+event_detected	event_gpio.h	58;"	prototype
+event_initialise	event_gpio.h	62;"	prototype
+event_occurred	event_gpio.c	72;"	variable
+events	event_gpio.c	428;"	local
+events	event_gpio.c	595;"	local
+exported_gpios	event_gpio.c	69;"	variable
+exported_pwms	c_pwm.c	52;"	variable
+exports_cleanup	event_gpio.c	334;"	function
+exports_cleanup	event_gpio.h	49;"	prototype
+f	event_gpio.c	114;"	local
+f	event_gpio.c	139;"	local
+f	event_gpio.c	324;"	local
+f	event_gpio.c	403;"	local
+f	event_gpio.c	415;"	local
+f	event_gpio.c	463;"	local
+f	event_gpio.c	475;"	local
+f	event_gpio.c	493;"	local
+falling_edge	constants.h	10;"	variable
+fd	event_gpio.c	172;"	local
+fd	event_gpio.c	185;"	local
+fd	event_gpio.c	221;"	local
+fd	event_gpio.c	242;"	local
+fd	event_gpio.c	264;"	local
+fd	event_gpio.c	286;"	local
+fd	event_gpio.c	309;"	local
+fd	event_gpio.c	46;"	member	struct:fdx	file:
+fd	event_gpio.c	512;"	local
+fd	event_gpio.c	555;"	local
+fd	event_gpio.c	593;"	local
+fd	event_gpio.c	78;"	local
+fd	spimodule.c	49;"	member	struct:__anon1	file:
+fd_list	event_gpio.c	52;"	variable
+fd_lookup	event_gpio.c	137;"	function
+fdx	event_gpio.c	44;"	struct	file:
+fh	c_adc.c	53;"	local
+fh	c_adc.c	69;"	local
+file	common.c	338;"	local
+file	common.c	371;"	local
+filename	event_gpio.c	173;"	local
+filename	event_gpio.c	222;"	local
+filename	event_gpio.c	244;"	local
+filename	event_gpio.c	265;"	local
+filename	event_gpio.c	310;"	local
+found_string	common.c	319;"	local
+fragment	c_pwm.c	148;"	local
+fragment	c_pwm.c	233;"	local
+frequency	py_pwm.c	145;"	local
+frequency	py_pwm.c	55;"	local
+func	event_gpio.c	58;"	member	struct:callback	file:
+func	py_gpio.c	439;"	local
+g	event_gpio.c	187;"	local
+g	event_gpio.c	80;"	local
+get_adc_ain	common.c	285;"	function
+get_adc_ain	common.h	47;"	prototype
+get_gpio_number	common.c	265;"	function
+get_gpio_number	common.h	45;"	prototype
+get_pwm_key	common.c	276;"	function
+get_pwm_key	common.h	46;"	prototype
+get_pwm_key_by_name	common.c	248;"	function
+get_uart_device_tree_name	common.c	300;"	function
+get_uart_device_tree_name	common.h	48;"	prototype
+gpio	common.c	42;"	member	struct:pins_t	file:
+gpio	event_gpio.c	430;"	local
+gpio	event_gpio.c	47;"	member	struct:fdx	file:
+gpio	event_gpio.c	57;"	member	struct:callback	file:
+gpio	event_gpio.c	66;"	member	struct:gpio_exp	file:
+gpio	py_gpio.c	121;"	local
+gpio	py_gpio.c	145;"	local
+gpio	py_gpio.c	238;"	local
+gpio	py_gpio.c	278;"	local
+gpio	py_gpio.c	333;"	local
+gpio	py_gpio.c	372;"	local
+gpio	py_gpio.c	390;"	local
+gpio	py_gpio.c	42;"	member	struct:py_callback	file:
+gpio	py_gpio.c	437;"	local
+gpio	py_gpio.c	74;"	local
+gpio_direction	common.h	40;"	variable
+gpio_event_add	event_gpio.c	473;"	function
+gpio_event_add	event_gpio.h	59;"	prototype
+gpio_event_remove	event_gpio.c	491;"	function
+gpio_event_remove	event_gpio.h	60;"	prototype
+gpio_exp	event_gpio.c	64;"	struct	file:
+gpio_export	event_gpio.c	76;"	function
+gpio_export	event_gpio.h	47;"	prototype
+gpio_get_direction	event_gpio.c	240;"	function
+gpio_get_direction	event_gpio.h	51;"	prototype
+gpio_get_value	event_gpio.c	284;"	function
+gpio_get_value	event_gpio.h	53;"	prototype
+gpio_initial	event_gpio.c	413;"	function
+gpio_is_evented	event_gpio.c	461;"	function
+gpio_is_evented	event_gpio.h	61;"	prototype
+gpio_lookup	event_gpio.c	322;"	function
+gpio_methods	py_gpio.c	477;"	variable
+gpio_mode	common.h	39;"	variable
+gpio_set_direction	event_gpio.c	219;"	function
+gpio_set_direction	event_gpio.h	50;"	prototype
+gpio_set_edge	event_gpio.c	307;"	function
+gpio_set_value	event_gpio.c	262;"	function
+gpio_set_value	event_gpio.h	52;"	prototype
+gpio_unexport	event_gpio.c	183;"	function
+gpio_unexport	event_gpio.h	48;"	prototype
+gpio_warnings	py_gpio.c	37;"	variable	file:
+gstate	py_gpio.c	173;"	local
+high	constants.h	1;"	variable
+i	event_gpio.c	594;"	local
+i	py_gpio.c	52;"	local
+i	py_pwm.c	31;"	local
+ii	spimodule.c	115;"	local
+ii	spimodule.c	165;"	local
+ii	spimodule.c	209;"	local
+ii	spimodule.c	295;"	local
+initSPI	spimodule.c	833;"	function
+init_module	py_gpio.c	50;"	function	file:
+init_module	py_pwm.c	29;"	function	file:
+initial	event_gpio.c	48;"	member	struct:fdx	file:
+initial	py_gpio.c	78;"	local
+initialize_adc	c_adc.c	38;"	function
+initialize_pwm	c_pwm.c	69;"	function
+input	constants.h	3;"	variable
+is_evented	event_gpio.c	49;"	member	struct:fdx	file:
+key	c_pwm.c	44;"	member	struct:pwm_exp	file:
+key	common.c	41;"	member	struct:pins_t	file:
+key	py_pwm.c	113;"	local
+key	py_pwm.c	143;"	local
+key	py_pwm.c	53;"	local
+key	py_pwm.c	94;"	local
+kwlist	py_gpio.c	242;"	local
+kwlist	py_gpio.c	283;"	local
+kwlist	py_gpio.c	79;"	local	file:
+kwlist	py_pwm.c	116;"	local	file:
+kwlist	py_pwm.c	146;"	local	file:
+kwlist	py_pwm.c	58;"	local	file:
+kwlist	spimodule.c	699;"	local	file:
+kwlist	spimodule.c	746;"	local	file:
+lastcall	py_gpio.c	44;"	member	struct:py_callback	file:
+len	c_pwm.c	108;"	local
+len	c_pwm.c	125;"	local
+len	c_pwm.c	81;"	local
+len	event_gpio.c	185;"	local
+len	event_gpio.c	78;"	local
+len	spimodule.c	115;"	local
+len	spimodule.c	165;"	local
+len	spimodule.c	209;"	local
+len	spimodule.c	295;"	local
+line	common.c	340;"	local
+line	common.c	373;"	local
+list	spimodule.c	117;"	local
+list	spimodule.c	166;"	local
+list	spimodule.c	213;"	local
+list	spimodule.c	296;"	local
+load_device_tree	common.c	336;"	function
+load_device_tree	common.h	50;"	prototype
+lookup_ain_by_key	common.c	187;"	function
+lookup_ain_by_name	common.c	202;"	function
+lookup_exported_pwm	c_pwm.c	54;"	function
+lookup_gpio_by_key	common.c	165;"	function
+lookup_gpio_by_name	common.c	176;"	function
+lookup_uart_by_name	common.c	217;"	function
+low	constants.h	2;"	variable
+m	spimodule.c	835;"	local
+max_dt_length	spimodule.c	694;"	local
+mode	spimodule.c	439;"	local
+mode	spimodule.c	50;"	member	struct:__anon1	file:
+module	py_adc.c	153;"	local
+module	py_gpio.c	508;"	local
+module	py_pwm.c	199;"	local
+module	py_uart.c	89;"	local
+module_setup	common.c	37;"	variable
+module_setup	common.h	53;"	variable
+moduledocstring	py_adc.c	125;"	variable	file:
+moduledocstring	py_gpio.c	475;"	variable	file:
+moduledocstring	py_pwm.c	171;"	variable	file:
+moduledocstring	py_uart.c	64;"	variable	file:
+msg	spimodule.c	292;"	local	file:
+msh	spimodule.c	52;"	member	struct:__anon1	file:
+msh	spimodule.c	634;"	local
+n	event_gpio.c	431;"	local
+n	event_gpio.c	594;"	local
+name	common.c	149;"	member	struct:uart_t	file:
+name	common.c	40;"	member	struct:pins_t	file:
+new_cb	event_gpio.c	344;"	local
+new_fd	event_gpio.c	151;"	local
+new_gpio	event_gpio.c	80;"	local
+new_pwm	c_pwm.c	155;"	local
+new_py_cb	py_gpio.c	205;"	local
+next	c_pwm.c	50;"	member	struct:pwm_exp	file:
+next	event_gpio.c	50;"	member	struct:fdx	file:
+next	event_gpio.c	59;"	member	struct:callback	file:
+next	event_gpio.c	67;"	member	struct:gpio_exp	file:
+next	py_gpio.c	46;"	member	struct:py_callback	file:
+ob_type	spimodule.c	97;"	prototype	file:
+ocp_dir	c_adc.c	34;"	variable
+ocp_dir	c_pwm.c	38;"	variable
+open_value_file	event_gpio.c	170;"	function
+output	constants.h	4;"	variable
+p	common.c	167;"	local
+p	common.c	178;"	local
+p	common.c	189;"	local
+p	common.c	204;"	local
+p	common.c	219;"	local
+p	common.c	233;"	local
+p	common.c	250;"	local
+path	common.c	150;"	member	struct:uart_t	file:
+path	spimodule.c	696;"	local
+period_fd	c_pwm.c	154;"	local
+period_fd	c_pwm.c	45;"	member	struct:pwm_exp	file:
+period_ns	c_pwm.c	49;"	member	struct:pwm_exp	file:
+period_ns	c_pwm.c	83;"	local
+period_path	c_pwm.c	151;"	local
+pins_t	common.c	39;"	struct	file:
+pins_t	common.c	45;"	typedef	file:
+polarity	py_pwm.c	57;"	local
+polarity_fd	c_pwm.c	154;"	local
+polarity_fd	c_pwm.c	47;"	member	struct:pwm_exp	file:
+polarity_path	c_pwm.c	153;"	local
+poll_thread	event_gpio.c	426;"	function
+prev	event_gpio.c	116;"	local
+prev	event_gpio.c	381;"	local
+prev	py_gpio.c	337;"	local
+prev_g	event_gpio.c	187;"	local
+prev_pwm	c_pwm.c	232;"	local
+pud	py_gpio.c	77;"	local
+pud_down	constants.h	8;"	variable
+pud_off	constants.h	6;"	variable
+pud_up	constants.h	7;"	variable
+pwm	c_pwm.c	110;"	local
+pwm	c_pwm.c	127;"	local
+pwm	c_pwm.c	155;"	local
+pwm	c_pwm.c	232;"	local
+pwm	c_pwm.c	56;"	local
+pwm	c_pwm.c	84;"	local
+pwm_cleanup	c_pwm.c	268;"	function
+pwm_cleanup	c_pwm.h	28;"	prototype
+pwm_disable	c_pwm.c	230;"	function
+pwm_disable	c_pwm.h	25;"	prototype
+pwm_exp	c_pwm.c	42;"	struct	file:
+pwm_initialized	c_pwm.c	39;"	variable
+pwm_methods	py_pwm.c	173;"	variable
+pwm_mux_mode	common.c	43;"	member	struct:pins_t	file:
+pwm_pins	common.h	41;"	variable
+pwm_set_duty_cycle	c_pwm.c	124;"	function
+pwm_set_duty_cycle	c_pwm.h	27;"	prototype
+pwm_set_frequency	c_pwm.c	80;"	function
+pwm_set_frequency	c_pwm.h	26;"	prototype
+pwm_set_polarity	c_pwm.c	107;"	function
+pwm_start	c_pwm.c	146;"	function
+pwm_start	c_pwm.h	24;"	prototype
+pwm_test_fragment	c_pwm.c	149;"	local
+pwm_test_path	c_pwm.c	150;"	local
+py_add_event_callback	py_gpio.c	236;"	function	file:
+py_add_event_detect	py_gpio.c	276;"	function	file:
+py_callback	py_gpio.c	39;"	struct	file:
+py_callbacks	py_gpio.c	48;"	variable	file:
+py_cb	py_gpio.c	43;"	member	struct:py_callback	file:
+py_cleanup	py_adc.c	30;"	function	file:
+py_cleanup	py_gpio.c	63;"	function	file:
+py_cleanup	py_pwm.c	42;"	function	file:
+py_cleanup	py_uart.c	32;"	function	file:
+py_event_detected	py_gpio.c	370;"	function	file:
+py_gpio_function	py_gpio.c	435;"	function	file:
+py_input_gpio	py_gpio.c	143;"	function	file:
+py_output_gpio	py_gpio.c	119;"	function	file:
+py_read	py_adc.c	51;"	function	file:
+py_read_raw	py_adc.c	90;"	function	file:
+py_remove_event_detect	py_gpio.c	331;"	function	file:
+py_set_duty_cycle	py_pwm.c	111;"	function	file:
+py_set_frequency	py_pwm.c	141;"	function	file:
+py_setup_adc	py_adc.c	39;"	function	file:
+py_setup_channel	py_gpio.c	72;"	function	file:
+py_setup_uart	py_uart.c	41;"	function	file:
+py_setwarnings	py_gpio.c	461;"	function	file:
+py_start_channel	py_pwm.c	51;"	function	file:
+py_stop_channel	py_pwm.c	92;"	function	file:
+py_value	py_adc.c	57;"	local
+py_value	py_adc.c	96;"	local
+py_value	py_gpio.c	148;"	local
+py_wait_for_edge	py_gpio.c	388;"	function	file:
+read_successful	c_adc.c	72;"	local
+read_value	c_adc.c	67;"	function
+read_value	c_adc.h	27;"	prototype
+ref	spimodule.c	94;"	local
+remove_callbacks	event_gpio.c	377;"	function
+remove_edge_detect	event_gpio.c	552;"	function
+remove_edge_detect	event_gpio.h	56;"	prototype
+result	py_gpio.c	172;"	local
+result	py_gpio.c	280;"	local
+result	py_gpio.c	391;"	local
+result	py_gpio.c	416;"	local
+result	spimodule.c	378;"	local
+result	spimodule.c	386;"	local
+result	spimodule.c	399;"	local
+result	spimodule.c	412;"	local
+result	spimodule.c	425;"	local
+result	spimodule.c	586;"	local
+result	spimodule.c	627;"	local
+rising_edge	constants.h	9;"	variable
+rpigpiomodule	py_gpio.c	493;"	variable	file:
+run_callbacks	event_gpio.c	366;"	function
+run_py_callbacks	py_gpio.c	170;"	function	file:
+rx	common.c	152;"	member	struct:uart_t	file:
+rxbuf	spimodule.c	164;"	local
+rxbuf	spimodule.c	215;"	local
+rxbuf	spimodule.c	298;"	local
+self	spimodule.c	58;"	local
+set_initial_false	event_gpio.c	401;"	function
+setup_error	common.c	36;"	variable
+setup_error	common.h	52;"	variable
+slot_line	common.c	374;"	local
+slots	common.c	339;"	local
+slots	common.c	372;"	local
+status	spimodule.c	114;"	local
+status	spimodule.c	165;"	local
+status	spimodule.c	210;"	local
+status	spimodule.c	294;"	local
+str_gpio	event_gpio.c	186;"	local
+str_gpio	event_gpio.c	79;"	local
+stredge	event_gpio.c	41;"	variable
+success	py_adc.c	55;"	local
+success	py_adc.c	93;"	local
+t	event_gpio.c	515;"	local
+table	common.c	48;"	variable
+temp	c_pwm.c	232;"	local
+temp	event_gpio.c	115;"	local
+temp	event_gpio.c	187;"	local
+temp	event_gpio.c	380;"	local
+temp	py_gpio.c	336;"	local
+test	spimodule.c	359;"	local
+test_path	c_adc.c	50;"	local
+thread_running	event_gpio.c	73;"	variable
+threads	event_gpio.c	513;"	local
+threads	event_gpio.c	71;"	variable
+timenow	py_gpio.c	176;"	local
+tmp	spimodule.c	439;"	local
+tmp	spimodule.c	474;"	local
+tmp	spimodule.c	502;"	local
+tmp	spimodule.c	530;"	local
+tmp	spimodule.c	558;"	local
+tmp32	spimodule.c	698;"	local
+tmp8	spimodule.c	697;"	local
+try_count	c_adc.c	71;"	local
+tv_timenow	py_gpio.c	175;"	local
+tx	common.c	153;"	member	struct:uart_t	file:
+txbuf	spimodule.c	215;"	local
+txbuf	spimodule.c	298;"	local
+uart_cleanup	c_uart.c	42;"	function
+uart_cleanup	c_uart.h	25;"	prototype
+uart_methods	py_uart.c	66;"	variable
+uart_setup	c_uart.c	33;"	function
+uart_setup	c_uart.h	24;"	prototype
+uart_t	common.c	148;"	struct	file:
+uart_t	common.c	154;"	typedef	file:
+uart_table	common.c	156;"	variable
+unload_device_tree	common.c	369;"	function
+unload_device_tree	common.h	51;"	prototype
+val	spimodule.c	133;"	local
+val	spimodule.c	193;"	local
+val	spimodule.c	239;"	local
+val	spimodule.c	266;"	local
+val	spimodule.c	317;"	local
+val	spimodule.c	343;"	local
+valid_uarts	py_uart.c	29;"	variable
+value	py_adc.c	54;"	local
+value	py_adc.c	94;"	local
+value	py_gpio.c	122;"	local
+value	py_gpio.c	147;"	local
+value	py_gpio.c	438;"	local
+version	constants.h	12;"	variable
+vstr	event_gpio.c	266;"	local
+wrmsg	spimodule.c	104;"	variable	file:
+xfer	spimodule.c	297;"	local
+xferptr	spimodule.c	214;"	local

@@ -1,0 +1,423 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_MOD_BY	Bostjan Mihoric	/ccompletion@gmail.com/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	/unofficial modification/
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	/unofficial modification/
+A	Beagle.cpp	244;"	local
+A	Beagle.cpp	252;"	local
+A	Beagle.cpp	264;"	local
+A	Beagle.cpp	274;"	local
+A	Beagle.cpp	286;"	local
+A	Beagle.cpp	304;"	local
+A	Beagle.cpp	337;"	local
+A	Beagle.cpp	347;"	local
+A	Beagle.cpp	375;"	local
+A	Beagle.cpp	411;"	local
+A	UART_MOTOR_WORK.cpp	72;"	local
+ADCT	Tuning.h	48;"	macro
+AIN	Beagle.cpp	270;"	function
+AIN	Beagle.h	105;"	prototype
+AVOID_USE_HDMI	Tuning.h	37;"	macro
+BEAGLE_CAPE_SLOTS	Tuning.h	49;"	macro
+BlueRead	Beagle.cpp	117;"	function	class:cRGBC
+BlueRead	Beagle.h	57;"	prototype	class:cRGBC
+CALPIN	Beagle.h	83;"	member	class:PWMAccumulator
+CTLAdaptor	Control.h	18;"	prototype	class:CTLAdaptor
+CTLAdaptor	Control.h	7;"	class
+CTL_ALGORITHM	Control.h	5;"	macro
+CTL_MIN_DELTA_THRESHOLD	Control.h	6;"	macro
+ClearRead	Beagle.cpp	125;"	function	class:cRGBC
+ClearRead	Beagle.h	58;"	prototype	class:cRGBC
+DELAY	Control.h	11;"	member	class:CTLAdaptor
+DELTA_ACC	Beagle.h	19;"	macro
+DPrint	NavTest.cpp	9;"	macro	file:	funlike:
+DRV	Beagle.h	93;"	class
+DRV	Beagle.h	98;"	prototype	class:DRV
+DeInit	SHOOT.cpp	77;"	function
+Drive	Beagle.cpp	419;"	function	class:DRV
+Drive	Beagle.h	100;"	prototype	class:DRV
+Drive	UART_MOTOR_WORK.cpp	24;"	prototype	file:
+Drive	UART_MOTOR_WORK.cpp	77;"	function
+EXPORT	SHOOT.cpp	24;"	local
+EXPORT	SHOOT.cpp	37;"	local
+EZWritePWM	Beagle.cpp	315;"	function
+EZWritePWM	Beagle.h	111;"	prototype
+EnableADCs	Beagle.cpp	261;"	function
+EnableADCs	Beagle.h	106;"	prototype
+EnablePWM	Beagle.cpp	283;"	function
+EnablePWM	Beagle.h	108;"	prototype
+FIR	Control.h	10;"	member	class:CTLAdaptor
+Frame	CamCap.cpp	79;"	prototype	file:
+Frame	pic - Copy.cpp	22;"	prototype	file:
+Frame	pic_Video.cpp	36;"	prototype	file:
+GPIOI_J	EZPin.h	2;"	macro	funlike:
+GPIO_1_16_N	SHOOT.cpp	13;"	macro	file:
+GPIO_1_28	SHOOT.cpp	14;"	macro	file:
+GPIO_1_28_N	SHOOT.cpp	12;"	macro	file:
+GPIO_EXPORT	SHOOT.cpp	16;"	macro	file:
+GPIO_UEXPORT	SHOOT.cpp	17;"	macro	file:
+GPIR_1_16	SHOOT.cpp	15;"	macro	file:
+GPO	SHOOT.cpp	55;"	local
+GPO	SHOOT.cpp	79;"	local
+GreenRead	Beagle.cpp	109;"	function	class:cRGBC
+GreenRead	Beagle.h	56;"	prototype	class:cRGBC
+HDR	Beagle.h	84;"	member	class:PWMAccumulator
+HiT	Beagle.h	83;"	member	class:PWMAccumulator
+HighLimit	Beagle.cpp	402;"	function	class:PWMAccumulator
+HighLimit	Beagle.h	91;"	prototype	class:PWMAccumulator
+IMPROC_GLOBALS	pic_image.cpp	15;"	namespace	file:
+ION	Tuning.h	8;"	macro
+IPin	Beagle.h	68;"	member	class:c_bin_io
+InitUart4	Beagle.cpp	409;"	function
+InitUart4	UART_MOTOR_WORK.cpp	23;"	prototype	file:
+InitUart4	UART_MOTOR_WORK.cpp	70;"	function
+LED0	Tuning.h	44;"	macro
+LED1	Tuning.h	45;"	macro
+LED2	Tuning.h	46;"	macro
+LED3	Tuning.h	47;"	macro
+LEN	Control.h	15;"	member	class:CTLAdaptor
+LINE_THRESHOLD	NavTest.cpp	4;"	macro	file:
+LSTART	Tuning.h	31;"	macro
+LT1	Tuning.h	11;"	macro
+LT10	Tuning.h	20;"	macro
+LT2	Tuning.h	12;"	macro
+LT3	Tuning.h	13;"	macro
+LT4	Tuning.h	14;"	macro
+LT5	Tuning.h	15;"	macro
+LT6	Tuning.h	16;"	macro
+LT7	Tuning.h	17;"	macro
+LT8	Tuning.h	18;"	macro
+LT9	Tuning.h	19;"	macro
+LTGT	NavTest.cpp	7;"	macro	file:	funlike:
+LTLT	NavTest.cpp	8;"	macro	file:	funlike:
+LeftDrive	Tuning.h	25;"	macro
+LeftExite	Tuning.h	22;"	macro
+LineTrace	NavTest.cpp	14;"	prototype	file:
+LineTrace	NavTest.cpp	18;"	function
+LoT	Beagle.h	83;"	member	class:PWMAccumulator
+LowLimit	Beagle.cpp	398;"	function	class:PWMAccumulator
+LowLimit	Beagle.h	90;"	prototype	class:PWMAccumulator
+MAX_DUTY	Tuning.h	69;"	macro
+MAX_VAL	NavTest.cpp	5;"	macro	file:
+MIN_VAL	NavTest.cpp	6;"	macro	file:
+NAV_BH	Tuning.h	66;"	macro
+NAV_BL	Tuning.h	63;"	macro
+NAV_GH	Tuning.h	67;"	macro
+NAV_GL	Tuning.h	64;"	macro
+NAV_RH	Tuning.h	65;"	macro
+NAV_RL	Tuning.h	62;"	macro
+NO_USE_COLOR_SENSE	Tuning.h	35;"	macro
+NO_USE_MMC	Tuning.h	36;"	macro
+NavMaxLineWidth	Tuning.h	56;"	macro
+ODX	Control.h	14;"	member	class:CTLAdaptor
+OFrame	pic - Copy.cpp	23;"	prototype	file:
+OFrame	pic_Video.cpp	37;"	prototype	file:
+OK	Beagle.h	66;"	member	class:c_bin_io
+OT	NavTest.cpp	27;"	local
+PERIOD	Tuning.h	68;"	macro
+PWM1duty	SHOOT.cpp	7;"	macro	file:
+PWM1period	SHOOT.cpp	8;"	macro	file:
+PWM2duty	SHOOT.cpp	9;"	macro	file:
+PWM2period	SHOOT.cpp	10;"	macro	file:
+PWMAccumulator	Beagle.cpp	326;"	function	class:PWMAccumulator
+PWMAccumulator	Beagle.h	78;"	class
+PWMAccumulator	Beagle.h	86;"	prototype	class:PWMAccumulator
+PWM_DUTY	Adafruit_IO.h	5;"	member	struct:PWM_OBJECT
+PWM_DUTY_F	Adafruit_IO.h	7;"	member	struct:PWM_OBJECT
+PWM_OBJECT	Adafruit_IO.h	1;"	struct
+PWM_PATH	Adafruit_IO.h	3;"	member	struct:PWM_OBJECT
+PWM_PERIOD	Adafruit_IO.h	4;"	member	struct:PWM_OBJECT
+PWM_PERIOD_F	Adafruit_IO.h	6;"	member	struct:PWM_OBJECT
+Pin	Beagle.h	67;"	member	class:c_bin_io
+PinDirection	Beagle.h	69;"	member	class:c_bin_io
+PinMode	Beagle.h	67;"	member	class:c_bin_io
+PinVal	Beagle.h	69;"	member	class:c_bin_io
+PointsOnWheel	Tuning.h	60;"	macro
+Process	Control.h	33;"	prototype	class:CTLAdaptor
+ProcessTarget	CamCap.cpp	77;"	function
+REL_	Tuning.h	28;"	macro
+RER_	Tuning.h	29;"	macro
+RPC	Beagle.cpp	93;"	local
+Read	Beagle.cpp	139;"	function	class:cRGBC
+Read	Beagle.cpp	210;"	function	class:c_bin_io
+Read	Beagle.cpp	76;"	function	class:cI2C
+Read	Beagle.h	43;"	prototype	class:cI2C
+Read	Beagle.h	60;"	prototype	class:cRGBC
+Read	Beagle.h	75;"	prototype	class:c_bin_io
+ReadF	Beagle.cpp	250;"	function
+ReadF	Beagle.h	104;"	prototype
+RedRead	Beagle.cpp	101;"	function	class:cRGBC
+RedRead	Beagle.h	55;"	prototype	class:cRGBC
+RightDrive	Tuning.h	26;"	macro
+RightExite	Tuning.h	23;"	macro
+RotationsPer90dTurn	Tuning.h	59;"	macro
+SLPT	UART_MOTOR_WORK.cpp	12;"	member	struct:step	file:
+SX	pic - Copy.cpp	25;"	local
+SX	pic_Video.cpp	19;"	local
+SY	pic - Copy.cpp	25;"	local
+SY	pic_Video.cpp	19;"	local
+SetIP	Beagle.cpp	184;"	function	class:c_bin_io
+SetIP	Beagle.h	73;"	prototype	class:c_bin_io
+SetOP	Beagle.cpp	197;"	function	class:c_bin_io
+SetOP	Beagle.h	74;"	prototype	class:c_bin_io
+Set_Pwm	SHOOT.cpp	22;"	function
+ShootTarget	CamCap.cpp	6;"	function
+TCS34717	Beagle.h	18;"	macro
+TEST_MODE	pic_image.cpp	7;"	macro	file:
+TP	Beagle.cpp	159;"	local
+TP	Beagle.cpp	175;"	local
+TRUE	Beagle.cpp	54;"	macro	file:
+TV	Beagle.h	69;"	member	class:c_bin_io
+Tuning	Tuning.h	4;"	macro
+TurnSpeed	Tuning.h	58;"	macro
+UART_4	UART_MOTOR_WORK.cpp	6;"	macro	file:
+UART_BASE	Beagle.h	20;"	macro
+Write	Beagle.cpp	133;"	function	class:cRGBC
+Write	Beagle.cpp	226;"	function	class:c_bin_io
+Write	Beagle.cpp	70;"	function	class:cI2C
+Write	Beagle.h	42;"	prototype	class:cI2C
+Write	Beagle.h	59;"	prototype	class:cRGBC
+Write	Beagle.h	76;"	prototype	class:c_bin_io
+WriteF	Beagle.cpp	242;"	function
+WriteF	Beagle.h	103;"	prototype
+WritePWM	Beagle.cpp	298;"	function
+WritePWM	Beagle.h	109;"	prototype
+YAC	Control.cpp	9;"	local
+YPast	Control.h	13;"	member	class:CTLAdaptor
+_Cam	CamCap.cpp	4;"	macro	file:
+__Beagle_Gen_purpose_input_output	Beagle.h	8;"	macro
+a	NavTest.cpp	20;"	local
+a	PanTilt.cpp	22;"	local
+accumulate	Beagle.cpp	366;"	function	class:PWMAccumulator
+accumulate	Beagle.h	87;"	prototype	class:PWMAccumulator
+accumulate	PanTilt.cpp	35;"	prototype	file:
+accumulate	PanTilt.cpp	39;"	prototype	file:
+ad	Beagle.cpp	94;"	local
+ain	Adafruit_IO.cpp	22;"	member	struct:pins_t	file:
+am33xx_pwm	Beagle.cpp	285;"	local
+am33xx_pwm	Beagle.cpp	335;"	local
+b	NavTest.cpp	20;"	local
+b2	Beagle.cpp	136;"	local
+build_path	Adafruit_IO.h	16;"	prototype
+byte	Beagle.h	15;"	typedef
+c	NavTest.cpp	20;"	local
+cI2C	Beagle.cpp	57;"	function	class:cI2C
+cI2C	Beagle.h	35;"	class
+cI2C	Beagle.h	40;"	prototype	class:cI2C
+cRGBC	Beagle.cpp	88;"	function	class:cRGBC
+cRGBC	Beagle.h	46;"	class
+cRGBC	Beagle.h	53;"	prototype	class:cRGBC
+c_bin_io	Beagle.cpp	152;"	function	class:c_bin_io
+c_bin_io	Beagle.h	63;"	class
+c_bin_io	Beagle.h	71;"	prototype	class:c_bin_io
+cap	CamCap.cpp	8;"	prototype	file:
+close	SHOOT.cpp	28;"	prototype	file:
+close	SHOOT.cpp	32;"	prototype	file:
+close	SHOOT.cpp	41;"	prototype	file:
+close	SHOOT.cpp	45;"	prototype	file:
+close	SHOOT.cpp	49;"	prototype	file:
+close	SHOOT.cpp	53;"	prototype	file:
+close	SHOOT.cpp	69;"	prototype	file:
+close	SHOOT.cpp	73;"	prototype	file:
+cmd	Beagle.cpp	103;"	local
+cmd	Beagle.cpp	111;"	local
+cmd	Beagle.cpp	119;"	local
+cmd	Beagle.cpp	127;"	local
+cmd	Beagle.cpp	135;"	local
+cmd	Beagle.cpp	141;"	local
+ct	pic - Copy.cpp	25;"	local
+ct	pic_Video.cpp	19;"	local
+d	NavTest.cpp	20;"	local
+d1	Beagle.cpp	423;"	local
+d1	UART_MOTOR_WORK.cpp	81;"	local
+d2	Beagle.cpp	424;"	local
+d2	UART_MOTOR_WORK.cpp	82;"	local
+delta	Control.h	12;"	member	class:CTLAdaptor
+dir	UART_MOTOR_WORK.cpp	33;"	local
+dir	UART_MOTOR_WORK.cpp	55;"	local
+dir1	UART_MOTOR_WORK.cpp	10;"	member	struct:step	file:
+dir2	UART_MOTOR_WORK.cpp	11;"	member	struct:step	file:
+dlta	PanTilt.cpp	23;"	local
+dt	Adafruit_IO.cpp	128;"	member	struct:uart_t	file:
+duty1	SHOOT.cpp	26;"	local
+duty2	SHOOT.cpp	30;"	local
+dutyNS	Beagle.cpp	320;"	local
+duty_fd	Adafruit_IO.cpp	311;"	local
+duty_fd	Adafruit_IO.cpp	345;"	local
+duty_path	Adafruit_IO.cpp	309;"	local
+endl	Beagle.cpp	338;"	local
+endl	UART_MOTOR_WORK.cpp	62;"	local
+endl	pic_Video.cpp	78;"	local
+endl	pic_image.cpp	65;"	variable
+fh	Beagle.h	49;"	member	class:cRGBC
+file	Adafruit_IO.cpp	162;"	local
+file	Adafruit_IO.cpp	190;"	local
+flush	Beagle.cpp	458;"	prototype	file:
+flush	Beagle.cpp	465;"	prototype	file:
+flush	SHOOT.cpp	27;"	prototype	file:
+flush	SHOOT.cpp	31;"	prototype	file:
+flush	SHOOT.cpp	40;"	prototype	file:
+flush	SHOOT.cpp	44;"	prototype	file:
+flush	SHOOT.cpp	48;"	prototype	file:
+flush	SHOOT.cpp	52;"	prototype	file:
+flush	SHOOT.cpp	68;"	prototype	file:
+flush	SHOOT.cpp	72;"	prototype	file:
+flush	UART_MOTOR_WORK.cpp	116;"	prototype	file:
+flush	UART_MOTOR_WORK.cpp	123;"	prototype	file:
+flush	UART_MOTOR_WORK.cpp	64;"	prototype	file:
+fragment	Adafruit_IO.cpp	305;"	local
+frame	CamCap.cpp	28;"	local
+frame	CamCap.cpp	29;"	local
+get	Beagle.cpp	393;"	function	class:PWMAccumulator
+get	Beagle.h	89;"	prototype	class:PWMAccumulator
+getline	PanTilt.cpp	31;"	prototype	file:
+gpio	Adafruit_IO.cpp	20;"	member	struct:pins_t	file:
+i	CamCap.cpp	80;"	local
+i	pic - Copy.cpp	24;"	local
+i	pic_Video.cpp	18;"	local
+in	PanTilt.cpp	21;"	local
+init	SHOOT.cpp	34;"	function
+initialize_pwm	Adafruit_IO.cpp	292;"	function
+ip	Beagle.h	66;"	member	class:c_bin_io
+ips	Beagle.h	66;"	member	class:c_bin_io
+j	CamCap.cpp	80;"	local
+j	pic - Copy.cpp	24;"	local
+j	pic_Video.cpp	18;"	local
+key	Adafruit_IO.cpp	19;"	member	struct:pins_t	file:
+line	Adafruit_IO.cpp	164;"	local
+line	Adafruit_IO.cpp	192;"	local
+load_device_tree	Adafruit_IO.cpp	159;"	function
+load_device_tree	Adafruit_IO.h	13;"	prototype
+lookup_ain_by_key	Adafruit_IO.cpp	257;"	function
+lookup_ain_by_key	Adafruit_IO.h	20;"	prototype
+lookup_ain_by_name	Adafruit_IO.cpp	272;"	function
+lookup_ain_by_name	Adafruit_IO.h	21;"	prototype
+lookup_gpio_by_key	Adafruit_IO.cpp	235;"	function
+lookup_gpio_by_key	Adafruit_IO.h	18;"	prototype
+lookup_gpio_by_name	Adafruit_IO.cpp	246;"	function
+lookup_gpio_by_name	Adafruit_IO.h	19;"	prototype
+lookup_uart_by_name	Adafruit_IO.cpp	221;"	function
+main	NavTest.cpp	11;"	function
+main	PanTilt.cpp	4;"	function
+main	SHOOT.cpp	92;"	function
+main	UART_MOTOR_WORK.cpp	25;"	function
+main	pic - Copy.cpp	9;"	function
+main	pic_Video.cpp	11;"	function
+main	pic_image.cpp	22;"	function
+mat	pic - Copy.cpp	11;"	local
+mat	pic_Video.cpp	13;"	local
+mat	pic_Video.cpp	26;"	local
+mat	pic_image.cpp	17;"	member	namespace:IMPROC_GLOBALS	file:
+mat2	pic - Copy.cpp	11;"	local
+mat2	pic - Copy.cpp	15;"	local
+mat2	pic_Video.cpp	13;"	local
+mat2	pic_image.cpp	17;"	member	namespace:IMPROC_GLOBALS	file:
+mtr	UART_MOTOR_WORK.cpp	31;"	local
+mtr	UART_MOTOR_WORK.cpp	54;"	local
+name	Adafruit_IO.cpp	126;"	member	struct:uart_t	file:
+name	Adafruit_IO.cpp	18;"	member	struct:pins_t	file:
+new_pwm	Adafruit_IO.cpp	312;"	local
+op	Beagle.cpp	272;"	local
+op	Beagle.h	39;"	member	class:cI2C
+open	SHOOT.cpp	25;"	prototype	file:
+open	SHOOT.cpp	29;"	prototype	file:
+open	SHOOT.cpp	38;"	prototype	file:
+open	SHOOT.cpp	42;"	prototype	file:
+open	SHOOT.cpp	46;"	prototype	file:
+open	SHOOT.cpp	50;"	prototype	file:
+open	SHOOT.cpp	66;"	prototype	file:
+open	SHOOT.cpp	70;"	prototype	file:
+opt	Beagle.h	96;"	member	class:DRV
+opt	UART_MOTOR_WORK.cpp	27;"	local
+opx	Beagle.cpp	445;"	local
+opx	UART_MOTOR_WORK.cpp	103;"	local
+opx	UART_MOTOR_WORK.cpp	29;"	local
+p	Adafruit_IO.cpp	223;"	local
+p	Adafruit_IO.cpp	237;"	local
+p	Adafruit_IO.cpp	248;"	local
+p	Adafruit_IO.cpp	259;"	local
+p	Adafruit_IO.cpp	274;"	local
+p	UART_MOTOR_WORK.cpp	37;"	local
+path	Adafruit_IO.cpp	127;"	member	struct:uart_t	file:
+pd	Beagle.cpp	301;"	local
+pd	Beagle.cpp	345;"	local
+pd	Beagle.cpp	372;"	local
+period	Beagle.h	82;"	member	class:PWMAccumulator
+periodNS	Beagle.cpp	319;"	local
+period_fd	Adafruit_IO.cpp	311;"	local
+period_fd	Adafruit_IO.cpp	344;"	local
+period_path	Adafruit_IO.cpp	308;"	local
+pi	UART_MOTOR_WORK.cpp	32;"	local
+pi	UART_MOTOR_WORK.cpp	46;"	local
+pi	UART_MOTOR_WORK.cpp	56;"	local
+pi2	UART_MOTOR_WORK.cpp	32;"	local
+pi2	UART_MOTOR_WORK.cpp	47;"	local
+pin	Beagle.h	84;"	member	class:PWMAccumulator
+pins_t	Adafruit_IO.cpp	17;"	struct	file:
+pins_t	Adafruit_IO.cpp	23;"	typedef	file:
+polarity_fd	Adafruit_IO.cpp	311;"	local
+process	Control.cpp	3;"	function	class:CTLAdaptor
+pwm	Adafruit_IO.cpp	312;"	local
+pwm_initialized	Adafruit_IO.cpp	290;"	variable
+pwm_mux_mode	Adafruit_IO.cpp	21;"	member	struct:pins_t	file:
+pwm_op	Adafruit_IO.cpp	313;"	local
+pwm_open	Adafruit_IO.cpp	303;"	function
+pwm_test_fragment	Adafruit_IO.cpp	306;"	local
+pwm_test_path	Adafruit_IO.cpp	307;"	local
+ret	Beagle.cpp	214;"	local
+ret	Beagle.cpp	272;"	local
+ret	Beagle.cpp	395;"	local
+ret	Beagle.cpp	80;"	local
+rpt	Beagle.cpp	104;"	local
+rpt	Beagle.cpp	112;"	local
+rpt	Beagle.cpp	120;"	local
+rpt	Beagle.cpp	128;"	local
+rpt	Beagle.cpp	142;"	local
+rx	Adafruit_IO.cpp	129;"	member	struct:uart_t	file:
+s2x	CamCap.cpp	38;"	local
+set	Beagle.cpp	386;"	function	class:PWMAccumulator
+set	Beagle.h	88;"	prototype	class:PWMAccumulator
+sks	pic_Video.cpp	38;"	local
+slot_line	Adafruit_IO.cpp	193;"	local
+slots	Adafruit_IO.cpp	163;"	local
+slots	Adafruit_IO.cpp	191;"	local
+slots	SHOOT.cpp	21;"	macro	file:
+spd1	Beagle.cpp	421;"	local
+spd1	UART_MOTOR_WORK.cpp	79;"	local
+spd2	Beagle.cpp	422;"	local
+spd2	UART_MOTOR_WORK.cpp	80;"	local
+step	UART_MOTOR_WORK.cpp	8;"	struct	file:
+steps	UART_MOTOR_WORK.cpp	7;"	macro	file:
+steps_	UART_MOTOR_WORK.cpp	14;"	variable
+stp	UART_MOTOR_WORK.cpp	13;"	typedef	file:
+table	Adafruit_IO.cpp	26;"	variable
+tslk	Beagle.cpp	302;"	local
+tslk	Beagle.cpp	346;"	local
+tslk	Beagle.cpp	373;"	local
+tx	Adafruit_IO.cpp	130;"	member	struct:uart_t	file:
+uart_cleanup	Adafruit_IO.cpp	151;"	function
+uart_cleanup	Adafruit_IO.h	11;"	prototype
+uart_setup	Adafruit_IO.cpp	143;"	function
+uart_setup	Adafruit_IO.h	10;"	prototype
+uart_t	Adafruit_IO.cpp	125;"	struct	file:
+uart_t	Adafruit_IO.cpp	131;"	typedef	file:
+uart_table	Adafruit_IO.cpp	133;"	variable
+unload_device_tree	Adafruit_IO.cpp	188;"	function
+unload_device_tree	Adafruit_IO.h	14;"	prototype
+value	Beagle.h	81;"	member	class:PWMAccumulator
+write	Beagle.cpp	457;"	prototype	file:
+write	Beagle.cpp	464;"	prototype	file:
+write	UART_MOTOR_WORK.cpp	115;"	prototype	file:
+write	UART_MOTOR_WORK.cpp	122;"	prototype	file:
+write	UART_MOTOR_WORK.cpp	63;"	prototype	file:
+y	Control.cpp	5;"	local
+~CTLAdaptor	Control.h	19;"	prototype	class:CTLAdaptor
+~DRV	Beagle.h	99;"	prototype	class:DRV
+~cI2C	Beagle.cpp	65;"	function	class:cI2C
+~cI2C	Beagle.h	41;"	prototype	class:cI2C
+~cRGBC	Beagle.cpp	97;"	function	class:cRGBC
+~cRGBC	Beagle.h	54;"	prototype	class:cRGBC
+~c_bin_io	Beagle.cpp	171;"	function	class:c_bin_io
+~c_bin_io	Beagle.h	72;"	prototype	class:c_bin_io

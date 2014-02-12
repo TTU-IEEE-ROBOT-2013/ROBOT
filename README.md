@@ -4,6 +4,9 @@ g++ -o OP pic.cpp `pkg-config --libs opencv`
 All c code / pru asm used in our robot
 The new beggining
 
+Note: Files in folder "FinalApproach" are being edited in main
+		folder, then copied there using Z_UPDATE.bat.
+
 TODO:   Create pru test for navigation:
 		Create c++ test for navigation (first test)
 		Finish target finding test for Target Acquisition

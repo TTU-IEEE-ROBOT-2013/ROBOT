@@ -32,10 +32,15 @@ for(j=0;j<mat.rows();j++)
 		if(Frame(i,j)[1] < 190 && Frame(i,j)[2] > 65) //vary the luminance values.  Black and White can be red with Very Low or Very High luminance
 		//off-white can be red with low saturation and high luminance. something similar for black
 		{
-		SX+=i;
-		SY+=j;
-		ct++;
-		Frame(i,j)[1]=255; //make it white 
+		int dx = (Frame(i-1,j)[2]-Frame(i+1,j)[2]);
+		int dy = (Frame(i,j-1)-Frame(i,j+1));
+		if(dx<0)dx*=-1;
+		if(dy<0)dy*=-1;
+		int dxy = dx+dy;
+		SX+=i*dxy;
+		SY+=j*dxy;
+		ct+=dxy;
+		Frame(i,j)[1]=255; //make it different
 		}
 		else
 		{
