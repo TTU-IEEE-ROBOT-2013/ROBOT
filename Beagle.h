@@ -142,7 +142,7 @@ double F[FIR_LEN];
 double AXP;
 public:
 ACON();
-double EXEC(double);
+double Exec(double);
 
 };
 void WriteF(const char * FileName, const char * value);
@@ -159,6 +159,7 @@ void EZWritePWM(int HDR, int pin, double FS, double Duty);
 
 //Differential input
 double TestIn();
+double Test2In();
 double DiffIn();
 double CenterPoint();
 

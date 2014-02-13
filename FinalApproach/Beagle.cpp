@@ -559,13 +559,20 @@ void DRV::Drive(int dir1, int dir2)
 #ifdef TRUE
 #define EZ_A EZ_APPROXIMATION
 #define EZ_T TURN_THRESH
-double TestIn()
+double Test2In()
 {
 	double A = AIN(TP2);
+	return A;
+}
+double TestIn()
+{
+	double A = AIN(TP1);
+	return A;
 }
 double DiffIn()
 {
 	double T = AIN(TP1);
+	double T2= AIN(TP2); //TP2 should be more than A and B
 	double A,B;
 	A=AIN(DP);
 	B=AIN(DM);
@@ -750,7 +757,7 @@ ACON::ACON()
 	F[0]=1;
 	AXP=0;
 }
-double ACON::EXEC(double x)
+double ACON::Exec(double x)
 {
 	//if this exploads, a -1 implementation will be needed
 	//x=-AXP;//Like this!!

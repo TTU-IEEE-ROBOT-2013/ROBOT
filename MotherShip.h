@@ -1,7 +1,8 @@
 #include <iostream>
 #include <fstream>
 #include <iostream>
-#include <opencv2/opencv.hpp>
+//#include <opencv2/opencv.hpp>
+#include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -10,7 +11,7 @@
 #include "Tuning.h"
 #include "Beagle.h"
 using namespace std;
-using namespace cv;
+//using namespace cv;
 #define TRUE 1
 typedef struct 
 {

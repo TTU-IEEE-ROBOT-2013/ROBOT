@@ -9,6 +9,7 @@
 //(if polarity is invalid, the bot will go into left field,
 //so the polarity is the most important feature)
 #define SPD_FACT 10.0
+#define AVG_SPEED 127
 #ifndef NULL
 #define NULL 0
 #endif
@@ -56,7 +57,7 @@
 //the first 4 may need updated
 #define DP 0
 #define DM 1
-#define TP1 2
+#define TP1 2 //error and line test
 #define TP2 3
 #define OUT_OF_BOUNDS -1e100
 #define TURN_TIME 1e100
@@ -86,17 +87,31 @@
 //definitions of some common values required
 //speed at which to turn. this is in reference to N/256*MAX_SPEED
 //the motors will turn at slightly different speeds, so we need to adjust them somewhat.
-#define TurnSpeedL 160
-#define TurnSpeedR -170
-#define TurnSpeedT TurnSpeedL,TurnSpeedR  //this may need flipped
+
+//start motor speed
+#define DEF_SPEED_L 100
+#define DEF_SPEED_R 100
+
+//TurnSpeed (Avoid using to "FINE TUNE")
+#define TurnSpeedR 110
+#define TurnSpeedL -120
+#define TurnSpeedT TurnSpeedR,TurnSpeedL  //this may need flipped
+#define TurnSpeedT2 TurnSpeedR/2,TurnSpeedL/2
 #define RotationsPer90dTurn 1 //assuming 3" wheels and 12" axle length, 2*pi*3/2*pi*12=1/4 (1/4 of a circle is 90d)
 //RGB limits for block detection.
-#define NAV_RL 50
-#define NAV_BL 50
-#define NAV_GL 50
+//change these based on testing!!!!
+//There may be 2 (one for blue, one for red)
+#define NAV_RL 1000
+#define NAV_BL 1000
+#define NAV_GL 1000
 #define NAV_RH 1024
 #define NAV_BH 1024
 #define NAV_GH 1024
+//change this to include both tests, if a second is required
+#define IS_BLOCK(red,green,blue) (NAV_RL < red   && red   < NAV_RH  && \
+				NAV_BL < blue  && blue  < NAV_BL && \
+				NAV_GL < green && green < NAV_GL)
+				
 //GPIO ADDRESS FOR USE IN PRU CODE (yes, not this code)
 /*
 #define GPIO0 0x44E05000

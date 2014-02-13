@@ -3,7 +3,7 @@
 #include <unistd.h>
 #include "Tuning.h"
 using namespace std;
-#define UART_4 = "ADAFRUIT-UART4"
+#define UART_4 "ADAFRUIT-UART4"
 #define steps 5
 typedef struct step
 {
@@ -70,7 +70,7 @@ int main()
 void InitUart4()
 {
 	FILE * A = fopen(BEAGLE_CAPE_SLOTS,"ab");
-	if(A==NULL) return;
+	if(A==0) return;
 	fprintf(A,UART_4);
 	fclose(A);
 }
