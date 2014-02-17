@@ -31,11 +31,14 @@ private:
 	#endif
 	DRV* Drive;
 	cRGBC* BFinder;
+	c_bin_io * LED_PWR;
 	int REV;
 	int MSR,MSL;
 public:
 	Navigator()
 	{
+		LED_PWR=new c_bin_io(LED_GPIO);//
+		EnableADCs()
 		#ifndef USE_PID
 		CTL=new ACON();; //discreate self-adapting control system(No Time Funcs Req'd)
 		#else
@@ -44,6 +47,8 @@ public:
 		Drive = new DRV();
 		BFinder = new cRGBC();
 		REV=1;
+		MSR=0;
+		MSL=0;
 		CCLR;
 	}
 	void Decelerate()
@@ -62,19 +67,23 @@ public:
 		//Drive->Drive(100,100);
 		//sleep(10);
 		//Decelerate();
-			double dV =0;
-			while(true)
-			{
+		PID pt(1,.1,.005);
+		
+		double dV =0;
+		while(true)
+		{
 			double dP=DiffIn();
-			dV+=dP/200;
+			//dV+=dP/200;
+			dv=pt.Exec(dP);
 			//double dV = -CTL->Exec(dP); //apply control system
 			cout << dP << endl;
+			
 			MSR=40-1*dV;
 			MSL=40+1*dV;
 			if(MSR > 80)MSR=80;
 			if(MSL > 80)MSL=80;
 			Drive->Drive(MSR,MSL);
-			}
+		}
 	}
 	void FWD_Turn()
 	{
@@ -175,7 +184,7 @@ public:
 		}
 		return false;
 	}
-		bool NavigateToFirstBlock()
+	bool NavigateToFirstBlock()
 	{
 		#ifdef USE_PID
 		CTL->Clear();
@@ -222,14 +231,19 @@ public:
 class Shooter
 {
 private:
-	VideoCapture cap(0);
-	PWMAccumulator Pan(PAN_PWM);
-	PWMAccumulator Tilt(TILT_PWM);
-	c_bin_io FlyWheels(FW_GPIO);
-	c_bin_io LinActuate(LA_GPIO);
+	VideoCapture * cap;
+	PWMAccumulator * Pan;
+	PWMAccumulator * Tilt;
+	c_bin_io * FlyWheels;
+	c_bin_io * LinActuate;
 public:
 	Shooter()
 	{
+		cap = new VideoCapture(0);
+		Pan =new PWMAccumulator(PAN_PWM);
+		Tilt=new PWMAccumulator(TILT_PWM);
+		FlyWheels=new c_bin_io(FW_GPIO);
+		LinActuate=new c_bin_io(LA_GPIO);
 		Pan.LowLimit  ( 900000);
 		Pan.HighLimit (1500000);
 		Tilt.LowLimit ( 900000);

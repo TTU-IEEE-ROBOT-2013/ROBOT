@@ -101,12 +101,12 @@ cRGBC::cRGBC()
 	write(fh,cmd,2);
 	int i;
 	sleep(3);
-//#ifdef not_Defined
-//	for(i=0;i<0x1B;i++)
-//	{
-//		write(fh,i | 0x80,)
-//	}
-//#endif
+	//#ifdef not_Defined
+	//	for(i=0;i<0x1B;i++)
+	//	{
+	//		write(fh,i | 0x80,)
+	//	}
+	//#endif
 	//write(fh,&dat,1);
 
 }
@@ -255,7 +255,9 @@ c_bin_io::~c_bin_io()
 			fprintf(TP,"%d",IPin);
 			fclose(TP);
 		}
-		delete TV,PinVal,PinDirection;
+		delete	TV;
+		delete	PinVal;
+		delete	PinDirection;
 	}
 }
 void c_bin_io::SetIP()
@@ -359,17 +361,17 @@ double AIN(int ADC_ID)
 	////A.open(op, ios::in);
 	//if(!A.eof())
 	{
-	//A>>ret;
-	FILE * A = fopen(op,"r");
-	if(A==NULL)
-	{//cout << "KER" << endl;
-	return 0;}
-	try2:
-	int err = fscanf(A,"%d",&ret);
-	if(err == EOF) goto try2;
-	fclose(A);
-	//cout << ret << endl;
-	//A.close();
+		//A>>ret;
+		FILE * A = fopen(op,"r");
+		if(A==NULL)
+		{//cout << "KER" << endl;
+			return 0;}
+try2:
+		int err = fscanf(A,"%d",&ret);
+		if(err == EOF) goto try2;
+		fclose(A);
+		//cout << ret << endl;
+		//A.close();
 	}
 	return ret;
 }
@@ -507,12 +509,12 @@ void PWMAccumulator::HighLimit(int a)
 #ifdef TRUE
 void InitUart4()
 {
-    FILE * A;// = fopen(pd,"ab");
+	FILE * A;// = fopen(pd,"ab");
 	A = fopen(BEAGLE_CAPE_SLOTS,"ab");
 	if(A != 0) 
 	{
-	fprintf(A , UART_4);
-	fclose(A);
+		fprintf(A , UART_4);
+		fclose(A);
 	}
 }
 #endif
@@ -520,9 +522,9 @@ void InitUart4()
 #ifdef TRUE
 DRV::DRV()
 {
-InitUart4();
-opt=new ofstream();
-opt->open("/dev/ttyO4",ios::binary | ios::in | ios::out);
+	InitUart4();
+	opt=new ofstream();
+	opt->open("/dev/ttyO4",ios::binary | ios::in | ios::out);
 
 }
 void DRV::Drive(int dir1, int dir2)
@@ -662,8 +664,8 @@ double DTime::poll()
 //local delay function for PID and APID
 void QDelay(double * X)
 {
-	X[3]=X[2];
 	X[2]=X[1];
+	X[1]=X[0];
 }
 //y[n]=AX[n]+GX[n-1]+AX[n-2]+Y[n-2]
 
@@ -742,7 +744,7 @@ double APID::Exec(double x)
 	//the difference: we re-calculate the PID terms.
 	double e=x;
 	double px;
-	double P,I,D;
+	double P=0,I=0,D=0;
 	if(abs(x)<APID_THROW && abs(x)>APID_FALL)
 	{
 		P=(x-APID_FALL)/(APID_THROW-APID_FALL)*(_PMX-_PMN)+_PMN;
@@ -796,28 +798,27 @@ double ACON::Exec(double x)
 	X[0]=x;
 	p+=X[0]*F[0];
 	for(j=0;j<FIR_LEN-1;j++)
-		F[j]+=delta*X[0]*X[j];
+	F[j]+=delta*X[0]*X[j];
 	//using p instead of y since y is output of sensor
 	//which is also x in this case (due to feedback)
 	AXP+=p;
 	return AXP;
 }
-	#endif
-	/*The important interface between Control module and motor speed*/
-	#ifdef TRUE
-	int __MT_CONV_L(double A, double R)
-	{
+#endif
+/*The important interface between Control module and motor speed*/
+#ifdef TRUE
+int __MT_CONV_L(double A, double R)
+{
 	int ret;
 	double RT;
 	RT = A * SPD_FACT * R + TARG_SPEED;
-	return (R * ret);
-	}
-	int __MT_CONV_R(double A, double R)
-	{
+	return (R * RT);
+}
+int __MT_CONV_R(double A, double R)
+{
 	double RT;
 	int ret;
 	RT=-1 * A * SPD_FACT * R + TARG_SPEED;
-	return (R*ret);
-	}
-	#endif
-	
+	return (R * RT);
+}
+#endif
