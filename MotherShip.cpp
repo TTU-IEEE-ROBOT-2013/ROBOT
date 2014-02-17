@@ -32,11 +32,13 @@ private:
 	DRV* Drive;
 	cRGBC* BFinder;
 	c_bin_io * LED_PWR;
+	//c_bin_io TLED(LED_GPIO);
 	int REV;
 	int MSR,MSL;
 public:
 	Navigator()
 	{
+		//TLED.SetIP();
 		LED_PWR=new c_bin_io(LED_GPIO);//
 		EnableADCs()
 		#ifndef USE_PID
@@ -67,7 +69,7 @@ public:
 		//Drive->Drive(100,100);
 		//sleep(10);
 		//Decelerate();
-		PID pt(1,.1,.005);
+		PID pt(2.5,.25,.05);
 		
 		double dV =0;
 		while(true)
@@ -227,7 +229,7 @@ public:
 };
 #endif
 /*Class Shooter: Shoots the target*/
-#ifndef TRUE
+#ifdef TRUE
 class Shooter
 {
 private:
@@ -244,26 +246,26 @@ public:
 		Tilt=new PWMAccumulator(TILT_PWM);
 		FlyWheels=new c_bin_io(FW_GPIO);
 		LinActuate=new c_bin_io(LA_GPIO);
-		Pan.LowLimit  ( 900000);
-		Pan.HighLimit (1500000);
-		Tilt.LowLimit ( 900000);
-		Tilt.HighLimit(1500000);
-		Pan.Set    (( ( 900000)   +
+		Pan->LowLimit  ( 900000);
+		Pan->HighLimit (1500000);
+		Tilt->LowLimit ( 900000);
+		Tilt->HighLimit(1500000);
+		Pan->Set    (( ( 900000)   +
 		(1500000))/2);
-		Pan.Set    (( ( 900000)   +
+		Pan->Set    (( ( 900000)   +
 		(1500000))/2);
 		//..
-		FlyWheels.SetOP();
-		FlyWheels.Write(false);
-		LinActuate.SetOP();
-		LinActuate.Write(LA_CLOSED);
+		FlyWheels->SetOP();
+		FlyWheels->Write(false);
+		LinActuate->SetOP();
+		LinActuate->Write(LA_CLOSED);
 		//Note: if it does not initialize properly, may need to change.
-		if(!cap.isOpened()){cout<<"ERROR: no camera";return -1;}
+		if(!cap->isOpened()){cout<<"ERROR: no camera";return -1;}
 	}
 	CPoint TFind()
 	{
 		Mat mat,mat2;
-		cap >> mat2;
+		(*cap) >> mat2;
 		cvtColor(mat2, mat, CV_BGR2HLS);
 		Mat_ <Vec3b> Frame(mat);
 		//	Mat_ <Vec3b> OFrame(mat2);
@@ -323,6 +325,25 @@ public:
 		
 	}
 };
+
+#endif
+/*int main(): Waits for LEDS to turn on and begins execution*/
+#ifdef TRUE
+int main()
+{
+	Navigator X;
+	X.DCrap();
+	double S=TestIn();
+	WriteF(LED0,"1");
+	while(S*EZ_APPROXIMATION > TestIn())
+	{
+		cout<<TestIn()<<endl;
+	}
+	
+
+}
+#endif	
+
 //Vestigial Code
 #ifndef TRUE
 int NOT_main_157663()
@@ -382,21 +403,3 @@ int NOT_main_157663()
 	}
 }
 #endif
-
-#endif
-/*int main(): Waits for LEDS to turn on and begins execution*/
-#ifdef TRUE
-int main()
-{
-	Navigator X;
-	X.DCrap();
-	double S=TestIn();
-	WriteF(LED0,"1");
-	while(S*EZ_APPROXIMATION > TestIn())
-	{
-		cout<<TestIn()<<endl;
-	}
-	
-
-}
-#endif	

@@ -46,9 +46,11 @@
 //8_10  68 (2-4)
 #define FW_GPIO       68
 //Linear Actuators
-#define LA_GPIO       
+#define LA_GPIO       26
 #define LA_CLOSED     false
 #define LA_OPEN       true
+//LEDs
+#define LED_GPIO		
 #define CX_SCN         360/2
 #define CY_SCN         240/2
 #define CX_EPS         10
