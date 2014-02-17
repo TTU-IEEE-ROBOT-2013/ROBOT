@@ -78,7 +78,7 @@
 #define LED1 "/sys/class/leds/beaglebone:green:usr1/brightness" //can be used for debuging/error reporting 
 #define LED2 "/sys/class/leds/beaglebone:green:usr2/brightness" //can be used for debuging (when run starts)
 #define LED3 "/sys/class/leds/beaglebone:green:usr3/brightness" //reserved for heartbeat.
-#define ADCT "/sys/bus/iio/devices/iio:device0/in_voltage%d_raw"
+#define ADCT "/sys/devices/ocp.2/helper.14/AIN%d"
 #define BEAGLE_CAPE_SLOTS "/sys/devices/bone_capemgr.8/slots" 
 
 

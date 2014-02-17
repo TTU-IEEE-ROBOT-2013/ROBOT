@@ -352,11 +352,25 @@ void EnableADCs()
 }
 double AIN(int ADC_ID)
 {
-	char op[255];double ret;
+	char op[255];int ret=0;
 	sprintf(op,ADCT,ADC_ID);
-	FILE * A = fopen(op,"rb");
-	if(A==NULL)return 0;
-	fscanf(A,"%d",&ret);
+	//cout << op << endl;
+	//ifstream A;
+	////A.open(op, ios::in);
+	//if(!A.eof())
+	{
+	//A>>ret;
+	FILE * A = fopen(op,"r");
+	if(A==NULL)
+	{//cout << "KER" << endl;
+	return 0;}
+	try2:
+	int err = fscanf(A,"%d",&ret);
+	if(err == EOF) goto try2;
+	fclose(A);
+	//cout << ret << endl;
+	//A.close();
+	}
 	return ret;
 }
 #endif
@@ -504,6 +518,13 @@ void InitUart4()
 #endif
 /*Drive Controler*/
 #ifdef TRUE
+DRV::DRV()
+{
+InitUart4();
+opt=new ofstream();
+opt->open("/dev/ttyO4",ios::binary | ios::in | ios::out);
+
+}
 void DRV::Drive(int dir1, int dir2)
 {
 	int spd1;
@@ -522,35 +543,35 @@ void DRV::Drive(int dir1, int dir2)
 	}
 	if(dir2 < 0)
 	{
-		d2=0;
+		d2=1;
 		spd2=-dir2;
 	}
 	else
 	{
-		d2=1;
+		d2=0;
 		spd2=dir2;
 	}
 	char opx[4];
 	opx[0]=0x80;
 	opx[1]=0;
 	//dir=dir && 1;
-	d2=d2 && 1;
-	d1=d1 && 1;
+	//d2=d2 && 1;
+	//d1=d1 && 1;
 	//d1
 	//opx[2]=(char)mtr<<1 | dir;
 	opx[2]=((char)0<<1 | d1);
 	if(spd1 > 127)spd1=127;
 	opx[3]=spd1;
 	//cout << pi << "||||||" << mtr << endl;
-	opt.write(opx,4);
-	opt.flush();
+	opt->write(opx,4);
+	opt->flush();
 
 	//d2
 	opx[2]=((char)1<<1 | d2);
 	if(spd2 > 127)spd2=127;
 	opx[3]=spd2;
-	opt.write(opx,4);
-	opt.flush();
+	opt->write(opx,4);
+	opt->flush();
 
 
 }
@@ -577,6 +598,7 @@ double DiffIn()
 	A=AIN(DP);
 	B=AIN(DM);
 	double C = A-B;
+	return C;
 	if((A>T*EZ_A || B>T*EZ_A)&&(T<A*EZ_A&&T<B*EZ_A))
 	{
 		return C;

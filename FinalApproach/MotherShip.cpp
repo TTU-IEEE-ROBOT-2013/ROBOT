@@ -58,10 +58,23 @@ public:
 	
 	void DCrap()
 	{
-		MSR=MSL=100;
-		Drive->Drive(100,100);
-		sleep(10);
-		Decelerate();
+		//MSR=MSL=100;
+		//Drive->Drive(100,100);
+		//sleep(10);
+		//Decelerate();
+			double dV =0;
+			while(true)
+			{
+			double dP=DiffIn();
+			dV+=dP/200;
+			//double dV = -CTL->Exec(dP); //apply control system
+			cout << dP << endl;
+			MSR=40-1*dV;
+			MSL=40+1*dV;
+			if(MSR > 80)MSR=80;
+			if(MSL > 80)MSL=80;
+			Drive->Drive(MSR,MSL);
+			}
 	}
 	void FWD_Turn()
 	{
@@ -361,7 +374,8 @@ int NOT_main_157663()
 #ifdef TRUE
 int main()
 {
-	
+	Navigator X;
+	X.DCrap();
 	double S=TestIn();
 	WriteF(LED0,"1");
 	while(S*EZ_APPROXIMATION > TestIn())

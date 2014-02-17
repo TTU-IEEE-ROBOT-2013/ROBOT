@@ -128,7 +128,7 @@ double Exec(double x); //executes the Transfer function generated
 class DRV
 {
 private:
-	ofstream opt;
+	ofstream * opt;
 public:
 	DRV();
 	~DRV();
