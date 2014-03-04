@@ -22,7 +22,7 @@ typedef unsigned char byte;
 								//uart port as %d
 								//just remember to enable them first!
 
-								
+#define RapidCall(a,n) {for(int __kin=0;__kin<n;__kin++){a;}}
 								
 class DTime
 {
@@ -88,7 +88,7 @@ int HDR,pin;
 public:
 PWMAccumulator(int HDR, int pin, double TS, double Initial);
 void accumulate(double DAV);
-void set(double DAV);
+void set(int DAV);
 double get();
 void LowLimit (int a);
 void HighLimit(int b);
@@ -160,7 +160,7 @@ void EZWritePWM(int HDR, int pin, double FS, double Duty);
 //Differential input
 double TestIn();
 double Test2In();
-double DiffIn();
+double bDiffIn();
 double CenterPoint();
 
 #endif

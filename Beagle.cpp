@@ -342,7 +342,48 @@ double abs(double x)
 */
 #endif
 /*ADC functions (just need 2) */
-#ifdef TRUE
+#ifdef _RAW_ADC_FS
+void EnableADCs()
+{
+	//echo cape-bone-iio > /sys/devices/bone_capemgr.*/slots
+	FILE * A;
+	A=fopen(BEAGLE_CAPE_SLOTS,"ab");
+	if(A==NULL)return;
+	fprintf(A,"cape-bone-iio");
+	fclose(A);
+}
+
+double AIN(int ADC_ID)
+{
+	{
+	FILE * A;
+	A=fopen(ADC_TRIG);
+	fprintf(A,"1");
+	fclose(A);
+	}
+	char op[255];int ret=0;
+	sprintf(op,ADC_DEV,ADC_ID);
+	//cout << op << endl;
+	//ifstream A;
+	////A.open(op, ios::in);
+	//if(!A.eof())
+	{
+		//A>>ret;
+		FILE * A = fopen(op,"r");
+		if(A==NULL)
+		{//cout << "KER" << endl;
+			return 0;}
+try2:
+		int err = fscanf(A,"%d",&ret);
+		if(err == EOF) goto try2;
+		fclose(A);
+		//cout << ret << endl;
+		//A.close();
+	}
+	ret * (1.8/4096*1000);
+	return ret;
+}
+#else
 void EnableADCs()
 {
 	//echo cape-bone-iio > /sys/devices/bone_capemgr.*/slots
@@ -375,6 +416,7 @@ try2:
 	}
 	return ret;
 }
+
 #endif
 //untested {EnablePWM} (should work. very similar to adaFruit inits.
 /*PWM back-end functions*/
@@ -388,7 +430,7 @@ void EnablePWM(int HDR,int pin)
 	fclose(A);
 	//often the file needs be cycled first on this board
 	A = fopen(BEAGLE_CAPE_SLOTS,"ab");
-	fprintf(A,"bone_pwm_p%d_%d",HDR,pin);
+	fprintf(A,"bone_pwm_P%d_%d",HDR,pin);
 	fclose(A);
 	//bone_pwm_P8_13
 }
@@ -431,6 +473,7 @@ PWMAccumulator::PWMAccumulator(int HDRx, int pinx, double FS, double Initial)
 	HiT=period;
 	value=(int)(Initial*period);
 	//ritePWM(HDR,pin,period,value);
+	/*
 	const char * am33xx_pwm = "am33xx_pwm";
 	
 	FILE * A = fopen(BEAGLE_CAPE_SLOTS,"ab");
@@ -441,10 +484,13 @@ PWMAccumulator::PWMAccumulator(int HDRx, int pinx, double FS, double Initial)
 	A = fopen(BEAGLE_CAPE_SLOTS,"ab");
 	fprintf(A,"bone_pwm_p%d_%d",HDR,pin);
 	fclose(A);
+	*/
 	char pd[255];
 	int tslk;
-	A=0;
-	//FILE * A=0;
+	//A=0;
+	//we have problems with errors opening at first. It needs time to initialize
+	usleep(100000);
+	FILE * A=0;
 	for(int i=0;i<1000 && A==0;i++)
 	{
 		sprintf(pd, "/sys/devices/ocp.2/pwm_test_P%d_%d.%d/period",HDR,pin,i);
@@ -458,7 +504,7 @@ PWMAccumulator::PWMAccumulator(int HDRx, int pinx, double FS, double Initial)
 	}
 	else
 	{
-		cout<<"FATAL ERROR: PWM COULD NOT BE INITIALIZED!";
+		cout<<"FATAL ERROR: PWM COULD NOT BE INITIALIZED!"<<HDR<<"|"<<pin<<"|"<<tslk;
 	}
 	
 }
@@ -484,12 +530,24 @@ void PWMAccumulator::accumulate(double DAV)
 	fclose(A);
 }
 
-void PWMAccumulator::set(double DAV)
+void PWMAccumulator::set(int DAV)
 {
-	value=DAV*period;
+	value=DAV;//*period;
 	if(value > HiT)value=HiT;
 	if(value < LoT)value=LoT;
-	WritePWM(HDR,pin,period,value);
+	//WritePWM(HDR,pin,period,value);
+	char pd[255];
+	char tslk;
+	sprintf(pd, "/sys/devices/ocp.2/pwm_test_P%d_%d.%d/period",HDR,pin,CALPIN);
+	FILE * A = fopen(pd,"ab");
+	if(A==0)return;
+	fprintf(A,"%d",period);
+	fclose(A);
+	sprintf(pd, "/sys/devices/ocp.2/pwm_test_P%d_%d.%d/duty",HDR,pin,CALPIN);
+	fopen(pd,"ab");
+	if(A==0)return;
+	fprintf(A,"%d",value);
+	fclose(A); 
 }
 double PWMAccumulator::get()
 {
@@ -565,15 +623,21 @@ void DRV::Drive(int dir1, int dir2)
 	if(spd1 > 127)spd1=127;
 	opx[3]=spd1;
 	//cout << pi << "||||||" << mtr << endl;
+	cout << "Motor 1 Start" << endl;
 	opt->write(opx,4);
+	cout << "Motor 1 Write" << endl;
 	opt->flush();
+	cout << "Motor 1 Flushed" << endl;
 
 	//d2
 	opx[2]=((char)1<<1 | d2);
 	if(spd2 > 127)spd2=127;
 	opx[3]=spd2;
+	cout << "Motor 2 Start" << endl;
 	opt->write(opx,4);
+	cout << "Motor 2 Write" << endl;
 	opt->flush();
+	cout << "Motor 2 Flushed" << endl;
 
 
 }
@@ -592,7 +656,7 @@ double TestIn()
 	double A = AIN(TP1);
 	return A;
 }
-double DiffIn()
+double bDiffIn()
 {
 	double T = AIN(TP1);
 	double T2= AIN(TP2); //TP2 should be more than A and B

@@ -101,12 +101,12 @@ cRGBC::cRGBC()
 	write(fh,cmd,2);
 	int i;
 	sleep(3);
-//#ifdef not_Defined
-//	for(i=0;i<0x1B;i++)
-//	{
-//		write(fh,i | 0x80,)
-//	}
-//#endif
+	//#ifdef not_Defined
+	//	for(i=0;i<0x1B;i++)
+	//	{
+	//		write(fh,i | 0x80,)
+	//	}
+	//#endif
 	//write(fh,&dat,1);
 
 }
@@ -255,7 +255,9 @@ c_bin_io::~c_bin_io()
 			fprintf(TP,"%d",IPin);
 			fclose(TP);
 		}
-		delete TV,PinVal,PinDirection;
+		delete	TV;
+		delete	PinVal;
+		delete	PinDirection;
 	}
 }
 void c_bin_io::SetIP()
@@ -340,7 +342,48 @@ double abs(double x)
 */
 #endif
 /*ADC functions (just need 2) */
-#ifdef TRUE
+#ifdef _RAW_ADC_FS
+void EnableADCs()
+{
+	//echo cape-bone-iio > /sys/devices/bone_capemgr.*/slots
+	FILE * A;
+	A=fopen(BEAGLE_CAPE_SLOTS,"ab");
+	if(A==NULL)return;
+	fprintf(A,"cape-bone-iio");
+	fclose(A);
+}
+
+double AIN(int ADC_ID)
+{
+	{
+	FILE * A;
+	A=fopen(ADC_TRIG);
+	fprintf(A,"1");
+	fclose(A);
+	}
+	char op[255];int ret=0;
+	sprintf(op,ADC_DEV,ADC_ID);
+	//cout << op << endl;
+	//ifstream A;
+	////A.open(op, ios::in);
+	//if(!A.eof())
+	{
+		//A>>ret;
+		FILE * A = fopen(op,"r");
+		if(A==NULL)
+		{//cout << "KER" << endl;
+			return 0;}
+try2:
+		int err = fscanf(A,"%d",&ret);
+		if(err == EOF) goto try2;
+		fclose(A);
+		//cout << ret << endl;
+		//A.close();
+	}
+	ret * (1.8/4096*1000);
+	return ret;
+}
+#else
 void EnableADCs()
 {
 	//echo cape-bone-iio > /sys/devices/bone_capemgr.*/slots
@@ -359,20 +402,21 @@ double AIN(int ADC_ID)
 	////A.open(op, ios::in);
 	//if(!A.eof())
 	{
-	//A>>ret;
-	FILE * A = fopen(op,"r");
-	if(A==NULL)
-	{//cout << "KER" << endl;
-	return 0;}
-	try2:
-	int err = fscanf(A,"%d",&ret);
-	if(err == EOF) goto try2;
-	fclose(A);
-	//cout << ret << endl;
-	//A.close();
+		//A>>ret;
+		FILE * A = fopen(op,"r");
+		if(A==NULL)
+		{//cout << "KER" << endl;
+			return 0;}
+try2:
+		int err = fscanf(A,"%d",&ret);
+		if(err == EOF) goto try2;
+		fclose(A);
+		//cout << ret << endl;
+		//A.close();
 	}
 	return ret;
 }
+
 #endif
 //untested {EnablePWM} (should work. very similar to adaFruit inits.
 /*PWM back-end functions*/
@@ -386,7 +430,7 @@ void EnablePWM(int HDR,int pin)
 	fclose(A);
 	//often the file needs be cycled first on this board
 	A = fopen(BEAGLE_CAPE_SLOTS,"ab");
-	fprintf(A,"bone_pwm_p%d_%d",HDR,pin);
+	fprintf(A,"bone_pwm_P%d_%d",HDR,pin);
 	fclose(A);
 	//bone_pwm_P8_13
 }
@@ -429,6 +473,7 @@ PWMAccumulator::PWMAccumulator(int HDRx, int pinx, double FS, double Initial)
 	HiT=period;
 	value=(int)(Initial*period);
 	//ritePWM(HDR,pin,period,value);
+	/*
 	const char * am33xx_pwm = "am33xx_pwm";
 	
 	FILE * A = fopen(BEAGLE_CAPE_SLOTS,"ab");
@@ -439,10 +484,13 @@ PWMAccumulator::PWMAccumulator(int HDRx, int pinx, double FS, double Initial)
 	A = fopen(BEAGLE_CAPE_SLOTS,"ab");
 	fprintf(A,"bone_pwm_p%d_%d",HDR,pin);
 	fclose(A);
+	*/
 	char pd[255];
 	int tslk;
-	A=0;
-	//FILE * A=0;
+	//A=0;
+	//we have problems with errors opening at first. It needs time to initialize
+	usleep(100000);
+	FILE * A=0;
 	for(int i=0;i<1000 && A==0;i++)
 	{
 		sprintf(pd, "/sys/devices/ocp.2/pwm_test_P%d_%d.%d/period",HDR,pin,i);
@@ -456,7 +504,7 @@ PWMAccumulator::PWMAccumulator(int HDRx, int pinx, double FS, double Initial)
 	}
 	else
 	{
-		cout<<"FATAL ERROR: PWM COULD NOT BE INITIALIZED!";
+		cout<<"FATAL ERROR: PWM COULD NOT BE INITIALIZED!"<<HDR<<"|"<<pin<<"|"<<tslk;
 	}
 	
 }
@@ -482,12 +530,24 @@ void PWMAccumulator::accumulate(double DAV)
 	fclose(A);
 }
 
-void PWMAccumulator::set(double DAV)
+void PWMAccumulator::set(int DAV)
 {
-	value=DAV*period;
+	value=DAV;//*period;
 	if(value > HiT)value=HiT;
 	if(value < LoT)value=LoT;
-	WritePWM(HDR,pin,period,value);
+	//WritePWM(HDR,pin,period,value);
+	char pd[255];
+	char tslk;
+	sprintf(pd, "/sys/devices/ocp.2/pwm_test_P%d_%d.%d/period",HDR,pin,CALPIN);
+	FILE * A = fopen(pd,"ab");
+	if(A==0)return;
+	fprintf(A,"%d",period);
+	fclose(A);
+	sprintf(pd, "/sys/devices/ocp.2/pwm_test_P%d_%d.%d/duty",HDR,pin,CALPIN);
+	fopen(pd,"ab");
+	if(A==0)return;
+	fprintf(A,"%d",value);
+	fclose(A); 
 }
 double PWMAccumulator::get()
 {
@@ -507,12 +567,12 @@ void PWMAccumulator::HighLimit(int a)
 #ifdef TRUE
 void InitUart4()
 {
-    FILE * A;// = fopen(pd,"ab");
+	FILE * A;// = fopen(pd,"ab");
 	A = fopen(BEAGLE_CAPE_SLOTS,"ab");
 	if(A != 0) 
 	{
-	fprintf(A , UART_4);
-	fclose(A);
+		fprintf(A , UART_4);
+		fclose(A);
 	}
 }
 #endif
@@ -520,9 +580,9 @@ void InitUart4()
 #ifdef TRUE
 DRV::DRV()
 {
-InitUart4();
-opt=new ofstream();
-opt->open("/dev/ttyO4",ios::binary | ios::in | ios::out);
+	InitUart4();
+	opt=new ofstream();
+	opt->open("/dev/ttyO4",ios::binary | ios::in | ios::out);
 
 }
 void DRV::Drive(int dir1, int dir2)
@@ -563,15 +623,21 @@ void DRV::Drive(int dir1, int dir2)
 	if(spd1 > 127)spd1=127;
 	opx[3]=spd1;
 	//cout << pi << "||||||" << mtr << endl;
+	cout << "Motor 1 Start" << endl;
 	opt->write(opx,4);
+	cout << "Motor 1 Write" << endl;
 	opt->flush();
+	cout << "Motor 1 Flushed" << endl;
 
 	//d2
 	opx[2]=((char)1<<1 | d2);
 	if(spd2 > 127)spd2=127;
 	opx[3]=spd2;
+	cout << "Motor 2 Start" << endl;
 	opt->write(opx,4);
+	cout << "Motor 2 Write" << endl;
 	opt->flush();
+	cout << "Motor 2 Flushed" << endl;
 
 
 }
@@ -590,7 +656,7 @@ double TestIn()
 	double A = AIN(TP1);
 	return A;
 }
-double DiffIn()
+double bDiffIn()
 {
 	double T = AIN(TP1);
 	double T2= AIN(TP2); //TP2 should be more than A and B
@@ -662,8 +728,8 @@ double DTime::poll()
 //local delay function for PID and APID
 void QDelay(double * X)
 {
-	X[3]=X[2];
 	X[2]=X[1];
+	X[1]=X[0];
 }
 //y[n]=AX[n]+GX[n-1]+AX[n-2]+Y[n-2]
 
@@ -742,7 +808,7 @@ double APID::Exec(double x)
 	//the difference: we re-calculate the PID terms.
 	double e=x;
 	double px;
-	double P,I,D;
+	double P=0,I=0,D=0;
 	if(abs(x)<APID_THROW && abs(x)>APID_FALL)
 	{
 		P=(x-APID_FALL)/(APID_THROW-APID_FALL)*(_PMX-_PMN)+_PMN;
@@ -796,28 +862,27 @@ double ACON::Exec(double x)
 	X[0]=x;
 	p+=X[0]*F[0];
 	for(j=0;j<FIR_LEN-1;j++)
-		F[j]+=delta*X[0]*X[j];
+	F[j]+=delta*X[0]*X[j];
 	//using p instead of y since y is output of sensor
 	//which is also x in this case (due to feedback)
 	AXP+=p;
 	return AXP;
 }
-	#endif
-	/*The important interface between Control module and motor speed*/
-	#ifdef TRUE
-	int __MT_CONV_L(double A, double R)
-	{
+#endif
+/*The important interface between Control module and motor speed*/
+#ifdef TRUE
+int __MT_CONV_L(double A, double R)
+{
 	int ret;
 	double RT;
 	RT = A * SPD_FACT * R + TARG_SPEED;
-	return (R * ret);
-	}
-	int __MT_CONV_R(double A, double R)
-	{
+	return (R * RT);
+}
+int __MT_CONV_R(double A, double R)
+{
 	double RT;
 	int ret;
 	RT=-1 * A * SPD_FACT * R + TARG_SPEED;
-	return (R*ret);
-	}
-	#endif
-	
+	return (R * RT);
+}
+#endif

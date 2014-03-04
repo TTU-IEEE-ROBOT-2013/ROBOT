@@ -28,29 +28,32 @@
 #define FIR_LEN 50
 //gpio all exist in this folder
 //motor //9_13 (uart 4)
-#define UART_4 "ADAFRUIT-UART4"
+#define UART_4 "BB-UART4"
+//"ADAFRUIT-UART4"
 //definitions for Pan and Tilt
 //use as PWMAccumulator(PAN_PWM)
 #define DELTA_ACC .001  //decrease to increase stability
 
 //8_13 pan
-#define PAN_PWM_PIN 8,13
+#define TILT_PWM_PIN 8,13
 //9_14 tilt
-#define TILT_PWM_PIN 9,14
+#define PAN_PWM_PIN 9,14
 #define PAN_TILT_FS   20000000
-#define PAN_INIT   900000
-#define TILT_INIT  900000
+#define PAN_INIT    900000
+#define TILT_INIT  1900000
 #define PAN_PWM  PAN_PWM_PIN,	PAN_TILT_FS, PAN_INIT
 #define TILT_PWM TILT_PWM_PIN,	PAN_TILT_FS, TILT_INIT
 //Flywheels
 //8_10  68 (2-4)
 #define FW_GPIO       68
 //Linear Actuators
-#define LA_GPIO       
+#define LA_GPIO       26
 #define LA_CLOSED     false
 #define LA_OPEN       true
-#define CX_SCN         360/2
-#define CY_SCN         240/2
+//LEDs
+#define LED_GPIO	49	
+#define CX_SCN         (360/2)
+#define CY_SCN         (240/2)
 #define CX_EPS         10
 #define CY_EPS         10
 //LINE SENSOR defines
@@ -63,6 +66,13 @@
 #define TURN_TIME 1e100
 #define TURN_THRESH 1.5 //We know to turn when
 #define EZ_APPROXIMATION 1.1
+//Define pins used for binary line sensors
+#define L2 22	//
+#define L1 44	//
+#define R2 47  //
+#define R1 56  //
+#define C2 27  //
+#define C1 46  //
 //reserved macros (not used in code, but specify pins used by other interfaces)
 //reserved of color-sense
 #define NO_USE_COLOR_SENSE 9,21;9,22 //other i2c devices can go here
@@ -70,7 +80,6 @@
 #define AVOID_USE_HDMI 8,{27-46} //we shouldn't use them
 //usable are p8 { 7,8,9,10,11,12,13,14,15,16,17,18,19,26 }
 //			 p9 { 11-24,26-31,41,42 }
-//free on p8 (none) (p9 all but 21,22 <i2c> and 11,12
 //special pins are {9,21;9,22} i2c: 8,13;8,19;9,14;9,15;9,42;9,29;9,31; PWM
 //					9,24;9,26 UART 1
 //text pin definitions
@@ -78,6 +87,11 @@
 #define LED1 "/sys/class/leds/beaglebone:green:usr1/brightness" //can be used for debuging/error reporting 
 #define LED2 "/sys/class/leds/beaglebone:green:usr2/brightness" //can be used for debuging (when run starts)
 #define LED3 "/sys/class/leds/beaglebone:green:usr3/brightness" //reserved for heartbeat.
+#define LED0T "/sys/class/leds/beaglebone:green:usr0/trigger" //turned on at start
+#define LED1T "/sys/class/leds/beaglebone:green:usr1/trigger" //can be used for debuging/error reporting 
+#define LED2T "/sys/class/leds/beaglebone:green:usr2/trigger" //can be used for debuging (when run starts)
+#define LED3T "/sys/class/leds/beaglebone:green:usr3/trigger" //reserved for heartbeat.
+
 #define ADCT "/sys/devices/ocp.2/helper.14/AIN%d"
 #define BEAGLE_CAPE_SLOTS "/sys/devices/bone_capemgr.8/slots" 
 

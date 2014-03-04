@@ -15,7 +15,7 @@ using namespace std;
 #define GPIO_1_28_N 60
 #define GPIO_1_16_N 48
 #define GPIO_1_28    "/sys/class/gpio/gpio60"
-#define GPIR_1_16    "/sys/class/gpio/gpio48"
+#define GPIO_1_16    "/sys/class/gpio/gpio48"
 #define GPIO_EXPORT  "/sys/class/gpio/export"
 #define GPIO_UEXPORT "/sys/class/gpio/unexport"
 typedef struct _cpoint {int x;int y} CPoint;

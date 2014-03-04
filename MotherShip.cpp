@@ -1,16 +1,6 @@
 #include "MotherShip.h"
-
-namespace MotherShip
-{
-	cRGBC BlockType;
-	//c_bin_io FlyWheels(FW_GPIO);
-	//c_bin_io LinActuate(LA_GPIO);
-	//PWMAccumulator Pan(PAN_PWM);
-	//PWMAccumulator Tilt(TILT_PWM);
-	
-	
-}
-using namespace MotherShip;
+#include <vector>
+using namespace std;
 /*Class Navigator: Navigates*/
 #ifdef TRUE
 #define USE_PID //uncomment to use PID, comment to go Adaptive
@@ -32,20 +22,73 @@ private:
 	DRV* Drive;
 	cRGBC* BFinder;
 	c_bin_io * LED_PWR;
+	//typically like pointers, but won't do pointer to vector.
+	//Back
+	GPIO_READ_DMA * LMBR;
+	GPIO_READ_DMA * LMBC;
+	GPIO_READ_DMA * LMBL;
+	//Front
+	GPIO_READ_DMA * LMFR;
+	GPIO_READ_DMA * LMFC;
+	GPIO_READ_DMA * LMFL;
+	//
+	ADC_DMA * APIN;
 	//c_bin_io TLED(LED_GPIO);
 	int REV;
 	int MSR,MSL;
 public:
-	Navigator()
+	Navigator() 
 	{
+		LMBR=new GPIO_READ_DMA(1,15);
+		LMBC=new GPIO_READ_DMA(0,27);
+		LMBL=new GPIO_READ_DMA(0,22);
+		LMFR=new GPIO_READ_DMA(1,12);
+		LMFC=new GPIO_READ_DMA(1,14);
+		LMFL=new GPIO_READ_DMA(2,1);
+		cout << "TST1" <<endl;
 		//TLED.SetIP();
 		LED_PWR=new c_bin_io(LED_GPIO);//
-		EnableADCs()
+		EnableADCs();
+		//InitUart4();
 		#ifndef USE_PID
 		CTL=new ACON();; //discreate self-adapting control system(No Time Funcs Req'd)
 		#else
 		CTL=new PID(1,1,2); //someone can set the weights appropriately
 		#endif
+		APIN=new ADC_DMA;
+		LED_PWR->SetOP();
+		LED_PWR->Write(true);
+		
+		
+		// cout << "TST1" <<endl;
+		// LineFW1.push_back(new c_bin_io(R1));
+		// LineFW1.push_back(new c_bin_io(C1));
+		// LineFW1.push_back(new c_bin_io(L1));
+	
+		// cout << "TST1" <<endl;
+	
+		// #define L LineFW1
+		// L[0]->SetIP();
+		// L[1]->SetIP();
+		// L[2]->SetIP();
+		// #undef L
+		
+		
+		// cout << "TST1" <<endl;
+		// LineFW2.push_back(new c_bin_io(R2));
+		// LineFW2.push_back(new c_bin_io(C2));
+		// LineFW2.push_back(new c_bin_io(L2));
+		
+		
+		// cout << "TST1" <<endl;
+		// #define L LineFW2
+		// L[0]->SetIP();
+		// L[1]->SetIP();
+		// L[2]->SetIP();
+		// #undef L
+		
+		//cout << "TST1" <<endl;
+		
 		Drive = new DRV();
 		BFinder = new cRGBC();
 		REV=1;
@@ -65,171 +108,91 @@ public:
 	
 	void DCrap()
 	{
+		cout<< "RIGHT LEFT\n";
+		while(false)
+		{
+			int R,L;
+			cin >> R >> L;
+			Drive->Drive(R,L);
+		}
+		//sleep(5);
+		cout<< "LEFT";
+		Drive->Drive(0,0);
+		sleep(5);
+		//int * X=(int*)10000;
+		//cout << *X;
+		//,return;
 		//MSR=MSL=100;
 		//Drive->Drive(100,100);
 		//sleep(10);
 		//Decelerate();
-		PID pt(2.5,.25,.05);
+		
+		//Line Following 101 (binary line detection algorithm)
+		//RapidCall(AIN(0)+AIN(1),5);
+		while(true)
+		{
+			double ML=0,MR=0,MT=50;
+			//#define L LineFW1
+			if(LMFC->Read())
+			Drive->Drive(60,60);
+			else if(LMFL->Read())
+			Drive->Drive(0,60);
+			else if(LMFR->Read())
+			Drive->Drive(60,0);
+			else
+			Drive->Drive(0,0);
+			//#undef  L
+			//APIN->Clear();
+			//APIN->Poll();
+			//MT=-(APIN->DiffIn()-20);
+			//cout << MT << endl;
+			//if(MT > 100)MT=0;
+			//if(MT < -100)MT=0;
+			//if(MT>0)Drive->Drive(0,60);
+			//else Drive->Drive(60,0);	
+			//AIN0 = left AIN1 = right			
+			//3 left  2 right
+			//	ML=AIN(3);
+			//	MR=AIN(2);
+			//cout << "L"<<ML<<"|R"<<MR<<endl;
+			//	if(ML < 1676)ML=MT;else ML=0;
+			//	if(MR < 1699)MR=MT;else MR=0;
+			//		Drive->Drive(MR,ML);
+			//usleep(200);
+		}
+		cout << "We left the loop!" << endl;
+		wait();
+		PID pt(2.5,.05,.05);
 		
 		double dV =0;
-		while(true)
+		while(false)
 		{
-			double dP=DiffIn();
+			double dP=APIN->DiffIn()+20;
 			//dV+=dP/200;
-			dv=pt.Exec(dP);
+			dV=pt.Exec(dP);
 			//double dV = -CTL->Exec(dP); //apply control system
-			cout << dP << endl;
+			cout << dP << "|" << dV << endl;
 			
-			MSR=40-1*dV;
-			MSL=40+1*dV;
-			if(MSR > 80)MSR=80;
-			if(MSL > 80)MSL=80;
+			MSR=50+.0001*dV;
+			MSL=50-.0001*dV;
+			if(MSR > 55)MSR=55;
+			if(MSL > 55)MSL=55;
+			if(MSR < -55)MSR=-55;
+			if(MSL < -55)MSL=-55;
 			Drive->Drive(MSR,MSL);
 		}
-	}
-	void FWD_Turn()
-	{
-		//decelerate should ensure we are just a little beyond the block
-		Drive->Drive(TurnSpeedT); //TurnSpeedT is a multi-variable macro
-		double NOT_THERE = 10;
-		double IsThere=0;
-		while(IsThere<NOT_THERE)
-		IsThere=TestIn();
-		NOT_THERE=Test2In();
-		Drive->Drive(TurnSpeedT2);
-		usleep(1000);
-		Drive->Drive(0,0);
-		Decelerate();//we cheat a little here.
-	}
-	void REV_Turn()
-	{
-		Decelerate();
-	}
-	int FWD_Intersect(bool ETurn) //0 for intersect, 1 for block
-	{
-		double dP;
-		CCLR;
 		while(true)
 		{
-			dP=DiffIn();
-			if(FWD_FindBlock())
-			{
-				Decelerate();
-				return 1;
-			}
-			if(dP==TURN_TIME)
-			{
-				if(ETurn)
-				{
-					Decelerate();
-					FWD_Turn();
-					return 0;
-				}
-				else
-				return 0;
-			}
-			if(dP==OUT_OF_BOUNDS)
-			{
-				/*MAJOR ERROR (TEH hard part)*/
-				//for now, just stop and avoid wheel damaging.
-				Decelerate();
-			}
-			//at last, special cirumstances out, lets go
-			double dV = CTL->Exec(dP); //apply control system
-			MSR=AVG_SPEED+SPD_FACT*dV;
-			MSL=AVG_SPEED-SPD_FACT*dV;
-			Drive->Drive(MSR,MSL);
-		}
-		
-	}
-	int REV_Intersect()
-	{
-		double dP;
-		CCLR;
-		while(true)
-		{
-			dP=DiffIn();
-			if(FWD_FindBlock())
-			{
-				Decelerate();
-				return 1;
-			}
-			if(dP==TURN_TIME)
-			{
-				Decelerate();
-				REV_Turn();
-				return 0;
-			}
-			if(dP==OUT_OF_BOUNDS)
-			{
-				/*MAJOR ERROR (TEH hard part)*/
-				//for now, just stop and avoid wheel damaging.
-				Decelerate();
-			}
-			//at last, special cirumstances out, lets go
-			double dV = -CTL->Exec(dP); //apply control system
-			MSR=AVG_SPEED+SPD_FACT*dV;
-			MSL=AVG_SPEED-SPD_FACT*dV;
-			Drive->Drive(-MSR,-MSL);
-		}
-		
-	}
-	bool FWD_FindBlock()
-	{
-		static int BPos = 0;
-		int red=  BFinder->RedRead(  );
-		int green=BFinder->GreenRead();
-		int blue= BFinder->BlueRead( );
-		if(IS_BLOCK(red,green,blue))
-		{
-			return true;
-		}
-		return false;
-	}
-	bool NavigateToFirstBlock()
-	{
-		#ifdef USE_PID
-		CTL->Clear();
-		#endif
-		REV=1;
-		FWD_Intersect(false);
-		FWD_Intersect(true);
-		FWD_Intersect(false);
-		REV=-1;
-		return true;
-	}
-	bool NavigateToNextBlock()
-	{
-		#ifdef USE_PID
-		CTL->Clear();
-		#endif
-		if(REV=-1)
-		{
-			REV_Intersect();
-			int P=FWD_Intersect(true);
-			if(P==1)
-			{
-				return false;
-			}
-			FWD_Intersect(false);
-			REV=-1;
-			return true;
-		}
-		else
-		{
-			FWD_Intersect(true);
-			int P=FWD_Intersect(false);
-			if(P==1)
-			{
-				return false;
-			}
-			return true;
+			//AIN4
+			double ID = AIN(4);
+			cout << ID;
 		}
 	}
 };
 #endif
 /*Class Shooter: Shoots the target*/
 #ifdef TRUE
+//VideoCapture cap(0);
 class Shooter
 {
 private:
@@ -246,84 +209,152 @@ public:
 		Tilt=new PWMAccumulator(TILT_PWM);
 		FlyWheels=new c_bin_io(FW_GPIO);
 		LinActuate=new c_bin_io(LA_GPIO);
-		Pan->LowLimit  ( 900000);
-		Pan->HighLimit (1500000);
-		Tilt->LowLimit ( 900000);
-		Tilt->HighLimit(1500000);
-		Pan->Set    (( ( 900000)   +
-		(1500000))/2);
-		Pan->Set    (( ( 900000)   +
-		(1500000))/2);
+		Pan->LowLimit  ( 500000);
+		Pan->HighLimit (2300000);
+		Tilt->LowLimit (1900000);
+		Tilt->HighLimit(2400000);
+		Tilt->set    (( (2400000)   +
+		(1900000))/2);
+		Pan->set    (( ( 500000)   +
+		(2300000))/2);
 		//..
 		FlyWheels->SetOP();
 		FlyWheels->Write(false);
 		LinActuate->SetOP();
 		LinActuate->Write(LA_CLOSED);
 		//Note: if it does not initialize properly, may need to change.
-		if(!cap->isOpened()){cout<<"ERROR: no camera";return -1;}
+		if(!cap->isOpened()){cout<<"ERROR: no camera";return;}
 	}
 	CPoint TFind()
 	{
+		//	cout<<"NO CALL?";
+		//	cout<<"??"<<endl;
+		CPoint cvoid = {-1 -1};
+		if(!cap->isOpened()){cout<<"ERROR: no camera";return cvoid;}
 		Mat mat,mat2;
-		(*cap) >> mat2;
-		cvtColor(mat2, mat, CV_BGR2HLS);
+		//	cout << "Pre Cap";
+		//	cout << endl;	
+		cap->read(mat);	
+		//		(*cap) >> mat2;
+		//	cout << "Post Cap";
+		//	cout << "FAIL_CONVERT?";
+		cvtColor(mat, mat2, CV_BGR2HLS);
 		Mat_ <Vec3b> Frame(mat);
-		//	Mat_ <Vec3b> OFrame(mat2);
+		Mat_ <Vec3b> OFrame(mat2);
+		cv::Size sks = Frame.size();
 		int i,j;
 		int SX,SY,ct;
 		SX=0;SY=0;ct=0;
-		for(i=0;i<mat.cols();i++)
-		for(j=0;j<mat.rows();j++)
+		int FW = 5;
+		for(i=FW;i<sks.height-FW;i++)
+		for(j=FW;j<sks.width-FW;j++)
 		{
-			if(Frame(i,j)[0] < 20) {  //the value is red hue (20 > h | h > 240)
-				//if(Frame(i,j)[2] > 200) //Can vary the sat value to require it to be more or less red (like pink is a red)
-				if(Frame(i,j)[1] < 190 && Frame(i,j)[2] > 65) //vary the luminance values.  Black and White can be red with Very Low or Very High luminance
+			int a=(OFrame(i-FW,j)[0] + OFrame(i,j+FW)[0] + 
+			OFrame(i+FW,j)[0] + OFrame(i,j-FW)[0]-4*OFrame(i,j)[0]);
+			if(a<0)a+=256;
+			Frame(i,j)[0]=a;
+			Frame(i,j)[1]=OFrame(i,j)[1];//(OFrame(i-FW,j)[1] + OFrame(i,j+FW)[1] + 
+			//OFrame(i+FW,j)[1] + OFrame(i,j-FW)[1]-4*OFrame(i,j)[1]);
+
+			Frame(i,j)[2]=OFrame(i,j)[2];//(OFrame(i-FW,j)[2] + OFrame(i,j-FW)[2] + 
+			//OFrame(i+FW,j)[2] + OFrame(i,j+FW)[2]-4*OFrame(i,j)[2]);
+			
+			if(Frame(i,j)[0] < 20 && OFrame(i,j)[0] < 20)// || Frame(i,j)[0] > 245) 
+			{  //the value is red hue (20 > h | h > 240)
+				if(OFrame(i,j)[1] < 190 && OFrame(i,j)[1] > 50 && OFrame(i,j)[2] > 65 && OFrame(i,j)[2] < 250) //vary the luminance values.  Black and White can be red with Very Low or Very High luminance
 				//off-white can be red with low saturation and high luminance. something similar for black
 				{
-					//we can also add color-based
-					int dx = (Frame(i-1,j)[2]-Frame(i+1,j)[2]);
-					int dy = (Frame(i,j-1)[2]-Frame(i,j+1)[2]);
-					if(dx<0)dx*=-1;
-					if(dy<0)dy*=-1;
-					int dxy = dx+dy;
-					SX+=i*dxy;
-					SY+=j*dxy;
-					ct+=dxy;
-					//			Frame(i,j)[1]=255; //make it different
+					
+					SX+=j;
+					SY+=i;
+					ct++;
+					//OFrame(i,j)[0]=0;
+					//OFrame(i,j)[1]=255;
+					//OFrame(i,j)[2]=255;
 				}
-				//		else
-				//		{
-				//			Frame(i,j)[1]=0;
-				//		}
-				//		else
-				//		Frame(i,j)[1]=0;	
-				//Frame(i,j)[0]=0;
+				else
+				{
+					//OFrame(i,j)[0]=255;
+					//OFrame(i,j)[1]=0;
+					//OFrame(i,j)[2]=0;
+				}
 			}
+			else
+			{
+				//OFrame(i,j)[0]=255;
+				//OFrame(i,j)[1]=0;
+				//OFrame(i,j)[2]=0;
+			}
+
+		}
+		//		cout << ct;
+		//		cout << endl;
+		if(ct !=0){
 			SX = SX / ct;
 			SY = SY / ct;
-		}
+		}else{SX=SY=-1;}
+		//	cout << "SEE SOMETHING?";
+		//	cout << endl;
+		/*
+	if(SX > 4 && SX < 356 && SY > 4 && SY < 236)
+	for(i=-3;i<=3;i++)
+	for(j=-3;j<=3;j++)
+	{OFrame(SY+i,SX+j)[0]=0; OFrame(SY+i,SX+j)[1]=255; OFrame(SY+i,SX+j)[2]=0;} //green (the gotton format is BGR here)
+	
+		char op[255];
+		static int PK=0;
+		sprintf(op,"_%d.jpg",PK++);
+		imwrite(op,mat2);
+		*/
+		CPoint RT;
+		RT.x=SX;
+		RT.y=SY;
+		return RT;
 	}
+
 	void Action()
 	{
+		//	cout << "init";
+		//	cout << endl;
+		//VideoCapture capx(0);
+		//	cout << "ERC";
+		//	cout << endl;
 		//include the timer made earlier to wait for 3 seconds
 		CPoint Aim;
 		Aim.x=0;
 		Aim.y=0;
-		while((Aim.x - CX_SCN>CX_EPS)&&(Aim.y - CY_SCN>CY_EPS))
+		int Ex,Ey;
+		while((abs(Aim.x - (CX_SCN))>CX_EPS/2)||(abs(Aim.y - CY_SCN)>CY_EPS/2))
 		{
+			//		cout << "GRABA";
+			//		cout << endl;
 			Aim=TFind();
-			int Ex,Ey;
+			//TMPX(Aim.x,Aim.y,capx);
+			
+			cout<<Aim.x<<"|"<<Aim.y;//<<"||"<<CX_SCN<<"|"<<CY_SCN;
+			cout<<endl;
 			Ex=(Aim.x-CX_SCN);
 			Ey=(Aim.y-CY_SCN);
-			Pan.Accumulate(Ex);
-			Tilt.Accumulate(Ey);
+			//cout<<Ex<<"|"<<Ey;
+			//cout<<endl;
+			Pan->accumulate(Ex/4);
+			Tilt->accumulate(Ey/4);
 		}
+		ShootGun();
 		
 	}
 	void ShootGun()
 	{
-		
+		FlyWheels->Write(true);
+		sleep(1);
+		LinActuate->Write(LA_OPEN);
+		sleep(4);
+		LinActuate->Write(LA_CLOSED);
+		sleep(2);
+		FlyWheels->Write(false);
+		cout << "pow";
 	}
+
 };
 
 #endif
@@ -331,13 +362,20 @@ public:
 #ifdef TRUE
 int main()
 {
+	cout << "C";
+	cout <<"D";
 	Navigator X;
+	cout << "A";
+	cout << "B";
+	Shooter Y;
 	X.DCrap();
+	//Y.Action();
 	double S=TestIn();
 	WriteF(LED0,"1");
+	cout << "done" << endl;
 	while(S*EZ_APPROXIMATION > TestIn())
 	{
-		cout<<TestIn()<<endl;
+		//Y.Action();	//cout<<TestIn()<<endl;
 	}
 	
 
