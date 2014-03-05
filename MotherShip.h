@@ -83,7 +83,6 @@ GPIO_READ_DMA(int BLOCK, int PIN)
 		fprintf(PinMode,"in");
 		fclose(PinMode);
 	}
-	fclose(TP);
 		ER=false;
 		if(BLOCK > 3 || BLOCK < 0)
 		{ER=true;return;}

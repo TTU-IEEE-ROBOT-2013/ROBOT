@@ -101,7 +101,7 @@ public:
 		//this function will be tweeked (with addition/subtraction of steps)
 		//to achive max performance
 		Drive->Drive(.5*MSR,.5*MSL);
-		usleep(20000);
+		usleep(100000);
 		Drive->Drive(0*MSR,0*MSR);
 	}
 
@@ -129,18 +129,26 @@ public:
 		
 		//Line Following 101 (binary line detection algorithm)
 		//RapidCall(AIN(0)+AIN(1),5);
+		Drive->Drive(80,80);
+		double * FAIL=0;
 		while(true)
 		{
 			double ML=0,MR=0,MT=50;
 			//#define L LineFW1
-			if(LMFC->Read())
-			Drive->Drive(60,60);
-			else if(LMFL->Read())
-			Drive->Drive(0,60);
-			else if(LMFR->Read())
-			Drive->Drive(60,0);
-			else
+			bool a=LMFC->Read(),b=LMFL->Read(),c=LMFR->Read();
+			if(a&&b&&c)
+			{
 			Drive->Drive(0,0);
+			(*FAIL)=10;	
+			}
+			if(a)
+			Drive->Drive(100,100);
+			else if(b)
+			Drive->Drive(0,127);
+			else if(c)
+			Drive->Drive(127,0);
+			//else
+			//Drive->Drive(0,0);
 			//#undef  L
 			//APIN->Clear();
 			//APIN->Poll();
