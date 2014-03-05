@@ -119,81 +119,42 @@ public:
 		cout<< "LEFT";
 		Drive->Drive(0,0);
 		sleep(5);
-		//int * X=(int*)10000;
-		//cout << *X;
-		//,return;
-		//MSR=MSL=100;
-		//Drive->Drive(100,100);
-		//sleep(10);
-		//Decelerate();
-		
-		//Line Following 101 (binary line detection algorithm)
-		//RapidCall(AIN(0)+AIN(1),5);
 		Drive->Drive(80,80);
 		double * FAIL=0;
+		const int _S_DR = 80, _S_TR=100;
+FWD:
 		while(true)
 		{
-			double ML=0,MR=0,MT=50;
-			//#define L LineFW1
 			bool a=LMFC->Read(),b=LMFL->Read(),c=LMFR->Read();
 			if(a&&b&&c)
 			{
 			Drive->Drive(0,0);
-			(*FAIL)=10;	
+			sleep(1);
+			goto REV;
 			}
 			if(a)
-			Drive->Drive(100,100);
+			Drive->Drive(_S_DR,_S_DR);
 			else if(b)
-			Drive->Drive(0,127);
+			Drive->Drive(0,_S_TR);
 			else if(c)
-			Drive->Drive(127,0);
-			//else
-			//Drive->Drive(0,0);
-			//#undef  L
-			//APIN->Clear();
-			//APIN->Poll();
-			//MT=-(APIN->DiffIn()-20);
-			//cout << MT << endl;
-			//if(MT > 100)MT=0;
-			//if(MT < -100)MT=0;
-			//if(MT>0)Drive->Drive(0,60);
-			//else Drive->Drive(60,0);	
-			//AIN0 = left AIN1 = right			
-			//3 left  2 right
-			//	ML=AIN(3);
-			//	MR=AIN(2);
-			//cout << "L"<<ML<<"|R"<<MR<<endl;
-			//	if(ML < 1676)ML=MT;else ML=0;
-			//	if(MR < 1699)MR=MT;else MR=0;
-			//		Drive->Drive(MR,ML);
-			//usleep(200);
+			Drive->Drive(_S_TR,0);
 		}
-		cout << "We left the loop!" << endl;
-		wait();
-		PID pt(2.5,.05,.05);
-		
-		double dV =0;
-		while(false)
-		{
-			double dP=APIN->DiffIn()+20;
-			//dV+=dP/200;
-			dV=pt.Exec(dP);
-			//double dV = -CTL->Exec(dP); //apply control system
-			cout << dP << "|" << dV << endl;
-			
-			MSR=50+.0001*dV;
-			MSL=50-.0001*dV;
-			if(MSR > 55)MSR=55;
-			if(MSL > 55)MSL=55;
-			if(MSR < -55)MSR=-55;
-			if(MSL < -55)MSL=-55;
-			Drive->Drive(MSR,MSL);
-		}
+REV:
 		while(true)
 		{
-			//AIN4
-			double ID = AIN(4);
-			cout << ID;
+			bool a=LMBC->Read(),b=LMBL->Read(),c=LMBR->Read();
+			if(a&&b&&c)
+			{
+			Drive->Drive(0,0);
+			sleep(1);
+			goto FWD;
+			}
+			if(a)
+			Drive->Drive(-_S_DR,-_S_DR);
+			else if(b)
+			Drive->Drive(0,-_S_TR);
+			else if(c)
+			Drive->Drive(-_S_TR,0);
 		}
 	}
 };
@@ -389,63 +350,3 @@ int main()
 
 }
 #endif	
-
-//Vestigial Code
-#ifndef TRUE
-int NOT_main_157663()
-{
-	Mat mat,mat2;
-	VideoCapture cap(0);
-	if(!cap.isOpened()){cout<<"ERROR: no camera";return -1;}
-	cout<<"Capture";
-	cap >> mat2;
-	cvtColor(mat2, mat, CV_BGR2HLS);
-	//cap.set(CV_CAP_PROP_FPS, 30);
-	//cap.set(CV_CAP_PROP_FRAME_WIDTH ,620); //wid
-	//cap.set(CV_CAP_PROP_FRAME_HEIGHT ,480); //heigh
-	//Mat s2x;
-	//cvtColor(mat, s2x, CV_BGR2HSV);
-	Mat_ <Vec3b> Frame(mat);
-	Mat_ <Vec3b> OFrame(mat2);
-	int i,j;
-	int SX,SY,ct;
-	SX=0;SY=0;ct=0;
-	for(i=0;i<mat.cols();i++)
-	for(j=0;j<mat.rows();j++)
-	{
-		if(Frame(i,j)[0] < 20) {  //the value is red hue (20 > h | h > 240)
-			//if(Frame(i,j)[2] > 200) //Can vary the sat value to require it to be more or less red (like pink is a red)
-			if(Frame(i,j)[1] < 190 && Frame(i,j)[2] > 65) //vary the luminance values.  Black and White can be red with Very Low or Very High luminance
-			//off-white can be red with low saturation and high luminance. something similar for black
-			{
-				int dx = (Frame(i-1,j)[2]-Frame(i+1,j)[2]);
-				int dy = (Frame(i,j-1)-Frame(i,j+1));
-				if(dx<0)dx*=-1;
-				if(dy<0)dy*=-1;
-				int dxy = dx+dy;
-				SX+=i*dxy;
-				SY+=j*dxy;
-				ct+=dxy;
-				Frame(i,j)[1]=255; //make it different
-			}
-			else
-			{
-				Frame(i,j)[1]=0;
-			}
-			else
-			Frame(i,j)[1]=0;	
-			//Frame(i,j)[0]=0;
-		}
-		SX = SX / ct;
-		SY = SY / ct;
-		for(i=-3;i<=3;i++)
-		for(j=-3;j<=3;j++)
-		{OFrame(i,j)[0]=0; OFrame(i,j)[1]=255; OFrame(i,j)[2]=0;} //green (the gotton format is BGR here)
-		//we put green dot in center of target!
-		//note we don't have to do any mat=OFrame type stuff as there was no data copy
-		cout<<"Captured";
-		imwrite("alpha.png", mat);	
-		return 0;
-	}
-}
-#endif
