@@ -122,6 +122,7 @@ public:
 		Drive->Drive(80,80);
 		double * FAIL=0;
 		const int _S_DR = 80, _S_TR=100;
+		goto REV;
 FWD:
 		while(true)
 		{
@@ -130,8 +131,9 @@ FWD:
 			{
 			Drive->Drive(0,0);
 			sleep(1);
-			goto REV;
+			goto FL;
 			}
+			//if(block detected) goto REV
 			if(a)
 			Drive->Drive(_S_DR,_S_DR);
 			else if(b)
@@ -147,7 +149,7 @@ REV:
 			{
 			Drive->Drive(0,0);
 			sleep(1);
-			goto FWD;
+			goto RR;
 			}
 			if(a)
 			Drive->Drive(-_S_DR,-_S_DR);
@@ -156,7 +158,25 @@ REV:
 			else if(c)
 			Drive->Drive(-_S_TR,0);
 		}
+FL:
+		Drive->Drive(_S_DR/2,_S_DR/2);
+		usleep(100000);
+		Drive->Drive(_S_DR,-_S_DR);
+		usleep(100000);
+		while(true)
+		{
+			bool a=LMFC->Read(),b=LMFL->Read(),c=LMFR->Read();
+			bool d=LMBC->Read(),e=LMBL->Read(),f=LMBR->Read();
+			while(!LMBL->Read());
+			Drive->Drive(0,0);
+			usleep(10000);
+			Drive->Drive(_S_DR,_S_DR);
+			usleep(100000);
+			goto ENDX;//FWD;
+		}
+RR:
 	}
+ENDX:
 };
 #endif
 /*Class Shooter: Shoots the target*/
