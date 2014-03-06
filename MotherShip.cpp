@@ -119,9 +119,9 @@ public:
 		cout<< "LEFT";
 		Drive->Drive(0,0);
 		sleep(5);
-		Drive->Drive(80,80);
+		Drive->Drive(100,100);
 		double * FAIL=0;
-		const int _S_DR = 80, _S_TR=127;
+		const int _S_DR = 85, _S_TR=127;
 		goto FWD;
 FWD:
 		while(true)
@@ -148,7 +148,11 @@ FWDS:
 			if(a&&b&&c)
 			{
 			Drive->Drive(0,0);
-			sleep(1);
+			usleep(500000);
+			Drive->Drive(-_S_DR,-_S_DR);
+			//DONT FORGET TO KILL THIS
+			//when we get block detection.
+			usleep(500000);
 			//shooter.shoot() //or what ever
 			goto REV;
 			}
@@ -161,14 +165,41 @@ FWDS:
 			Drive->Drive(_S_TR,0);
 		}
 REV:
+		while(!(LMBC->Read() || LMBR->Read() || LMBL->Read()))
+		{
+			Drive->Drive(-_S_TR,0);
+		} 
 		while(true)
 		{
+			bool d=LMFC->Read(),e=LMFL->Read(),f=LMFR->Read();
 			bool a=LMBC->Read(),b=LMBL->Read(),c=LMBR->Read();
 			if(a&&b&&c)
 			{
 			Drive->Drive(0,0);
 			sleep(1);
-			goto RR;
+			goto RTR;
+			}
+			if(a)
+			Drive->Drive(-_S_DR,-_S_DR);
+			else if(b)
+			Drive->Drive(0,-_S_TR);
+			else if(c)
+			Drive->Drive(-_S_TR,0);
+		}
+REVF:
+		while(!(LMBC->Read() || LMBR->Read() || LMBL->Read()))
+		{
+			Drive->Drive(-_S_TR,0);
+		} 
+		while(true)
+		{
+			bool d=LMFC->Read(),e=LMFL->Read(),f=LMFR->Read();
+			bool a=LMBC->Read(),b=LMBL->Read(),c=LMBR->Read();
+			if(d&&e&&f)
+			{
+			Drive->Drive(0,0);
+			sleep(1);
+			goto RTR;
 			}
 			if(a)
 			Drive->Drive(-_S_DR,-_S_DR);
@@ -181,9 +212,9 @@ FL:
 		Drive->Drive(_S_TR,_S_TR);
 		usleep(200000);
 		Drive->Drive(_S_TR*.8,-_S_TR*.8);
-		usleep(300000);
-			bool a=LMFC->Read(),b=LMFL->Read(),c=LMFR->Read();
-			bool d=LMBC->Read(),e=LMBL->Read(),f=LMBR->Read();
+		usleep(500000);
+			//bool a=LMFC->Read(),b=LMFL->Read(),c=LMFR->Read();
+			//bool d=LMBC->Read(),e=LMBL->Read(),f=LMBR->Read();
 			while(!LMFC->Read());
 			Drive->Drive(0,0);
 			usleep(100000);
@@ -194,14 +225,14 @@ FL:
 			//Drive->Drive(_S_DR,_S_DR);
 			usleep(100000);
 			goto FWDS;//FWD;
+RTR:
 		
-RR:
-			Drive->Drive(_S_TR,_S_TR);
-		usleep(200000);
-		Drive->Drive(_S_TR*.8,-_S_TR*.8);
-		usleep(300000);
-			bool a=LMFC->Read(),b=LMFL->Read(),c=LMFR->Read();
-			bool d=LMBC->Read(),e=LMBL->Read(),f=LMBR->Read();
+		Drive->Drive(-_S_TR*.9,-_S_TR*.9);
+		usleep(700000);
+		Drive->Drive(-_S_TR*.8,_S_TR*.8);
+		usleep(500000);
+			//bool a=LMFC->Read(),b=LMFL->Read(),c=LMFR->Read();
+			//bool d=LMBC->Read(),e=LMBL->Read(),f=LMBR->Read();
 			while(!LMFC->Read());
 			Drive->Drive(0,0);
 			usleep(100000);
@@ -211,8 +242,25 @@ RR:
 			//usleep(10000);
 			//Drive->Drive(_S_DR,_S_DR);
 			usleep(100000);
-			goto FWD;//FWD;
-	ENDX:;
+			goto ENDX;//FWD;	ENDX:;
+RTSR:
+		Drive->Drive(_S_TR,_S_TR);
+		usleep(200000);
+		Drive->Drive(-_S_TR*.8,_S_TR*.8);
+		usleep(500000);
+			//bool a=LMFC->Read(),b=LMFL->Read(),c=LMFR->Read();
+			//bool d=LMBC->Read(),e=LMBL->Read(),f=LMBR->Read();
+			while(!LMFC->Read());
+			Drive->Drive(0,0);
+			usleep(100000);
+			Drive->Drive(_S_DR,_S_DR);
+			//while(!LMFC->Read());
+			Drive->Drive(0,0);
+			//usleep(10000);
+			//Drive->Drive(_S_DR,_S_DR);
+			usleep(100000);
+			//goto ENDX;//FWD;	ENDX:;
+	ENDX:
 	Drive->Drive(0,0);
 	}
 
