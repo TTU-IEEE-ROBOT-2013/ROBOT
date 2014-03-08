@@ -58,14 +58,10 @@ private:
 	PWMAccumulator * Tilt;
 	c_bin_io * FlyWheels;
 	c_bin_io * LinActuate;
-	ADC_DMA * APIN;
 public:
 	Shooter()
 	{
-		APIN=new ADC_DMA;
 		cap = new VideoCapture(0);
-		Mat mat;
-		cap->read(mat);
 		Pan =new PWMAccumulator(PAN_PWM);
 		Tilt=new PWMAccumulator(TILT_PWM);
 		FlyWheels=new c_bin_io(FW_GPIO);
@@ -95,6 +91,8 @@ public:
 		Mat mat,mat2;
 		//	cout << "Pre Cap";
 		//	cout << endl;	
+		{
+		AGAIN:
 		cap->read(mat);	
 		//		(*cap) >> mat2;
 		//	cout << "Post Cap";
@@ -122,18 +120,18 @@ public:
 			*/
 			//OFrame(i+FW,j)[2] + OFrame(i,j+FW)[2]-4*OFrame(i,j)[2]);
 			
-			if((OFrame(i,j)[0] < 10 || OFrame(i,j)[0] > 245))// && OFrame(i,j)[0] < 20 )
+			if((OFrame(i,j)[0] < 20|| OFrame(i,j)[0] > 5))// && OFrame(i,j)[0] < 20 )
 			{  //the value is red hue (20 > h | h > 240)
-				if( 	OFrame(i,j)[2] > 55 && OFrame(i,j)[2] < 180 &&
-					OFrame(i,j)[1] > 50 && OFrame(i,j)[1] < 200	)//off-white can be red with low saturation and high luminance. something similar for black
+				if(OFrame(i,j)[1] < 50 && OFrame(i,j)[1] > 30 && OFrame(i,j)[2] > 50 && OFrame(i,j)[2] < 70) //vary the luminance values.  Black and White can be red with Very Low or Very High luminance
+				//off-white can be red with low saturation and high luminance. something similar for black
 				{
 					
 					SX+=j;
 					SY+=i;
 					ct++;
-				//	Frame(i,j)[0]=0;
-				//	Frame(i,j)[1]=110;
-				//	Frame(i,j)[2]=255;
+					//Frame(i,j)[0]=0;
+					//Frame(i,j)[1]=110;
+					//Frame(i,j)[2]=255;
 				}
 				else
 				{
@@ -158,49 +156,37 @@ public:
 		}else{SX=SY=-1;}
 		//	cout << "SEE SOMETHING?";
 		//	cout << endl;
-		/*
-		cvtColor(mat, mat2, CV_HLS2BGR);
-	if(SX > 4 && SX < 356 && SY > 4 && SY < 236)
-	for(i=-3;i<=3;i++)
-	for(j=-3;j<=3;j++)
-	{OFrame(SY+i,SX+j)[0]=0; OFrame(SY+i,SX+j)[1]=255; OFrame(SY+i,SX+j)[2]=0;} //green (the gotton format is BGR here)
+		for(i=0;i<5;i++)
+		for(j=0;j<5;j++)
+		OFrame(i,j)[0]=255;
+		OFrame(i,j)[1]=157;
+		OFrame(i,j)[2]=10;
+	//	cvtColor(mat, mat2, CV_HLS2BGR);
+	//if(SX > 4 && SX < 356 && SY > 4 && SY < 236)
+	//for(i=-3;i<=3;i++)
+	//for(j=-3;j<=3;j++)
+	//{OFrame(SY+i,SX+j)[0]=0; OFrame(SY+i,SX+j)[1]=255; OFrame(SY+i,SX+j)[2]=0;} //green (the gotton format is BGR here)
 	
 		char op[255];
 		static int PK=0;
 		sprintf(op,"_%d.jpg",PK++);
 		
 		imwrite(op,mat2);
-		*/
+		sleep(5);
+		goto AGAIN;
+		}
 		CPoint RT;
 		RT.x=SX;
 		RT.y=SY;
 		return RT;
 	}
-	bool Valid()
-	{
-		//AIN5
-		APIN->Poll();
-		double V = APIN->AIN(5);
-		V=V/62;
-		cout << V;
-		if(V > MIN_TARG_DIST && V < MAX_TARG_DIST)
-			return true;
-		else
-			return false;
-	}
+
 	void Action()
 	{
-		//Tilt->set    (( (2400000)   +
-		//(1900000)*2)/3);
-		//Pan->set    (( ( 500000)   +
-		//(2300000))/2);
-		Mat mat;
-		cap->read(mat);
-		cap->read(mat);
-		cap->read(mat);
-		cap->read(mat);
-		cap->read(mat);
-		cap->read(mat);
+		Tilt->set    (( (2400000)   +
+		(1900000)*2)/3);
+		Pan->set    (( ( 500000)   +
+		(2300000))/2);
 		//	cout << "init";
 		//	cout << endl;
 		//VideoCapture capx(0);
@@ -208,42 +194,26 @@ public:
 		//	cout << endl;
 		//include the timer made earlier to wait for 3 seconds
 		CPoint Aim;
-		int Ex=0,Ey=0;
-		{
-		NOTVALID:
 		Aim.x=0;
 		Aim.y=0;
-		Tilt->set    (( (2400000)   +
-		(1900000)*2)/3);
-		Pan->set    (( ( 500000)   +
-		(2300000))/2);
+		int Ex,Ey;
 		while((abs(Aim.x - (CX_SCN))>CX_EPS/2)||(abs(Aim.y - CY_SCN)>CY_EPS/2))
 		{
 			//		cout << "GRABA";
 			//		cout << endl;
 			Aim=TFind();
 			//TMPX(Aim.x,Aim.y,capx);
+			
+			//cout<<Aim.x<<"|"<<Aim.y;//<<"||"<<CX_SCN<<"|"<<CY_SCN;
+			//cout<<endl;
 			Ex=(Aim.x-CX_SCN);
 			Ey=(Aim.y-CY_SCN);
-			if(Ex<40)Ex=1*Ex;else if(Ex<90) Ex=5*Ex; else Ex=12*Ex;
-			if(Ey<40)Ey=1*Ey;else if(Ey<90) Ex=5*Ex; else Ey=12*Ex;
+			//cout<<Ex<<"|"<<Ey;
+			//cout<<endl;
 			Pan->accumulate(Ex);
 			Tilt->accumulate(Ey);
 		}
-		if(Valid())
 		ShootGun();
-		else
-		{
-		static int IK = 0;
-		IK++;
-		if(IK < 3)
-		goto NOTVALID;
-				Pan->set    (( ( 500000)   +
-		(2300000))/2);
-		Tilt->Set(2400000);
-		ShootGun();
-		}
-		}
 		
 	}
 	void ShootGun()
@@ -337,7 +307,7 @@ void LeaveBlock()
 {
 bool a=LMFC->Read(),b=LMFL->Read(),c=LMFR->Read();
 Drive->Drive(_S_DR,_S_DR);
-sleep(1);
+usleep(500000);
 while(a && b && c)
 {
 a=LMFC->Read(),b=LMFL->Read(),c=LMFR->Read();
@@ -397,7 +367,7 @@ void Reverse()
 			#ifndef BLOCKDETECT
 			{
 			Drive->Drive(-_S_DR,-_S_DR);
-			usleep(500000);
+			usleep(1000000);
 			}
 			#endif
 		while(!(LMBC->Read() || LMBR->Read() || LMBL->Read()))
@@ -428,7 +398,7 @@ void Reverse()
 			#ifndef BLOCKDETECT
 			{
 			Drive->Drive(-_S_DR,-_S_DR);
-			usleep(500000);
+			usleep(1000000);
 			}
 			#endif
 		while(!(LMBC->Read() || LMBR->Read() || LMBL->Read()))
@@ -528,6 +498,8 @@ int main()
 {
 	Navigator X;
 	Shooter Y;
+	Y.Action();
+	/*
 	//get out of the shooting block (may need a delay added)
 	X.LeaveBlock();
 	
@@ -558,5 +530,6 @@ int main()
 	//GOTO FINISH
 	X.Forward();
 	//Sleep
+	*/
 }
 #endif	

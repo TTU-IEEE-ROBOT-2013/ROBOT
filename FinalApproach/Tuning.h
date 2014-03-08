@@ -115,12 +115,28 @@
 //RGB limits for block detection.
 //change these based on testing!!!!
 //There may be 2 (one for blue, one for red)
-#define NAV_RL 1000
-#define NAV_BL 1000
-#define NAV_GL 1000
-#define NAV_RH 1024
-#define NAV_BH 1024
-#define NAV_GH 1024
+#define MAX_RGBC_VAL 65535
+#define NAV_BLUE_RL 1000
+#define NAV_BLUE_BL 1000
+#define NAV_BLUE_GL 1000
+#define NAV_BLUE_RH 1024
+#define NAV_BLUE_BH 1024
+#define NAV_BLUE_GH 1024
+
+#define NAV_BLUE_RL 1000
+#define NAV_BLUE_BL 1000
+#define NAV_BLUE_GL 1000
+#define NAV_BLUE_RH 1024
+#define NAV_BLUE_BH 1024
+#define NAV_BLUE_GH 1024
+
+#define NAV_BLUE_RL 1000
+#define NAV_BLUE_BL 1000
+#define NAV_BLUE_GL 1000
+#define NAV_BLUE_RH 1024
+#define NAV_BLUE_BH 1024
+#define NAV_BLUE_GH 1024
+
 //change this to include both tests, if a second is required
 #define IS_BLOCK(red,green,blue) (NAV_RL < red   && red   < NAV_RH  && \
 				NAV_BL < blue  && blue  < NAV_BL && \
