@@ -138,7 +138,7 @@ public:
 		INT32 CFG=0;
 		CFG |= (FIFO << 26);
 		CFG |= (PIN  << 19);
-		CFG |= (0x1  << 00);
+		CFG |= (0x0  << 00); //averaging (auto-block-filter) 0 -> 1point 1 -> 2 point
 		INT32 * C=((INT32*)((char*)ADCX+ADC_SCFG+n*ADC_DSTP));
 		(*C)=CFG;
 		(*(C+1))=0xFF0000FF;
@@ -274,8 +274,14 @@ public:
 	}
 	double DiffIn()
 	{
-		return (stx[0]-stx[1])* (1.8/4096*1000);;
-	}
+		double a=stx[0];
+		if(stx[1]>a)a=stx[1];
+		if(stx[2]>a)a=stx[2];
+		if(stx[3]>a)a=stx[3];
+		if(stx[4]>a)a=stx[4];
+		if(stx[6]>a)a=stx[6];
+		return a;
+		}
 	/*
 	NOW: Create the rest of the class to give easier access
 	to these underlying properties.

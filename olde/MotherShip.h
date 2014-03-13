@@ -274,14 +274,8 @@ public:
 	}
 	double DiffIn()
 	{
-		double a=stx[0];
-		if(stx[1]>a)a=stx[1];
-		if(stx[2]>a)a=stx[2];
-		if(stx[3]>a)a=stx[3];
-		if(stx[4]>a)a=stx[4];
-		if(stx[6]>a)a=stx[6];
-		return a;
-		}
+		return (stx[0]+stx[1])* (.5*1.8/4096*1000);;
+	}
 	/*
 	NOW: Create the rest of the class to give easier access
 	to these underlying properties.

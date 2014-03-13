@@ -13,39 +13,39 @@ typedef struct _V3 {int a; int b; int c;} V3;
 
 V3 RGB2HSL(V3 RGB)
 {
-	double a,b,c;
-	double h,s,l;
-	a=RGB.a/(1.0*MAX_RGBC_VAL);
-	b=RGB.b/(1.0*MAX_RGBC_VAL);
-	c=RGB.c/(1.0*MAX_RGBC_VAL);
-	double R=a,G=b,B=c;
-	double mx,mn;
-	int sc=0;
-	mx=a;if(b>mx){mx=b;sc=1;}if(c>mx){mx=c;sc=2;}
-	mn=a;if(b<mn)mn=b;if(c<mn)mn=c;
-	l=(mx+mn)/2;
-	if(mn=mx)s=0;
-	else if(l<=.5)
-	s=(mx-mn)/(mx+mn);
-	else if(l>.5)
-	s=(mx-mn)/(2.0-mx-mn);
-	switch(sc)
-	{
-	case 0:
-		h=(G-R)/(mx-mn);
-		break;
-	case 1:
-		h=2.0+(B-R)/(mx-mn);
-	case 2:
-		h=4.0+(R-G)/(mx-mn);
-	}
-	if(h<0)h+=6;
-	h=h/6;
-	V3 RT;
-	RT.a=h*MAX_RGBC_VAL;
-	RT.b=s*MAX_RGBC_VAL;
-	RT.c=l*MAX_RGBC_VAL;
-	return RT;
+double a,b,c;
+double h,s,l;
+a=RGB.a/(1.0*MAX_RGBC_VAL);
+b=RGB.b/(1.0*MAX_RGBC_VAL);
+c=RGB.c/(1.0*MAX_RGBC_VAL);
+double R=a,G=b,B=c;
+double mx,mn;
+int sc=0;
+mx=a;if(b>mx){mx=b;sc=1;}if(c>mx){mx=c;sc=2;}
+mn=a;if(b<mn)mn=b;if(c<mn)mn=c;
+l=(mx+mn)/2;
+if(mn=mx)s=0;
+else if(l<=.5)
+s=(mx-mn)/(mx+mn);
+else if(l>.5)
+s=(mx-mn)/(2.0-mx-mn);
+switch(sc)
+{
+case 0:
+h=(G-R)/(mx-mn);
+break;
+case 1:
+h=2.0+(B-R)/(mx-mn);
+case 2:
+h=4.0+(R-G)/(mx-mn);
+}
+if(h<0)h+=6;
+h=h/6;
+V3 RT;
+RT.a=h*MAX_RGBC_VAL;
+RT.b=s*MAX_RGBC_VAL;
+RT.c=l*MAX_RGBC_VAL;
+return RT;
 }
 /*Class Shooter: Shoots the target*/
 #ifdef TRUE
@@ -58,14 +58,10 @@ private:
 	PWMAccumulator * Tilt;
 	c_bin_io * FlyWheels;
 	c_bin_io * LinActuate;
-	ADC_DMA * APIN;
 public:
 	Shooter()
 	{
-		APIN=new ADC_DMA;
 		cap = new VideoCapture(0);
-		Mat mat;
-		cap->read(mat);
 		Pan =new PWMAccumulator(PAN_PWM);
 		Tilt=new PWMAccumulator(TILT_PWM);
 		FlyWheels=new c_bin_io(FW_GPIO);
@@ -95,6 +91,8 @@ public:
 		Mat mat,mat2;
 		//	cout << "Pre Cap";
 		//	cout << endl;	
+		{
+		AGAIN:
 		cap->read(mat);	
 		//		(*cap) >> mat2;
 		//	cout << "Post Cap";
@@ -122,18 +120,18 @@ public:
 			*/
 			//OFrame(i+FW,j)[2] + OFrame(i,j+FW)[2]-4*OFrame(i,j)[2]);
 			
-			if((OFrame(i,j)[0] < 10 || OFrame(i,j)[0] > 245))// && OFrame(i,j)[0] < 20 )
+			if((OFrame(i,j)[0] < 20|| OFrame(i,j)[0] > 5))// && OFrame(i,j)[0] < 20 )
 			{  //the value is red hue (20 > h | h > 240)
-				if( 	OFrame(i,j)[2] > 55 && OFrame(i,j)[2] < 180 &&
-						OFrame(i,j)[1] > 50 && OFrame(i,j)[1] < 200	)//off-white can be red with low saturation and high luminance. something similar for black
+				if(OFrame(i,j)[1] < 50 && OFrame(i,j)[1] > 30 && OFrame(i,j)[2] > 50 && OFrame(i,j)[2] < 70) //vary the luminance values.  Black and White can be red with Very Low or Very High luminance
+				//off-white can be red with low saturation and high luminance. something similar for black
 				{
 					
 					SX+=j;
 					SY+=i;
 					ct++;
-					//	Frame(i,j)[0]=0;
-					//	Frame(i,j)[1]=110;
-					//	Frame(i,j)[2]=255;
+					//Frame(i,j)[0]=0;
+					//Frame(i,j)[1]=110;
+					//Frame(i,j)[2]=255;
 				}
 				else
 				{
@@ -158,49 +156,37 @@ public:
 		}else{SX=SY=-1;}
 		//	cout << "SEE SOMETHING?";
 		//	cout << endl;
-		/*
-		cvtColor(mat, mat2, CV_HLS2BGR);
-	if(SX > 4 && SX < 356 && SY > 4 && SY < 236)
-	for(i=-3;i<=3;i++)
-	for(j=-3;j<=3;j++)
-	{OFrame(SY+i,SX+j)[0]=0; OFrame(SY+i,SX+j)[1]=255; OFrame(SY+i,SX+j)[2]=0;} //green (the gotton format is BGR here)
+		for(i=0;i<5;i++)
+		for(j=0;j<5;j++)
+		OFrame(i,j)[0]=255;
+		OFrame(i,j)[1]=157;
+		OFrame(i,j)[2]=10;
+	//	cvtColor(mat, mat2, CV_HLS2BGR);
+	//if(SX > 4 && SX < 356 && SY > 4 && SY < 236)
+	//for(i=-3;i<=3;i++)
+	//for(j=-3;j<=3;j++)
+	//{OFrame(SY+i,SX+j)[0]=0; OFrame(SY+i,SX+j)[1]=255; OFrame(SY+i,SX+j)[2]=0;} //green (the gotton format is BGR here)
 	
 		char op[255];
 		static int PK=0;
 		sprintf(op,"_%d.jpg",PK++);
 		
 		imwrite(op,mat2);
-		*/
+		sleep(5);
+		goto AGAIN;
+		}
 		CPoint RT;
 		RT.x=SX;
 		RT.y=SY;
 		return RT;
 	}
-	bool Valid()
-	{
-		//AIN5
-		APIN->Poll();
-		double V = APIN->AIN(5);
-		V=V/62;
-		cout << V;
-		if(V > MIN_TARG_DIST && V < MAX_TARG_DIST)
-		return true;
-		else
-		return false;
-	}
+
 	void Action()
 	{
-		//Tilt->set    (( (2400000)   +
-		//(1900000)*2)/3);
-		//Pan->set    (( ( 500000)   +
-		//(2300000))/2);
-		Mat mat;
-		cap->read(mat);
-		cap->read(mat);
-		cap->read(mat);
-		cap->read(mat);
-		cap->read(mat);
-		cap->read(mat);
+		Tilt->set    (( (2400000)   +
+		(1900000)*2)/3);
+		Pan->set    (( ( 500000)   +
+		(2300000))/2);
 		//	cout << "init";
 		//	cout << endl;
 		//VideoCapture capx(0);
@@ -208,42 +194,26 @@ public:
 		//	cout << endl;
 		//include the timer made earlier to wait for 3 seconds
 		CPoint Aim;
-		int Ex=0,Ey=0;
+		Aim.x=0;
+		Aim.y=0;
+		int Ex,Ey;
+		while((abs(Aim.x - (CX_SCN))>CX_EPS/2)||(abs(Aim.y - CY_SCN)>CY_EPS/2))
 		{
-NOTVALID:
-			Aim.x=0;
-			Aim.y=0;
-			Tilt->set    (( (2400000)   +
-			(1900000)*2)/3);
-			Pan->set    (( ( 500000)   +
-			(2300000))/2);
-			while((abs(Aim.x - (CX_SCN))>CX_EPS/2)||(abs(Aim.y - (CY_SCN))>CY_EPS/2))
-			{
-				//		cout << "GRABA";
-				//		cout << endl;
-				Aim=TFind();
-				//TMPX(Aim.x,Aim.y,capx);
-				Ex=(Aim.x-(CX_SCN));
-				Ey=(Aim.y-(CY_SCN));
-				if(Ex<40)Ex=1*Ex;else if(Ex<90) Ex=5*Ex; else Ex=12*Ex;
-				if(Ey<40)Ey=1*Ey;else if(Ey<90) Ex=5*Ex; else Ey=12*Ex;
-				Pan->accumulate(Ex);
-				Tilt->accumulate(Ey);
-			}
-			if(Valid())
-			ShootGun();
-			else
-			{
-				static int IK = 0;
-				IK++;
-				if(IK < 3)
-				goto NOTVALID;
-				Pan->set    (( ( 500000)   +
-				(2300000))/2);
-				Tilt->set(2400000);
-				ShootGun();
-			}
+			//		cout << "GRABA";
+			//		cout << endl;
+			Aim=TFind();
+			//TMPX(Aim.x,Aim.y,capx);
+			
+			//cout<<Aim.x<<"|"<<Aim.y;//<<"||"<<CX_SCN<<"|"<<CY_SCN;
+			//cout<<endl;
+			Ex=(Aim.x-CX_SCN);
+			Ey=(Aim.y-CY_SCN);
+			//cout<<Ex<<"|"<<Ey;
+			//cout<<endl;
+			Pan->accumulate(Ex);
+			Tilt->accumulate(Ey);
 		}
+		ShootGun();
 		
 	}
 	void ShootGun()
@@ -278,9 +248,6 @@ private:
 	GPIO_READ_DMA * LMFR;
 	GPIO_READ_DMA * LMFC;
 	GPIO_READ_DMA * LMFL;
-	//From Arduino
-	GPIO_READ_DMA * BLOCK_DET;
-	GPIO_READ_DMA * START_SIG;
 	//
 	ADC_DMA * APIN;
 	//c_bin_io TLED(LED_GPIO);
@@ -295,8 +262,6 @@ public:
 		LMFR=new GPIO_READ_DMA(1,12);
 		LMFC=new GPIO_READ_DMA(1,14);
 		LMFL=new GPIO_READ_DMA(2,1);
-		START_SIG=new GPIO_READ_DMA(0,20);
-		BLOCK_DET=new GPIO_READ_DMA(1,13);
 		cout << "TST1" <<endl;
 		//TLED.SetIP();
 		LED_PWR=new c_bin_io(LED_GPIO);//
@@ -305,63 +270,16 @@ public:
 		APIN=new ADC_DMA;
 		LED_PWR->SetOP();
 		LED_PWR->Write(true);
+		
 		Drive = new DRV();
 		BFinder = new cRGBC();
 		REV=1;
 		MSR=0;
 		MSL=0;
 	}
-	void Start()
+	bool BLED_DETECT() //are we start signal or block?
 	{
-	while(!START_SIG->Read());
-	}
-	bool BLOCK_DETECT()
-	{
-		bool R = BLOCK_DET->Read();
-	}
-	void BLED_DETECT() //are we start signal or block?
-	{
-		cout << "TS\n";
-		double x[100];
-		double afirst=0;
-		int i,ac=0;
-		for(i=0;i<100;i++)
-		x[i]=0;
-		for(i=0;i<100;i++)
-		{
-			APIN->Poll();
-			double tmp = APIN->DiffIn();
-			afirst+=tmp;
-			x[99-i]=tmp;
-		}
-		afirst/=100;
-		cout << afirst << endl;
-		cout << "SET\n";
-		while(true)
-		{
-			
-			double a=0;
-			APIN->Poll();
-			for(i=99;i>0;i--)
-			{x[i]=x[i-1];a+=x[i];}
-			x[0]=APIN->DiffIn();
-			a+=x[0];
-			a/=100;
-			//cout << a << endl;
-			if(a > 850)
-			{
-				ac++;
-				if(ac>20)
-				{
-					LED_PWR->Write(false);
-					//cout << a << endl;
-					//usleep(100000);
-					return;
-				}
-			}
-			else
-			ac=0;
-		}
+	
 	}
 	UNUSED void Decelerate()
 	{
@@ -383,58 +301,44 @@ public:
 		//Drive->Drive(100,100);
 		//double * FAIL=0;
 		return;
-	}
-	//FWD:
-	void LeaveBlock()
-	{
-		bool a=LMFC->Read(),b=LMFL->Read(),c=LMFR->Read();
-		Drive->Drive(_S_DR,_S_DR);
-		sleep(1);
-
-		while(a && b && c)
-		{
-			a=LMFC->Read(),b=LMFL->Read(),c=LMFR->Read();
 		}
-	}
-	int aMSR,aMSL;
-	void Forward()
-	{
-		Drive->Drive(_S_DR,_S_DR);
-		aMSR=aMSL=_S_DR;
+//FWD:
+void LeaveBlock()
+{
+bool a=LMFC->Read(),b=LMFL->Read(),c=LMFR->Read();
+Drive->Drive(_S_DR,_S_DR);
+usleep(500000);
+while(a && b && c)
+{
+a=LMFC->Read(),b=LMFL->Read(),c=LMFR->Read();
+}
+}
+void Forward()
+{
 		while(true)
 		{
 			bool a=LMFC->Read(),b=LMFL->Read(),c=LMFR->Read();
-			bool bd=BLOCK_DETECT();
+			bool bd=false;
 			//bd=(Block_Detect)
 			if((a&&b&&c) ||(bd))
 			{
-				Drive->Drive(0,0);
-				sleep(1);
-				return;//goto FL;
+			Drive->Drive(0,0);
+			sleep(1);
+			return;//goto FL;
 			}
 			//if(block detected) return
 			if(a)
-			{
-				Drive->Drive(_S_DR,_S_DR);
-				aMSR=aMSL=_S_DR;
-			}
+			Drive->Drive(_S_DR,_S_DR);
 			else if(b)
-			{
-				Drive->Drive(0,_S_TR);
-				aMSR=0;
-				aMSL=_S_TR;
-			}
+			Drive->Drive(0,_S_TR);
 			else if(c)
-			{
-				Drive->Drive(_S_TR,0);
-				aMSL=0;
-				aMSR=_S_TR;
+			Drive->Drive(_S_TR,0);
+
 			}
-		}
-	}
-	//FWDS:
-	void useless(){ //same as FWD (only goto was different. gotos became return, so now useless
-		/*
+			}
+//FWDS:
+			void useless(){ //same as FWD (only goto was different. gotos became return, so now useless
+/*
 		while(true)
 		{
 			bool a=LMFC->Read(),b=LMFL->Read(),c=LMFR->Read();
@@ -454,22 +358,21 @@ public:
 			Drive->Drive(_S_TR,0);
 		}
 		*/
-	}
-	//REV:
-	void Reverse()
-	{
-		//DONT FORGET TO KILL THIS
-		//when we get block detection.
-		int er=0;
+		}
+//REV:
+void Reverse()
+{
+			//DONT FORGET TO KILL THIS
+			//when we get block detection.
+			#ifndef BLOCKDETECT
+			{
+			Drive->Drive(-_S_DR,-_S_DR);
+			usleep(1000000);
+			}
+			#endif
 		while(!(LMBC->Read() || LMBR->Read() || LMBL->Read()))
 		{
-			if(er<100)
 			Drive->Drive(-_S_TR,0);
-			if(er>100)
-			Drive->Drive(0,-_S_TR);
-			if(er>200)er=0;
-			usleep(1000);
-			er++;
 		} 
 		while(true)
 		{
@@ -477,9 +380,9 @@ public:
 			bool a=LMBC->Read(),b=LMBL->Read(),c=LMBR->Read();
 			if(a&&b&&c)
 			{
-				Drive->Drive(0,0);
-				sleep(1);
-				return;//goto RTR;
+			Drive->Drive(0,0);
+			sleep(1);
+			return;//goto RTR;
 			}
 			if(a)
 			Drive->Drive(-_S_DR,-_S_DR);
@@ -488,22 +391,19 @@ public:
 			else if(c)
 			Drive->Drive(-_S_TR,0);
 		}
-	}
-	//REVF:
+}
+//REVF:
 	void ReverseLine()
 	{
-		int er=50;
+			#ifndef BLOCKDETECT
+			{
+			Drive->Drive(-_S_DR,-_S_DR);
+			usleep(1000000);
+			}
+			#endif
 		while(!(LMBC->Read() || LMBR->Read() || LMBL->Read()))
 		{
-			Drive->Drive(-aMSR,-aMSL);
-			break;
-			if(er<10)
 			Drive->Drive(-_S_TR,0);
-			if(er>10)
-			Drive->Drive(0,-_S_TR);
-			if(er>20)er=0;
-			usleep(1000);
-			er++;
 		} 
 		while(true)
 		{
@@ -511,9 +411,9 @@ public:
 			bool a=LMBC->Read(),b=LMBL->Read(),c=LMBR->Read();
 			if(d&&e&&f)
 			{
-				Drive->Drive(0,0);
-				sleep(1);
-				return;//goto RTR;
+			Drive->Drive(0,0);
+			sleep(1);
+			return;//goto RTR;
 			}
 			if(a)
 			Drive->Drive(-_S_DR,-_S_DR);
@@ -522,72 +422,72 @@ public:
 			else if(c)
 			Drive->Drive(-_S_TR,0);
 		}
-	}
-	//FL:
-	void LeftTurn()
-	{
+		}
+			//FL:
+void LeftTurn()
+{
 		Drive->Drive(_S_TR,_S_TR);
 		usleep(200000);
 		Drive->Drive(_S_TR*.8,-_S_TR*.8);
 		usleep(500000);
-		//bool a=LMFC->Read(),b=LMFL->Read(),c=LMFR->Read();
-		//bool d=LMBC->Read(),e=LMBL->Read(),f=LMBR->Read();
-		while(!LMFC->Read());
-		Drive->Drive(0,0);
-		usleep(100000);
-		Drive->Drive(_S_DR,_S_DR);
-		//while(!LMFC->Read());
-		Drive->Drive(0,0);
-		//usleep(10000);
-		//Drive->Drive(_S_DR,_S_DR);
-		usleep(100000);
-		return;//goto FWDS;//FWD;
-	}
-	//RTR:
-	void RightTurn()
-	{
+			//bool a=LMFC->Read(),b=LMFL->Read(),c=LMFR->Read();
+			//bool d=LMBC->Read(),e=LMBL->Read(),f=LMBR->Read();
+			while(!LMFC->Read());
+			Drive->Drive(0,0);
+			usleep(100000);
+			Drive->Drive(_S_DR,_S_DR);
+			//while(!LMFC->Read());
+			Drive->Drive(0,0);
+			//usleep(10000);
+			//Drive->Drive(_S_DR,_S_DR);
+			usleep(100000);
+			return;//goto FWDS;//FWD;
+			}
+			//RTR:
+void RightTurn()
+{
 		
 		Drive->Drive(-_S_TR*.9,-_S_TR*.9);
 		usleep(500000);
 		Drive->Drive(-_S_TR*.8,_S_TR*.8);
 		usleep(500000);
-		//bool a=LMFC->Read(),b=LMFL->Read(),c=LMFR->Read();
-		//bool d=LMBC->Read(),e=LMBL->Read(),f=LMBR->Read();
-		while(!LMFC->Read());
-		Drive->Drive(0,0);
-		usleep(100000);
-		Drive->Drive(_S_DR,_S_DR);
-		//while(!LMFC->Read());
-		Drive->Drive(0,0);
-		//usleep(10000);
-		//Drive->Drive(_S_DR,_S_DR);
-		usleep(100000);
-		return;//goto ENDX;//FWD;	ENDX:;
-	}
-	//RTSR:
-	void RightTurnLine()
-	{
+			//bool a=LMFC->Read(),b=LMFL->Read(),c=LMFR->Read();
+			//bool d=LMBC->Read(),e=LMBL->Read(),f=LMBR->Read();
+			while(!LMFC->Read());
+			Drive->Drive(0,0);
+			usleep(100000);
+			Drive->Drive(_S_DR,_S_DR);
+			//while(!LMFC->Read());
+			Drive->Drive(0,0);
+			//usleep(10000);
+			//Drive->Drive(_S_DR,_S_DR);
+			usleep(100000);
+			return;//goto ENDX;//FWD;	ENDX:;
+}
+//RTSR:
+void RightTurnLine()
+{
 		Drive->Drive(_S_TR,_S_TR);
 		usleep(200000);
 		Drive->Drive(-_S_TR*.8,_S_TR*.8);
 		usleep(500000);
-		//bool a=LMFC->Read(),b=LMFL->Read(),c=LMFR->Read();
-		//bool d=LMBC->Read(),e=LMBL->Read(),f=LMBR->Read();
-		while(!LMFC->Read());
-		Drive->Drive(0,0);
-		usleep(100000);
-		Drive->Drive(_S_DR,_S_DR);
-		//while(!LMFC->Read());
-		Drive->Drive(0,0);
-		//usleep(10000);
-		//Drive->Drive(_S_DR,_S_DR);
-		usleep(100000);
-		return;//goto ENDX;//FWD;	ENDX:;
-	}
+			//bool a=LMFC->Read(),b=LMFL->Read(),c=LMFR->Read();
+			//bool d=LMBC->Read(),e=LMBL->Read(),f=LMBR->Read();
+			while(!LMFC->Read());
+			Drive->Drive(0,0);
+			usleep(100000);
+			Drive->Drive(_S_DR,_S_DR);
+			//while(!LMFC->Read());
+			Drive->Drive(0,0);
+			//usleep(10000);
+			//Drive->Drive(_S_DR,_S_DR);
+			usleep(100000);
+			return;//goto ENDX;//FWD;	ENDX:;
+}
 	void Stop()
 	{
-		//ENDX:
-		Drive->Drive(0,0);
+	//ENDX:
+	Drive->Drive(0,0);
 	}
 
 };
@@ -598,8 +498,8 @@ int main()
 {
 	Navigator X;
 	Shooter Y;
-	X.Start();
-	X.BLED_DETECT();
+	Y.Action();
+	/*
 	//get out of the shooting block (may need a delay added)
 	X.LeaveBlock();
 	
@@ -618,8 +518,8 @@ int main()
 	X.LeftTurn();
 	X.Forward();
 	Y.Action();
-	X.ReverseLine();
-	X.RightTurnLine();
+	X.Reverse();
+	X.RightTurn();
 	//3RD NAV
 	X.Forward();
 	X.LeftTurn();
@@ -630,5 +530,6 @@ int main()
 	//GOTO FINISH
 	X.Forward();
 	//Sleep
+	*/
 }
 #endif	

@@ -1,0 +1,10 @@
+[Unit]
+Description=ROBOT
+ConditionPathExists=|/bin
+After=leds.service
+ 
+[Service]
+ExecStart=/bin/start
+ 
+[Install]
+WantedBy=multi-user.target
