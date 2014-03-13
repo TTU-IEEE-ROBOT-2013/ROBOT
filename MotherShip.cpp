@@ -7,7 +7,7 @@ using namespace std;
 /*Class Navigator: Navigates*/
 #ifdef TRUE
 //constants
-const int _S_DR = 80, _S_TR=110;
+const int _S_DR = 90, _S_TR=127;
 //it take many tools to build a robot, math is only one of them
 typedef struct _V3 {int a; int b; int c;} V3;
 
@@ -70,10 +70,10 @@ public:
 		Tilt=new PWMAccumulator(TILT_PWM);
 		FlyWheels=new c_bin_io(FW_GPIO);
 		LinActuate=new c_bin_io(LA_GPIO);
-		Pan->LowLimit  ( 500000);
-		Pan->HighLimit (2300000);
-		Tilt->LowLimit (1900000);
-		Tilt->HighLimit(2400000);
+		Pan->LowLimit  ( 842000);
+		Pan->HighLimit (2186000);
+		Tilt->LowLimit (1958000);
+		Tilt->HighLimit(2186000);
 		Tilt->set    (( (2400000)   +
 		(1900000)*2)/3);
 		Pan->set    (( ( 500000)   +
@@ -190,10 +190,6 @@ public:
 	}
 	void Action()
 	{
-		//Tilt->set    (( (2400000)   +
-		//(1900000)*2)/3);
-		//Pan->set    (( ( 500000)   +
-		//(2300000))/2);
 		Mat mat;
 		cap->read(mat);
 		cap->read(mat);
@@ -201,12 +197,6 @@ public:
 		cap->read(mat);
 		cap->read(mat);
 		cap->read(mat);
-		//	cout << "init";
-		//	cout << endl;
-		//VideoCapture capx(0);
-		//	cout << "ERC";
-		//	cout << endl;
-		//include the timer made earlier to wait for 3 seconds
 		CPoint Aim;
 		int Ex=0,Ey=0;
 		{
@@ -219,30 +209,15 @@ NOTVALID:
 			(2300000))/2);
 			while((abs(Aim.x - (CX_SCN))>CX_EPS/2)||(abs(Aim.y - (CY_SCN))>CY_EPS/2))
 			{
-				//		cout << "GRABA";
-				//		cout << endl;
 				Aim=TFind();
-				//TMPX(Aim.x,Aim.y,capx);
 				Ex=(Aim.x-(CX_SCN));
 				Ey=(Aim.y-(CY_SCN));
-				if(Ex<40)Ex=1*Ex;else if(Ex<90) Ex=5*Ex; else Ex=12*Ex;
-				if(Ey<40)Ey=1*Ey;else if(Ey<90) Ex=5*Ex; else Ey=12*Ex;
+				if(Ex<40)Ex=1*Ex;else if(Ex<90) Ex=3*Ex; else Ex=5*Ex;
+				if(Ey<40)Ey=1*Ey;else if(Ey<90) Ex=3*Ex; else Ey=5*Ex;
 				Pan->accumulate(Ex);
 				Tilt->accumulate(Ey);
 			}
-			if(Valid())
 			ShootGun();
-			else
-			{
-				static int IK = 0;
-				IK++;
-				if(IK < 3)
-				goto NOTVALID;
-				Pan->set    (( ( 500000)   +
-				(2300000))/2);
-				Tilt->set(2400000);
-				ShootGun();
-			}
 		}
 		
 	}
@@ -336,7 +311,7 @@ public:
 		}
 		afirst/=100;
 		cout << afirst << endl;
-		cout << "SET\n";
+		//cout << "SET\n";
 		while(true)
 		{
 			
@@ -347,13 +322,15 @@ public:
 			x[0]=APIN->DiffIn();
 			a+=x[0];
 			a/=100;
+			cout << a << endl;
 			//cout << a << endl;
-			//cout << a << endl;
-			//usleep(100000);
-			if(a > 1200)
+			usleep(10000);
+			if(a > 1100)
 			{
+			//cout << a << endl;
+			usleep(10000);
 				ac++;
-				if(ac>20)
+				//if(ac>20)
 				{
 					
 
@@ -637,6 +614,7 @@ int main()
 	Shooter Y;
 	X.Start();
 	X.BLED_DETECT();
+	cout << "ImFree";
 	//get out of the shooting block (may need a delay added)
 	X.LeaveBlock();
 	

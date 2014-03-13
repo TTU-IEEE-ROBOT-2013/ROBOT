@@ -70,10 +70,10 @@ public:
 		Tilt=new PWMAccumulator(TILT_PWM);
 		FlyWheels=new c_bin_io(FW_GPIO);
 		LinActuate=new c_bin_io(LA_GPIO);
-		Pan->LowLimit  (842000 );
-		Pan->HighLimit (1962000);
-		Tilt->LowLimit (1958000);
-		Tilt->HighLimit(2186000);
+		Pan->LowLimit  ( 500000);
+		Pan->HighLimit (2300000);
+		Tilt->LowLimit (1900000);
+		Tilt->HighLimit(2400000);
 		Tilt->set    (( (2400000)   +
 		(1900000)*2)/3);
 		Pan->set    (( ( 500000)   +
@@ -85,16 +85,6 @@ public:
 		LinActuate->Write(LA_CLOSED);
 		//Note: if it does not initialize properly, may need to change.
 		if(!cap->isOpened()){cout<<"ERROR: no camera";return;}
-	}
-	void PreSet()
-	{
-		
-		Pan->set(842000)
-		int i;
-		for(i=842000;i<1962000,Valid();i+=1000)
-		{
-			Pan->set(i);
-		}
 	}
 	CPoint TFind()
 	{
@@ -192,7 +182,7 @@ public:
 		APIN->Poll();
 		double V = APIN->AIN(5);
 		V=V/62;
-		cout << V;
+		cout << V << endl;
 		if(V > MIN_TARG_DIST && V < MAX_TARG_DIST)
 			return true;
 		else
@@ -207,15 +197,17 @@ public:
 		char T=0;
 		while(T!='P')
 		{
-		T=cin.get();
-		if(T=='w')
-			Tilt->accumulate(10);
-		if(T=='s')
-			Tilt->accumulate(-10);
-		if(T=='a')
-			Pan->accumulate(-10);
-		if(T=='d')
-			Pan->accumulate(10);
+			T=cin.get();
+			if(T=='w')
+				Tilt->accumulate(10);
+			if(T=='s')
+				Tilt->accumulate(-10);
+			if(T=='a')
+				Pan->accumulate(-10);
+			if(T=='d')
+				Pan->accumulate(10);
+			cout << "TILT:"<<Tilt->get()<<"  PAN:"<<Pan->get()<<endl;
+			cout << Valid() << endl;
 		}
 		
 		
@@ -579,6 +571,8 @@ int main()
 	Navigator X;
 	Shooter Y;
 	//get out of the shooting block (may need a delay added)
+	Y.Action();
+	return 0;
 	X.LeaveBlock();
 	
 	//FIST NAV
