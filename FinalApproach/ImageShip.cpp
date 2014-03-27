@@ -83,7 +83,7 @@ public:
 		if(!cap->isOpened()){cout<<"ERROR: no camera";return;}
 	}
 	CPoint TFind()
-	{
+	{	char op[255];
 		//	cout<<"NO CALL?";
 		//	cout<<"??"<<endl;
 		CPoint cvoid = {-1 -1};
@@ -93,11 +93,17 @@ public:
 		//	cout << endl;	
 		{
 		AGAIN:
-		cap->read(mat);	
+		
+		cap->read(mat);
+		cvtColor(mat, mat2, CV_BGR2HLS);
+		static int PK=0;
+		sprintf(op,"_%d.bmp",PK++);	
+		imwrite(op,mat2);
+		
 		//		(*cap) >> mat2;
 		//	cout << "Post Cap";
 		//	cout << "FAIL_CONVERT?";
-		cvtColor(mat, mat2, CV_BGR2HLS);
+		
 		Mat_ <Vec3b> Frame(mat);
 		Mat_ <Vec3b> OFrame(mat2);
 		cv::Size sks = Frame.size();
@@ -120,25 +126,20 @@ public:
 			*/
 			//OFrame(i+FW,j)[2] + OFrame(i,j+FW)[2]-4*OFrame(i,j)[2]);
 			
-			if((OFrame(i,j)[0] < 20|| OFrame(i,j)[0] > 5))// && OFrame(i,j)[0] < 20 )
+			if((OFrame(i,j)[0] < 21 && OFrame(i,j)[0] > 14))// && OFrame(i,j)[0] < 20 )
 			{  //the value is red hue (20 > h | h > 240)
-				if(OFrame(i,j)[1] < 50 && OFrame(i,j)[1] > 30 && OFrame(i,j)[2] > 50 && OFrame(i,j)[2] < 70) //vary the luminance values.  Black and White can be red with Very Low or Very High luminance
+				if(OFrame(i,j)[1] > 70 && OFrame(i,j)[2] > 165)// && OFrame(i,j)[1] > 65 && OFrame(i,j)[2] > 170 && OFrame(i,j)[2] < 240) //vary the luminance values.  Black and White can be red with Very Low or Very High luminance
 				//off-white can be red with low saturation and high luminance. something similar for black
 				{
 					
 					SX+=j;
 					SY+=i;
 					ct++;
-					//Frame(i,j)[0]=0;
-					//Frame(i,j)[1]=110;
-					//Frame(i,j)[2]=255;
+					OFrame(i,j)[0]=90;
+					OFrame(i,j)[1]=140;
+					OFrame(i,j)[2]=255;
 				}
-				else
-				{
-					//OFrame(i,j)[0]=255;
-					//OFrame(i,j)[1]=0;
-					//OFrame(i,j)[2]=0;
-				}
+				
 			}
 			else
 			{
@@ -161,23 +162,22 @@ public:
 		OFrame(i,j)[0]=255;
 		OFrame(i,j)[1]=157;
 		OFrame(i,j)[2]=10;
-	//	cvtColor(mat, mat2, CV_HLS2BGR);
+		cvtColor(mat2, mat, CV_HLS2BGR);
 	//if(SX > 4 && SX < 356 && SY > 4 && SY < 236)
 	//for(i=-3;i<=3;i++)
 	//for(j=-3;j<=3;j++)
 	//{OFrame(SY+i,SX+j)[0]=0; OFrame(SY+i,SX+j)[1]=255; OFrame(SY+i,SX+j)[2]=0;} //green (the gotton format is BGR here)
 	
-		char op[255];
-		static int PK=0;
-		sprintf(op,"_%d.jpg",PK++);
 		
-		imwrite(op,mat2);
+		sprintf(op,"_%d-f.bmp",PK++);
+		
+		imwrite(op,mat);
 		sleep(5);
 		goto AGAIN;
 		}
 		CPoint RT;
-		RT.x=SX;
-		RT.y=SY;
+		//RT.x=SX;
+		//RT.y=SY;
 		return RT;
 	}
 

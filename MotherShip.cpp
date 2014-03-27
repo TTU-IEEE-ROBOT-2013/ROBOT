@@ -7,7 +7,7 @@ using namespace std;
 /*Class Navigator: Navigates*/
 #ifdef TRUE
 //constants
-const int _S_DR = 90, _S_TR=127;
+const int _S_DR = 80, _S_TR=127;
 //it take many tools to build a robot, math is only one of them
 typedef struct _V3 {int a; int b; int c;} V3;
 
@@ -122,10 +122,10 @@ public:
 			*/
 			//OFrame(i+FW,j)[2] + OFrame(i,j+FW)[2]-4*OFrame(i,j)[2]);
 			
-			if((OFrame(i,j)[0] < 10 || OFrame(i,j)[0] > 245))// && OFrame(i,j)[0] < 20 )
+			if((OFrame(i,j)[0] < 25 && OFrame(i,j)[0] > 12))// && OFrame(i,j)[0] < 20 )
 			{  //the value is red hue (20 > h | h > 240)
-				if( 	OFrame(i,j)[2] > 55 && OFrame(i,j)[2] < 180 &&
-						OFrame(i,j)[1] > 50 && OFrame(i,j)[1] < 200	)//off-white can be red with low saturation and high luminance. something similar for black
+				if(OFrame(i,j)[1] > 70  &&  OFrame(i,j)[2] > 170 && OFrame(i,j)[1]!=255)//&& OFrame(i,j)[2] < 180    	)
+						//OFrame(i,j)[1] > 50 && OFrame(i,j)[1] < 200	)//off-white can be red with low saturation and high luminance. something similar for black
 				{
 					
 					SX+=j;
@@ -134,12 +134,6 @@ public:
 					//	Frame(i,j)[0]=0;
 					//	Frame(i,j)[1]=110;
 					//	Frame(i,j)[2]=255;
-				}
-				else
-				{
-					//OFrame(i,j)[0]=255;
-					//OFrame(i,j)[1]=0;
-					//OFrame(i,j)[2]=0;
 				}
 			}
 			else
@@ -198,15 +192,15 @@ public:
 		cap->read(mat);
 		cap->read(mat);
 		CPoint Aim;
-		int Ex=0,Ey=0;
+		double Ex=0,Ey=0;
 		{
 NOTVALID:
 			Aim.x=0;
 			Aim.y=0;
 			Tilt->set    (( (2400000)   +
 			(1900000)*2)/3);
-			Pan->set    (( ( 500000)   +
-			(2300000))/2);
+			Pan->set    (( ( 500000)*2   +
+			(2300000)*3)/5);
 			while((abs(Aim.x - (CX_SCN))>CX_EPS/2)||(abs(Aim.y - (CY_SCN))>CY_EPS/2))
 			{
 				Aim=TFind();
@@ -214,9 +208,10 @@ NOTVALID:
 				Ey=(Aim.y-(CY_SCN));
 				if(Ex<40)Ex=1*Ex;else if(Ex<90) Ex=3*Ex; else Ex=5*Ex;
 				if(Ey<40)Ey=1*Ey;else if(Ey<90) Ex=3*Ex; else Ey=5*Ex;
-				Pan->accumulate(Ex);
+				Pan->accumulate(Ex*.5);
 				Tilt->accumulate(Ey);
 			}
+			//cout << "pow";
 			ShootGun();
 		}
 		
@@ -288,6 +283,7 @@ public:
 	}
 	void Start()
 	{
+	LED_PWR->Write(true);
 	while(!START_SIG->Read());
 	}
 	bool BLOCK_DETECT()
@@ -322,7 +318,7 @@ public:
 			x[0]=APIN->DiffIn();
 			a+=x[0];
 			a/=100;
-			cout << a << endl;
+			//cout << a << endl;
 			//cout << a << endl;
 			usleep(10000);
 			if(a > 1100)
@@ -332,8 +328,6 @@ public:
 				ac++;
 				//if(ac>20)
 				{
-					
-
 					return;
 				}
 			}
@@ -363,17 +357,22 @@ public:
 		return;
 	}
 	//FWD:
+	void NoDetect()
+	{
+	LED_PWR->Write(false);
+	}
 	void LeaveBlock()
 	{
-		LED_PWR->Write(false);
-		bool a=LMFC->Read(),b=LMFL->Read(),c=LMFR->Read();
-		Drive->Drive(_S_DR,_S_DR);
-		usleep(500000);
-
-		while(a && b && c)
-		{
-			a=LMFC->Read(),b=LMFL->Read(),c=LMFR->Read();
-		}
+			LED_PWR->Write(false);
+			Forward();
+			bool a=LMFC->Read(),b=LMFL->Read(),c=LMFR->Read();
+			Drive->Drive(_S_DR,_S_DR);
+//			usleep(1000000);
+//
+			while(a && b && c)
+			{
+				a=LMFC->Read();b=LMFL->Read();c=LMFR->Read();
+			}
 	}
 	int aMSR,aMSL;
 	void Forward()
@@ -385,7 +384,7 @@ public:
 			bool a=LMFC->Read(),b=LMFL->Read(),c=LMFR->Read();
 			bool bd=BLOCK_DETECT();
 			//bd=(Block_Detect)
-			if((a&&b&&c) ||(bd))
+			if((a&&b&&c))
 			{
 				Drive->Drive(0,0);
 				sleep(1);
@@ -420,8 +419,9 @@ public:
 			bool a=LMFC->Read(),b=LMFL->Read(),c=LMFR->Read();
 			bool bd=BLOCK_DETECT();
 			//bd=(Block_Detect)
-			if((a&&b&&c))
+			if((bd))
 			{
+				//usleep(300000);
 				Drive->Drive(0,0);
 				sleep(1);
 				return;//goto FL;
@@ -504,21 +504,49 @@ public:
 		}
 	}
 	//REVF:
+	void DEL()
+	{
+	Drive->Drive(_S_DR,_S_DR);
+	usleep(200000);
+	Drive->Drive(0,0);
+	}
 	void ReverseLine()
 	{
-		int er=50;
+		//int er=50;
+		Drive->Drive(-_S_DR,-_S_DR);
+
+//---------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------
+
+		usleep(500000);
 		while(!(LMBC->Read() || LMBR->Read() || LMBL->Read()))
 		{
 			Drive->Drive(-aMSR,-aMSL);
 			break;
-			if(er<10)
-			Drive->Drive(-_S_TR,0);
-			if(er>10)
-			Drive->Drive(0,-_S_TR);
-			if(er>20)er=0;
-			usleep(1000);
-			er++;
+			//if(er<5)
+			//Drive->Drive(-_S_TR,0);
+			//if(er>5)
+			//Drive->Drive(0,-_S_TR);
+			//if(er>10)er=0;
+			//usleep(1000);
+			//er++;
 		} 
+		{
+
+		bool d=LMFC->Read(),e=LMFL->Read(),f=LMFR->Read();
+		while(d && e && f)
+		{
+			bool a=LMBC->Read(),b=LMBL->Read(),c=LMBR->Read();
+			d=LMFC->Read();e=LMFL->Read();f=LMFR->Read();
+			if(a)
+			Drive->Drive(-_S_DR,-_S_DR);
+			else if(b)
+			Drive->Drive(0,-_S_TR);
+			else if(c)
+			Drive->Drive(-_S_TR,0);
+		}
+		}
 		while(true)
 		{
 			bool d=LMFC->Read(),e=LMFL->Read(),f=LMFR->Read();
@@ -526,7 +554,7 @@ public:
 			if(d&&e&&f)
 			{
 				Drive->Drive(0,0);
-				sleep(1);
+				sleep(1);//can speed up without
 				return;//goto RTR;
 			}
 			if(a)
@@ -537,24 +565,85 @@ public:
 			Drive->Drive(-_S_TR,0);
 		}
 	}
+
+
+void Reversecrv()
+	{
+		//int er=50;
+		Drive->Drive(-_S_DR,-_S_DR);
+		usleep(200000);
+		while(!(LMBC->Read() || LMBR->Read() || LMBL->Read()))
+		{
+			Drive->Drive(-aMSR,-aMSL);
+			break;
+			//if(er<5)
+			//Drive->Drive(-_S_TR,0);
+			//if(er>5)
+			//Drive->Drive(0,-_S_TR);
+			//if(er>10)er=0;
+			//usleep(1000);
+			//er++;
+		} 
+		{
+
+		bool d=LMFC->Read(),e=LMFL->Read(),f=LMFR->Read();
+		while(d && e && f)
+		{
+			bool a=LMBC->Read(),b=LMBL->Read(),c=LMBR->Read();
+			d=LMFC->Read();e=LMFL->Read();f=LMFR->Read();
+			if(a)
+			Drive->Drive(-_S_DR,-_S_DR);
+			else if(b)
+			Drive->Drive(0,-_S_TR);
+			else if(c)
+			Drive->Drive(-_S_TR,0);
+		}
+		}
+		while(true)
+		{
+			bool d=LMFC->Read(),e=LMFL->Read(),f=LMFR->Read();
+			bool a=LMBC->Read(),b=LMBL->Read(),c=LMBR->Read();
+			if(d&&e&&f)
+			{
+				Drive->Drive(0,0);
+				sleep(1);//can speed up without
+				return;//goto RTR;
+			}
+			if(a)
+			Drive->Drive(-_S_DR,-_S_DR);
+			else if(b)
+			Drive->Drive(0,-_S_TR);
+			else if(c)
+			Drive->Drive(-_S_TR,0);
+		}
+	}
+
+
+	
 	//FL:
 	void LeftTurn()
 	{
-		Drive->Drive(_S_TR,_S_TR);
-		usleep(200000);
-		Drive->Drive(_S_TR*.8,-_S_TR*.8);
+		//Drive->Drive(_S_TR,_S_TR);
+		Drive->Drive(_S_DR,_S_DR);
+			usleep(100000);
+			bool a=LMFC->Read(),b=LMFL->Read(),c=LMFR->Read();
+			while(a && b && c)
+			{
+				a=LMFC->Read();b=LMFL->Read();c=LMFR->Read();
+			}
+		Drive->Drive(_S_TR,-_S_TR*.8);
 		usleep(500000);
 		//bool a=LMFC->Read(),b=LMFL->Read(),c=LMFR->Read();
 		//bool d=LMBC->Read(),e=LMBL->Read(),f=LMBR->Read();
 		while(!LMFC->Read());
 		Drive->Drive(0,0);
-		usleep(100000);
-		Drive->Drive(_S_DR,_S_DR);
+		//usleep(100000);
+		//Drive->Drive(_S_DR,_S_DR);
 		//while(!LMFC->Read());
-		Drive->Drive(0,0);
+		//Drive->Drive(0,0);
 		//usleep(10000);
 		//Drive->Drive(_S_DR,_S_DR);
-		usleep(100000);
+		usleep(1000000);
 		return;//goto FWDS;//FWD;
 	}
 	//RTR:
@@ -563,7 +652,7 @@ public:
 		
 		Drive->Drive(-_S_TR*.9,-_S_TR*.9);
 		usleep(500000);
-		Drive->Drive(-_S_TR*.8,_S_TR*.8);
+		Drive->Drive(-_S_TR,_S_TR);
 		usleep(500000);
 		//bool a=LMFC->Read(),b=LMFL->Read(),c=LMFR->Read();
 		//bool d=LMBC->Read(),e=LMBL->Read(),f=LMBR->Read();
@@ -583,16 +672,16 @@ public:
 	{
 		Drive->Drive(_S_TR,_S_TR);
 		usleep(200000);
-		Drive->Drive(-_S_TR*.8,_S_TR*.8);
+		Drive->Drive(-_S_TR,_S_TR);
 		usleep(500000);
 		//bool a=LMFC->Read(),b=LMFL->Read(),c=LMFR->Read();
 		//bool d=LMBC->Read(),e=LMBL->Read(),f=LMBR->Read();
 		while(!LMFC->Read());
 		Drive->Drive(0,0);
-		usleep(100000);
-		Drive->Drive(_S_DR,_S_DR);
+		//usleep(100000);
+		//Drive->Drive(_S_DR,_S_DR);
 		//while(!LMFC->Read());
-		Drive->Drive(0,0);
+		//Drive->Drive(0,0);
 		//usleep(10000);
 		//Drive->Drive(_S_DR,_S_DR);
 		usleep(100000);
@@ -601,7 +690,7 @@ public:
 	void Stop()
 	{
 		//ENDX:
-		Drive->Drive(0,0);
+		while(START_SIG->Read());
 	}
 
 };
@@ -610,9 +699,25 @@ public:
 #ifdef TRUE
 int main()
 {
+	STRT:
 	Navigator X;
 	Shooter Y;
 	X.Start();
+	X.NoDetect();
+	X.Forward();
+	X.LeftTurn();
+	X.Forward2();
+	X.LeftTurn();
+	X.Forward();
+	//X.NoDetect();
+	//X.Forward();
+	//X.LeftTurn();
+	//X.Forward();
+	//X.ReverseLine();
+	//X.RightTurnLine();
+	return 0;
+	
+	
 	X.BLED_DETECT();
 	cout << "ImFree";
 	//get out of the shooting block (may need a delay added)
@@ -622,28 +727,39 @@ int main()
 	//GOTO Fist Shot
 	X.Forward();
 	X.LeftTurn();
-	X.Forward();
+	X.Forward2();
 	//shoot
-	Y.Action();
+	//X.DEL();
+	//Y.Action();
+	//sleep(1);
 	//back to line
 	X.ReverseLine();
 	X.RightTurnLine();
 	//2ND NAV
 	X.Forward();
 	X.LeftTurn();
+	X.Forward2();
+	//X.DEL();
+	//Y.Action();
+	//sleep(1);
+	X.LeftTurn();
+	X.DEL();
 	X.Forward();
-	Y.Action();
-	X.ReverseLine();
-	X.RightTurnLine();
+	X.LeftTurn();
 	//3RD NAV
 	X.Forward();
 	X.LeftTurn();
-	X.Forward();
-	Y.Action();
+	X.Forward2();
+	//X.DEL();
+	//Y.Action();
+	//sleep(1);
 	X.ReverseLine();
 	X.RightTurnLine();
 	//GOTO FINISH
 	X.Forward();
+	X.Stop();
+	//goto STRT;
+
 	//Sleep
 }
 #endif	
