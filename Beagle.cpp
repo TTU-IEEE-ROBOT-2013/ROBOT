@@ -625,20 +625,21 @@ void DRV::Drive(int dir1, int dir2)
 	//cout << pi << "||||||" << mtr << endl;
 	//cout << "Motor 1 Start" << endl;
 	opt->write(opx,4);
-	usleep(5000);
+	usleep(10000);
 	//cout << "Motor 1 Write" << endl;
 	opt->flush();
 	//cout << "Motor 1 Flushed" << endl;
-	usleep(5000);
+	usleep(10000);
 	//d2
 	opx[2]=((char)1<<1 | d2);
 	if(spd2 > 127)spd2=127;
 	opx[3]=spd2;
 	//cout << "Motor 2 Start" << endl;
 	opt->write(opx,4);
-	usleep(5000);
+	usleep(10000);
 	//cout << "Motor 2 Write" << endl;
 	opt->flush();
+	usleep(10000);
 	//cout << "Motor 2 Flushed" << endl;
 
 

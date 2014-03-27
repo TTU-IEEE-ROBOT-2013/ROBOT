@@ -114,7 +114,7 @@ public:
 		for(i=FW;i<sks.height-FW;i++)
 		for(j=FW;j<sks.width-FW;j++)
 		{
-			/*
+			
 			int a=(OFrame(i-FW,j)[0] + OFrame(i,j+FW)[0] + 
 			OFrame(i+FW,j)[0] + OFrame(i,j-FW)[0]-4*OFrame(i,j)[0]);
 			if(a<0)a+=256;
@@ -123,13 +123,12 @@ public:
 			//OFrame(i+FW,j)[1] + OFrame(i,j-FW)[1]-4*OFrame(i,j)[1]);
 			
 			Frame(i,j)[2]=OFrame(i,j)[2];//(OFrame(i-FW,j)[2] + OFrame(i,j-FW)[2] + 
-			*/
+			
 			//OFrame(i+FW,j)[2] + OFrame(i,j+FW)[2]-4*OFrame(i,j)[2]);
 			
-			if((OFrame(i,j)[0] < 21 && OFrame(i,j)[0] > 14))// && OFrame(i,j)[0] < 20 )
+			if((OFrame(i,j)[0] < 25 && OFrame(i,j)[0] > 12))// && OFrame(i,j)[0] < 20 )
 			{  //the value is red hue (20 > h | h > 240)
-				if(OFrame(i,j)[1] > 70 && OFrame(i,j)[2] > 210)// && OFrame(i,j)[1] > 65 && OFrame(i,j)[2] > 170 && OFrame(i,j)[2] < 240) //vary the luminance values.  Black and White can be red with Very Low or Very High luminance
-				//off-white can be red with low saturation and high luminance. something similar for black
+				if(OFrame(i,j)[1] > 70  &&  OFrame(i,j)[2] > 170 && OFrame(i,j)[1]!=255 && Frame(i,j)[0]<20)//off-white can be red with low saturation and high luminance. something similar for black
 				{
 					
 					SX+=j;

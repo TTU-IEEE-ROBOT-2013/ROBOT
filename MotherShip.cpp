@@ -1,4 +1,5 @@
 #include "MotherShip.h"
+#include "Tuning.h"
 #include <vector>
 //uncomment next when we have block detection or shooting to turn off sleep delays
 //#define BLOCKDETECT
@@ -10,7 +11,13 @@ using namespace std;
 const int _S_DR = 80, _S_TR=127;
 //it take many tools to build a robot, math is only one of them
 typedef struct _V3 {int a; int b; int c;} V3;
-
+void echo(const char * F,const char * V)
+{
+FILE * A=fopen(F,"ab");
+if(A==0)return;
+fprintf(A,V);
+fclose(A);
+}
 V3 RGB2HSL(V3 RGB)
 {
 	double a,b,c;
@@ -183,7 +190,13 @@ public:
 		return false;
 	}
 	void Action()
-	{
+//time.h
+	{    //ti.com/ieeesec
+		time_t timer1,timer2;
+		struct tm tax;
+		double secs;
+		time(&timer1);
+		
 		Mat mat;
 		cap->read(mat);
 		cap->read(mat);
@@ -199,8 +212,8 @@ NOTVALID:
 			Aim.y=0;
 			Tilt->set    (( (2400000)   +
 			(1900000)*2)/3);
-			Pan->set    (( ( 500000)*2   +
-			(2300000)*3)/5);
+			Pan->set    (( ( 500000)*3   +
+			(2300000)*2)/5);
 			while((abs(Aim.x - (CX_SCN))>CX_EPS/2)||(abs(Aim.y - (CY_SCN))>CY_EPS/2))
 			{
 				Aim=TFind();
@@ -210,6 +223,9 @@ NOTVALID:
 				if(Ey<40)Ey=1*Ey;else if(Ey<90) Ex=3*Ex; else Ey=5*Ex;
 				Pan->accumulate(Ex*.5);
 				Tilt->accumulate(Ey);
+			time(&timer2);
+			secs=difftime(timer2,timer1);
+			if(secs > 23)break;
 			}
 			//cout << "pow";
 			ShootGun();
@@ -280,11 +296,20 @@ public:
 		MSR=0;
 		MSL=0;
 		
+	echo(LED1T,"none");
+	echo(LED2T,"none");
+	echo(LED3T,"none");
+	echo(LED0T,"none");
+	echo(LED1,"0");
+	echo(LED2,"0");
+	echo(LED3,"0");
+	echo(LED0,"0");
 	}
 	void Start()
 	{
 	LED_PWR->Write(true);
 	while(!START_SIG->Read());
+		echo(LED0T,"heartbeat");
 	}
 	bool BLOCK_DETECT()
 	{
@@ -426,7 +451,7 @@ public:
 				sleep(1);
 				return;//goto FL;
 			}
-			//if(block detected) return
+			//if(block detected) return 
 			if(a)
 			{
 				Drive->Drive(_S_DR,_S_DR);
@@ -504,6 +529,12 @@ public:
 		}
 	}
 	//REVF:
+	void DELB()
+	{
+	Drive->Drive(-_S_DR,-_S_DR);
+	usleep(500000);
+	Drive->Drive(0,0);
+	}
 	void DEL()
 	{
 	Drive->Drive(_S_DR,_S_DR);
@@ -646,6 +677,31 @@ void Reversecrv()
 		usleep(1000000);
 		return;//goto FWDS;//FWD;
 	}
+	void UTurn()
+	{
+		//Drive->Drive(_S_TR,_S_TR);
+		//Drive->Drive(_S_DR,_S_DR);
+			//usleep(100000);
+			//bool a=LMFC->Read(),b=LMFL->Read(),c=LMFR->Read();
+			//while(a && b && c)
+			//{
+			//	a=LMFC->Read();b=LMFL->Read();c=LMFR->Read();
+			//}
+		Drive->Drive(_S_TR,-_S_TR*.8);
+		usleep(800000);
+		//bool a=LMFC->Read(),b=LMFL->Read(),c=LMFR->Read();
+		//bool d=LMBC->Read(),e=LMBL->Read(),f=LMBR->Read();
+		while(!LMFC->Read());
+		Drive->Drive(0,0);
+		//usleep(100000);
+		//Drive->Drive(_S_DR,_S_DR);
+		//while(!LMFC->Read());
+		//Drive->Drive(0,0);
+		//usleep(10000);
+		//Drive->Drive(_S_DR,_S_DR);
+		usleep(1000000);
+		return;//goto FWDS;//FWD;
+	}
 	//RTR:
 	void RightTurn()
 	{
@@ -691,6 +747,8 @@ void Reversecrv()
 	{
 		//ENDX:
 		while(START_SIG->Read());
+		echo(LED0T,"none");
+		echo(LED1,"0");
 	}
 
 };
@@ -703,20 +761,25 @@ int main()
 	Navigator X;
 	Shooter Y;
 	X.Start();
-	X.NoDetect();
-	X.Forward();
-	X.LeftTurn();
-	X.Forward2();
-	X.LeftTurn();
-	X.Forward();
+	//X.NoDetect();
+	//X.Forward();
+	//X.LeftTurn();
+	//X.Forward2();
+	//X.LeftTurn();
+	//X.Forward();
 	//X.NoDetect();
 	//X.Forward();
 	//X.LeftTurn();
 	//X.Forward();
 	//X.ReverseLine();
 	//X.RightTurnLine();
-	return 0;
-	
+	//return 0;
+	//X.NoDetect();
+	//X.Forward2();
+	//X.DELB();
+	//X.UTurn();
+	//X.Forward();
+	//return 0;
 	
 	X.BLED_DETECT();
 	cout << "ImFree";
@@ -730,19 +793,24 @@ int main()
 	X.Forward2();
 	//shoot
 	//X.DEL();
-	//Y.Action();
+	Y.Action();
 	//sleep(1);
 	//back to line
-	X.ReverseLine();
-	X.RightTurnLine();
+
+	X.DELB();
+	X.UTurn();
+	X.DEL();
+	X.Forward();
+	X.LeftTurn();
 	//2ND NAV
 	X.Forward();
 	X.LeftTurn();
 	X.Forward2();
 	//X.DEL();
-	//Y.Action();
+	Y.Action();
 	//sleep(1);
-	X.LeftTurn();
+	X.DELB();
+	X.UTurn();
 	X.DEL();
 	X.Forward();
 	X.LeftTurn();
@@ -751,10 +819,13 @@ int main()
 	X.LeftTurn();
 	X.Forward2();
 	//X.DEL();
-	//Y.Action();
+	Y.Action();
 	//sleep(1);
-	X.ReverseLine();
-	X.RightTurnLine();
+	X.DELB();
+	X.UTurn();
+	X.DEL();
+	X.Forward();
+	X.LeftTurn();
 	//GOTO FINISH
 	X.Forward();
 	X.Stop();

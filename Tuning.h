@@ -52,8 +52,8 @@
 #define LA_OPEN       true
 //LEDs
 #define LED_GPIO	49	
-#define CX_SCN         ((360/2)-20)
-#define CY_SCN         ((240/2)-5)
+#define CX_SCN         ((360/2)-18)
+#define CY_SCN         ((240/2)-10)
 #define CX_EPS         10
 #define CY_EPS         10
 //LINE SENSOR defines
